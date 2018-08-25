@@ -1,0 +1,5 @@
+*.pyc
+*.png
+__init__.py
+data/
+gameboy/

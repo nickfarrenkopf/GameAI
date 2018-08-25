@@ -24,6 +24,11 @@ def get_data():
     """ takes screenshot and returns normalized data """
     return np.array(ImageGrab.grab()) / 255
 
+def get_subimage_data(x1, y1, x2, y2):
+    """ """
+    return subimage(get_data(), (x1+x2)//2, (y1+y2)//2, (x2-x1)//2, (y2-y1)//2) 
+    
+
 def get_data_resized(width, height):
     """ """
     img = ImageGrab.grab()
@@ -87,9 +92,11 @@ def on_release(key):
         mx, my = mouseAPI.position
         return False
 
-def get_click(use_mouse=True):
+def get_click(message=None, use_mouse=True):
     """ start mouse listener and return location of next click """
     global mx, my
+    if message:
+        print(message)
     if use_mouse:
         with mouse.Listener(on_click=on_click) as listener:
             listener.join()

@@ -55,7 +55,7 @@ def unpooled(net, mask, input_shape, output_shape, batch_size=4):
 
 ### PARAMS ###
 
-batch_size = 4
+batch_size = 1
 patch = 3
 stride = 2
 c_strides = [1, 1, 1, 1]
