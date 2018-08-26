@@ -7,13 +7,15 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageGrab
 from pynput import mouse, keyboard
 
-import Library.LibraryGlobals as LG
+from pynput.keyboard import Key
+#import Library.LibraryGlobals as LG
 
 
 ### PARAMS ###
 
 # global listeners
 mx, my = 0, 0
+mkey = ''
 mouseAPI = mouse.Controller()
 keyAPI = keyboard.Controller()
 
@@ -85,12 +87,17 @@ def on_click(x, y, button, pressed):
     if not pressed:
         return False
 
-def on_release(key):
+def on_key(key):
     """ pynput keyboard on-release function """
-    global mx, my
-    if key == keyboard.Key.space:
-        mx, my = mouseAPI.position
+    global mkey
+    try:
+        key = key.char
+    except AttributeError:
+        pass
+    mkey = key
+    if key in ['x','y',Key.up,Key.right,Key.down,Key.left,'a','s','q','w']:
         return False
+    return True
 
 def get_click(message=None, use_mouse=True):
     """ start mouse listener and return location of next click """
@@ -104,6 +111,15 @@ def get_click(message=None, use_mouse=True):
         with keyboard.Listener(on_release=on_release) as listener:
             listener.join()
     return mx, my
+
+def get_key(message=None):
+    """ start mouse listener and return location of next click """
+    global mkey
+    if message:
+        print(message)
+    with keyboard.Listener(on_release=on_key) as listener:
+        listener.join()
+    return mkey
 
 
 ### HELPER ###
@@ -201,8 +217,8 @@ if __name__ == '__main__':
 
     # draw params
 
-    shade_radius = 5
-    shade_color = (0, 0, 255)
+    #shade_radius = 5
+    #shade_color = (0, 0, 255)
 
     # inital plot
     #plt.ion()
@@ -215,7 +231,7 @@ if __name__ == '__main__':
     #data_i = get_data()
     #datas = [data_i]
 
-    shade_image('2.png')
+    #shade_image('2.png')
     #img1 = np.array(Image.open(os.path.join(image_path, '2.png')))
     #img2 = np.array(Image.open(os.path.join(image_path, '2_label.png')))
 

@@ -5,9 +5,10 @@ from os.path import join
 # top
 base_path = os.path.dirname(os.path.realpath(__file__))
 data_path = join(base_path, 'data')
+game_path = join(base_path, 'games')
 
 # images
-image_path = join(data_path, 'images')
+images_path = join(data_path, 'images')
 #cards_path = join(data_path, 'cards')
 network_path = join(data_path, 'networks')
 
@@ -23,4 +24,10 @@ network_path = join(data_path, 'networks')
 #class_path = join(network_path, 'classify')
 #where_path = join(network_path, 'where')
 
+
+
+# GBA
+#gba_path = join(game_path, 'GBA')
+#gba_games_path = join(gba_path, 'games')
+#gba_emulator_path = join(gba_Path, 'mGBA', 'mGBA.exe')
 
