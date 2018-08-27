@@ -17,6 +17,14 @@ from Library.DataThings import *
 
 ### TEXT FILE ###
 
+def load_data():
+    """ """
+    path = paths.adwars2_labels
+    images = np.array([np.array(Image.open(os.path.join(path, f))) / 255
+              for f in os.listdir(path)])
+    #print(images.shape)
+    return images
+
 def load_card_info():
     """ load card text info """
     text_data = DT.read_file_csv(paths.card_info)
@@ -79,11 +87,11 @@ def load_images(vocab):
     """ """
     return [Image.open(join(paths.cards_path, v + '.png')) for v in vocab]
 
-def load_data(vocab):
-    """ """
-    data = [np.array(img)[:a, :b, :c] / 255 for img in load_images(vocab)]
-    labels = DT.new_labels(len(vocab))
-    return np.array(data), labels
+#def load_data(vocab):
+#    """ """
+#    data = [np.array(img)[:a, :b, :c] / 255 for img in load_images(vocab)]
+#    labels = DT.new_labels(len(vocab))
+#    return np.array(data), labels
 
 def load_scaled_data(vocab, ratio=[1.0]):
     """ """

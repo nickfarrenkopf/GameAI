@@ -95,9 +95,9 @@ def on_key(key):
     except AttributeError:
         pass
     mkey = key
-    if key in ['x','y',Key.up,Key.right,Key.down,Key.left,'a','s','q','w']:
-        return False
-    return True
+    #if key in ['x','y',Key.up,Key.right,Key.down,Key.left,'a','s','q','w']:
+    #    return False
+    return False
 
 def get_click(message=None, use_mouse=True):
     """ start mouse listener and return location of next click """

@@ -47,7 +47,8 @@ def train_auto(network, data, h, w, n_train=1000, alpha=0.0001, n_plot=40,
     """ iterate through data set to train autoencoder newtork """
     costs = []
     for k in range(n_train):
-        subdata = DT.subdata(data, h, w)
+        #subdata = DT.subdata(data, h, w)
+        subdata = data
         network.train_network(subdata, alpha)
         costs = check_cost(network, subdata, subdata, costs, k, kmax_cost)
         check_auto(network, data, subdata, h, w, k, kmax_img, n_plot)
@@ -55,17 +56,17 @@ def train_auto(network, data, h, w, n_train=1000, alpha=0.0001, n_plot=40,
 
 def check_cost(network, input_data, output_data, costs, k, k_max):
     """ check to print cost """
-    if k % k_max == 0:
+    if k % k_max == 0 and k != 0:
         costs, m = get_cost_slope(network, input_data, output_data, costs)
         print('Cost {} {:.7f} {:.7f}'.format(k, costs[-1], m))
     return costs
      
 def check_auto(network, data, input_data, h, w, k, k_max, n_plot):
     """ """
-    if k % k_max == 0 and k_max != 0:
+    if k_max != 0 and k % k_max == 0 and k != 0:
         subdata = input_data[:n_plot, :, :, :]
-        md = to_middle_data(data, h, w)
-        plot_middle(network, md, h, w, n_plot=n_plot, count=k)
+        #md = to_middle_data(data, h, w)
+        plot_middle(network, subdata, h, w, n_plot=n_plot, count=k)
 
 
 ### HELPER ###
@@ -73,7 +74,8 @@ def check_auto(network, data, input_data, h, w, k, k_max, n_plot):
 def plot_before_after(network, data, h, w, n_plot=15, random=False, count=None):
     """ plot before and after for autoencoder network """
     start = 0 if not random else np.random.randint(len(data) - n_plot)
-    subdata = DT.subdata(data[start: start + n_plot], h, w)
+    #subdata = DT.subdata(data[start: start + n_plot], h, w)
+    subdata = data
     outs = np.clip(network.get_outputs(subdata), 0, 1)
     outs = [[subdata[i], g] for i, g in enumerate(outs)]
     outs = list(itertools.chain.from_iterable(outs))
@@ -82,9 +84,11 @@ def plot_before_after(network, data, h, w, n_plot=15, random=False, count=None):
 
 def plot_middle(network, data, h, w, n_plot=15, random=False, count=None):
     """ plot middle layer for autoencoder network """
-    MID = (16, 16) if h == 128 and w == 128 else (40, 30) ### FIX
+    MID = (64, 64) if h == 512 and w == 512 else (40, 30) ### FIX
     start = 0 if not random else np.random.randint(len(data) - n_plot)
-    subdata = DT.subdata(data[start: start + n_plot], h, w)
+    #subdata = DT.subdata(data[start: start + n_plot], h, w)
+    subdata = data
+    #print(data.shape)
     mids = network.get_flat(subdata)
     outs = np.clip(network.get_outputs(subdata), 0, 1)
     both = [[subdata[i], outs[i], np.reshape(g, MID)]

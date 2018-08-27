@@ -64,7 +64,7 @@ class NetworkAuto(Network):
                 get_tensor = self.graph.get_tensor_by_name
                 self.flat = get_tensor('{}/flat:0'.format(self.name))
 
-    def batch_me(self, data, func, alpha=0, batch=4):
+    def batch_me(self, data, func, alpha=0, batch=1):
         """ """
         datas = []
         for i in range(data.shape[0] // batch + 1):
@@ -87,7 +87,7 @@ class NetworkAuto(Network):
 
     def get_flat(self, input_data):
         """ return middle flat layer of network given feed """
-        print('Flat shape {}'.format(input_data.shape))
+        #print('Flat shape {}'.format(input_data.shape))
         return self.batch_me(input_data, self.flat)
 
     def get_outputs(self, input_data):
@@ -101,6 +101,7 @@ class NetworkAuto(Network):
 
     def train_network(self, input_data, alpha):
         """ train network given feed """
+        #print(input_data.shape)
         stuff = self.batch_me(input_data, self.train, alpha=alpha)
 
 
@@ -136,7 +137,7 @@ class NetworkClass(Network):
 
     def get_base_outputs(self, input_data):
         """ """
-        print('Input shape: {}'.format(input_data.shape))
+        #print('Input shape: {}'.format(input_data.shape))
         node_net_in = self.auto_network.get_flat(input_data)
         node_net_in = np.reshape(node_net_in, (node_net_in.shape[0], -1))
         return node_net_in

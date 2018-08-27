@@ -6,11 +6,14 @@ from os.path import join
 base_path = os.path.dirname(os.path.realpath(__file__))
 data_path = join(base_path, 'data')
 game_path = join(base_path, 'games')
+network_path = join(data_path, 'networks')
 
 # images
 images_path = join(data_path, 'images')
 #cards_path = join(data_path, 'cards')
 network_path = join(data_path, 'networks')
+
+labels_path = join(images_path, 'labels')
 
 # text
 #card_info = join(data_path, 'card_info.txt')
@@ -25,6 +28,8 @@ network_path = join(data_path, 'networks')
 #where_path = join(network_path, 'where')
 
 
+
+adwars2_labels = os.path.join(labels_path, 'adwars2')
 
 # GBA
 #gba_path = join(game_path, 'GBA')
