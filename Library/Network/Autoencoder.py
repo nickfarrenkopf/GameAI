@@ -124,9 +124,12 @@ def create(network_path, auto_name, h, w, hidden):
                 print(current.shape)
                 
             # flat layer
-            flat = tf.reshape(current, flat_shape, name='flat')
+            mid = tf.reshape(current, flat_shape)
+            flat = tf.round(mid, name='flat')
+            current = tf.reshape(flat, current.shape)
             encoder.reverse()
             shapes.reverse()
+            print('Flat: {}'.format(flat.shape))
 
             # decoder
             for i, sets in enumerate(shapes):

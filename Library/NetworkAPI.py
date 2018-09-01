@@ -84,9 +84,9 @@ def plot_before_after(network, data, h, w, n_plot=15, random=False, count=None):
 
 def plot_middle(network, data, h, w, n_plot=15, random=False, count=None):
     """ plot middle layer for autoencoder network """
-    MID = (64, 64) if h == 512 and w == 512 else (40, 30) ### FIX
+    MID = (32, 32) if h == 512 and w == 512 else (40, 30) ### FIX
     start = 0 if not random else np.random.randint(len(data) - n_plot)
-    #subdata = DT.subdata(data[start: start + n_plot], h, w)
+    subdata = DT.subdata(data[start: start + n_plot], h, w)
     subdata = data
     #print(data.shape)
     mids = network.get_flat(subdata)

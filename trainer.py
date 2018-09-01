@@ -88,22 +88,23 @@ auto_network = 'hello'
 #x
 
 # -- NEW AUTO --
-## NETS.new_auto(paths.auto_path, 'test', 512, 512, [64, 32, 32, 32, 16, 16])
-## NETS.new_auto(paths.auto_path, 'test', 512, 512, [32, 16, 8, 4])
+## NETS.new_auto(paths.network_path, 'test', 512, 512, [64, 32, 32, 32, 16, 16])
+## NETS.new_auto(paths.network_path, 'test', 512, 512, [64, 32, 16, 8, 4])
 ## NETS.new_auto(paths.auto_path, 'look', 128, 128, [16, 16])
 
 # -- LOAD AUTO --
 #auto_network = NETS.load_auto(paths.network_path, '')
-#auto_network = NETS.load_auto(paths.auto_path, 'AUTO_test_512_512_5_4096')
+#auto_network = NETS.load_auto(paths.auto_path, 'AUTO_test_512_512_5_1024')
 #auto_network = NETS.load_auto(paths.auto_path, 'AUTO_what_128_4_256')
 #auto_network = NETS.load_auto(paths.auto_path, 'AUTO_test_1_128_128_4_256')
 #auto_network = NETS.load_auto(paths.auto_path, 'AUTO_look_320_480_5_2400') 
 
 
-#if True:
-#    auto_network = load_auto('AUTO_test_512_512_5_4096')
-##    ds = dt.load_data()
-#   NETS.train_auto(auto_network, ds, 512, 512, kmax_img=5, n_train=100)
+if True:
+    auto_network = load_auto('AUTO_test_512_512_5_1024')
+    ds = dt.load_data()
+    NETS.train_auto(auto_network, ds, 512, 512, kmax_img=5, n_train=100,
+                    kmax_cost=5)
 
 # -- TRAIN AUTO --
 #NETS.train_auto(auto_network, ds, 128, kmax_img=100)
