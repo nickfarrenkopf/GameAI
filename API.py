@@ -1,20 +1,19 @@
 import os
 import time
 
-import data_things as dt
 import paths
+import data_things as dt
+
 from Library import Screen
 from Library import RL_Agent
 from Library import RL_Environment
 from Library import RL_Reward
 
 
-from Library import NetworkAPI as NETS
-
 ### API ###
 
 def run_program(train_me=False, save_me=True):
-    """ """
+    """ ??? later """
 
     # clean previous game data
     clear_gamestate_data(game)
@@ -67,13 +66,6 @@ def train_networks(GS, A, R):
 
 
 
-def train_reward_network():
-    """ """
-    neg_nums = [0] + list(range(233, 247)) + list(range(328, 341))
-    pos_nums = list(range(385, 393))
-    #[file if for file in os.listdir(gamedata_path) if file in list_]
-
-
 ### HELPER ###
 
 def clear_gamestate_data():
@@ -85,13 +77,6 @@ def clear_gamestate_data():
     
 
 
-def record_data():
-    """ """
-    pass
-
-
-
-
 def listen_game_data():
     """ """
     done = False
@@ -99,7 +84,6 @@ def listen_game_data():
         pred = reward.get_reward()[0]
         print(list(pred).index(pred.max()))
         time.sleep(0.25)
-
 
 
 def record_game_data():
@@ -132,8 +116,7 @@ def record_game_data():
 pause_time = 1
 
 game_name = 'pacman'
-game_path = os.path.join(paths.games_path, game_name)
-gamedata_path = os.path.join(paths.games_path, 'gamedata')
+game_path = paths.pacman_path
 
 
 
@@ -144,28 +127,15 @@ env = RL_Environment.Environment(game_path, game_name, auto_network)
 player = RL_Agent.Agent(game_path, game_name)
 
 reward = RL_Reward.Reward(env, player)
+
+# do things
+
+
 #ds, ls, idxs = reward.files_to_labeled()
-reward.train_network()
+#reward.train_network()
 #listen_game_data()
 
 #-10:0-9 204-217 492-500
 #1:305-312
-
-# REWARD is agent and environment specific
-# ACTIONS is agent (?) and environment specific
-
-
-# SET ENV INDO
-
-
-
-### PROGRAM ###
-
-#run_program(train_me=False, save_me=False)
-
-#clear_gamestate_data()
-#record_game_data()
-
-#
 
 

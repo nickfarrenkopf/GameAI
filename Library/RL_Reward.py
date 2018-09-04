@@ -1,104 +1,122 @@
 import os
+import random
 import numpy as np
-from PIL import Image
 from keras.models import Sequential, load_model
-from keras.layers import Dense, Dropout
+from keras.layers import Dense
 
+import Screen
+import data_things as dt
 
 
 class Reward(object):
     """ """
 
     def __init__(self, environment, agent, n_classes=3):
-        """ """
+        """ RL agents, RL dependent params, network """
         self.env = environment
         self.agent = agent
-        self.n_classes = 3
 
+        self.n_classes = 3
+        self.class_list = 0
         self.network_path = agent.reward_network_path
-        self.load_reward_network()
+        
+        self.load_network()
 
 
     ### NETWORK ###
 
-    def load_reward_network(self):
-        """ load keras reward network """
+    def load_network(self):
+        """ load keras reward network if exists, create otherwise """
         if not os.path.exists(self.network_path):
-            self.create_reward_network()
+            self.create_network()
         else:
             self.network = load_model(self.network_path)
 
-    def create_reward_network(self, n_hidden=32):
+    def create_network(self, n_hidden=32, n_n_hidden=2):
         """ create ANN reward nertwork with keras """
+        # first layer
         network = Sequential()
         network.add(Dense(n_hidden, activation='relu',
                           input_shape=self.env.state_size))
-        network.add(Dense(n_hidden, activation='relu'))
+        # hidden layers
+        for _ in range(n_n_hidden - 1):
+            network.add(Dense(n_hidden, activation='relu'))
+        # last layer
         network.add(Dense(self.n_classes, activation='softmax'))
         network.compile(loss='categorical_crossentropy', optimizer='adam',
                         metrics=['accuracy'])
-        network.save(self.network_path)
+        # save network
+        self.save_network()
         self.network = network
 
-    def train_network(self):
-        """ train keras network """
-        # load files
-        # label images with labels
-        data, labels, idxs = self.files_to_labeled()
-        lab_set = list(sorted(set(labels)))
-        labels = [self.to_label(lab_set.index(l), 3) for l in labels]
-        mids = self.env.auto_network.get_flat(data)
-        #print(mids.shape)
-        mids = np.reshape(mids, (mids.shape[0], mids.shape[1]))
-        labels = np.reshape(labels, (mids.shape[0], -1))
-        self.network.fit(mids, labels, epochs=1000, verbose=2)
-        #self.network.save(self.network_path)
-        print('Netwkr trained')
+    def save_network(self):
+        """ """
+        self.network.save(self.network_path)
+        print('Network saved to {}'.format(self.network_path))
 
-
-                   
 
     ### RUN ###
 
     def get_reward(self):
         """ get prediction for keras network """
-        pred = self.network.predict(self.env.get_gamestate(), verbose=0)
-        return pred
+        return self.network.predict(self.env.get_gamestate(), verbose=0)
 
 
-    ### HELPER ###
+    ### TRAIN - OFFLINE ###
 
+    def train_network_offline(self, epochs=1000):
+        """ train keras network """
+        # get data
+        data, cold_labels, _ = self.gamedata_files_to_network_inputs()
+        labels = dt.to_one_hot(cold_labels, n_classes=self.n_classes)
+        flat = self.env.auto_network.get_flat(data)
+        # reshape and fit
+        flat = np.reshape(flat, (flat.shape[0], -1))
+        labels = np.reshape(labels, (labels.shape[0], -1))
+        self.network.fit(flat, labels, epochs=epochs, verbose=2)
 
-    def to_label(self, idx, lens):
+    def gamedata_files_to_network_inputs(self, shuffle_me=True):
         """ """
-        label = np.zeros(lens)
-        label[idx] = 1
-        return label
-
-    def files_to_labeled(self, shuffle_me=True):
-        """ """
-        files = self.env.get_gamedata_paths()
-        imgs = [Image.open(file) for file in files]
-        idxs, labels = self.get_reward_labels()
-        data = [np.array(imgs[i]) / 255 for i in idxs]
-        for i in range(0, len(imgs), len(imgs) // len(data)):
+        # find files
+        files = self.env.get_gamedata_filepaths()
+        labels, idxs = self.load_reward_text_data()
+        # add zero data
+        files_to_load = [file for i, file in enumerate(files) if i in idxs]
+        for i in range(0, len(files), len(files) // len(labels) - 1):
             if i not in idxs:
-                data.append(np.array(imgs[i]) / 255)
+                files_to_load.append(files[i])
                 labels.append(0)
-        # shuffle to array
+        # load data
+        data = np.array([Screen.load_image(file) for file in files_to_load])
+        labels = np.array(labels)
+        # shuffle order
         if shuffle_me:
-            random_idxs = list(range(len(data)))
-            np.random.shuffle(random_idxs)
-            data = np.array([data[i] for i in random_idxs])
-            labels = np.array([labels[i] for i in random_idxs])
-        else:
-            data = np.array(data)
-            labels = np.array(labels)
+            combined = list(zip(data, labels))
+            random.shuffle(combined)
+            data[:], labels[:] = zip(*combined)
         return data, labels, idxs
+
+
+
+
+    def load_reward_text_data():
+        """ """
+
+        # load reward data from text file!!!
         
+        labels = 0
+        idxs = 0
+        return labels, idxs
+
+
+    ### TRAIN - ONLINE ###  
+
+    def train_network_online(self, epoches=10, alpha=0.000001):
+        """ """
+        pass
 
     def get_reward_labels(self):
-        """ """
+        """ WUT """
         done = False
         all_labels = []
         all_idxs = []
@@ -125,4 +143,4 @@ class Reward(object):
         return all_idxs, all_labels
 
 
-    
+

@@ -1,4 +1,4 @@
 *.pyc
-*.png
+checkpoint
 __init__.py
-data/
+emulator/

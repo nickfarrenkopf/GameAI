@@ -38,15 +38,26 @@ def subdata_xy(data, height, width, x, y):
 
 ### LABELS ###
 
-def new_labels(n_classes):
+def to_one_hot(old_labels, n_classes=0):
     """ """
-    return np.array([new_label(i, n_classes) for i in range(n_classes)])
+    label_set = list(sorted(set(labels)))
+    n_classes = len(label_set) if n_classes == 0 else n_classes
+    new_labels = [new_label(label_set.index(label), n_classes)
+                  for label in old_labels]
+    return new_labels
+
 
 def new_label(i, n_classes):
     """ """
     label = np.zeros(n_classes)
     label[i] = 1
     return label
+
+def new_labels(n_classes):
+    """ """
+    return np.array([new_label(i, n_classes) for i in range(n_classes)])
+
+
 
 
 ### BINARY ###

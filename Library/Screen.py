@@ -22,6 +22,11 @@ keyAPI = keyboard.Controller()
 
 ### SCREEN ###
 
+
+def load_image(file):
+    """ """
+    return np.array(Image.open(file)) / 255
+
 def get_data():
     """ takes screenshot and returns normalized data """
     return np.array(ImageGrab.grab()) / 255
@@ -241,5 +246,5 @@ if __name__ == '__main__':
     #shade_image('2.png')
     #img1 = np.array(Image.open(os.path.join(image_path, '2.png')))
     #img2 = np.array(Image.open(os.path.join(image_path, '2_label.png')))
-
+ 
 
