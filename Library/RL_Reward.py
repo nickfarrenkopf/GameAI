@@ -9,7 +9,7 @@ from keras.layers import Dense, Dropout
 class Reward(object):
     """ """
 
-    def __init__(self, environment, agent):
+    def __init__(self, environment, agent, n_classes=3):
         """ """
         self.env = environment
         self.agent = agent
@@ -55,11 +55,7 @@ class Reward(object):
         #self.network.save(self.network_path)
         print('Netwkr trained')
 
-    def to_label(self, idx, lens):
-        """ """
-        label = np.zeros(lens)
-        label[idx] = 1
-        return label
+
                    
 
     ### RUN ###
@@ -71,6 +67,13 @@ class Reward(object):
 
 
     ### HELPER ###
+
+
+    def to_label(self, idx, lens):
+        """ """
+        label = np.zeros(lens)
+        label[idx] = 1
+        return label
 
     def files_to_labeled(self, shuffle_me=True):
         """ """
