@@ -23,6 +23,7 @@ def load_auto(auto_name):
 
 ### TRAIN ###
 
+
 ### TEST CLICK ###
 
 def auto_click(auto_network, size=128, n_times=5):
@@ -63,8 +64,6 @@ def whats(word, n_pos=5, n_neg=10):
 
 
 
-    
-
 
 def train_auto_full():
     """ """
@@ -84,12 +83,10 @@ def train_auto_full():
 
 ### PROGRAM ###
 
-auto_network = 'hello'
-#x
 
 # -- NEW AUTO --
 ## NETS.new_auto(paths.network_path, 'test', 512, 512, [64, 32, 32, 32, 16, 16])
-## NETS.new_auto(paths.network_path, 'test', 512, 512, [64, 32, 16, 8, 4])
+## NETS.new_auto(paths.network_path, 'test', 512, 512, [64, 32, 16, 8, 4, 4])
 ## NETS.new_auto(paths.auto_path, 'look', 128, 128, [16, 16])
 
 # -- LOAD AUTO --
@@ -99,12 +96,18 @@ auto_network = 'hello'
 #auto_network = NETS.load_auto(paths.auto_path, 'AUTO_test_1_128_128_4_256')
 #auto_network = NETS.load_auto(paths.auto_path, 'AUTO_look_320_480_5_2400') 
 
-
 if True:
-    auto_network = load_auto('AUTO_test_512_512_5_1024')
+    auto_network = load_auto('AUTO_test_512_512_6_256')
     ds = dt.load_data()
-    NETS.train_auto(auto_network, ds, 512, 512, kmax_img=5, n_train=100,
-                    kmax_cost=5)
+    dt.plot_data_multiple(ds)
+
+if False:
+    auto_network = load_auto('AUTO_test_512_512_6_256')
+    ds = dt.load_data()
+    print(ds.shape)
+    NETS.train_auto(auto_network, ds[:len(ds) // 2], 512, 512, kmax_img=1,
+                    n_train=20,
+                    kmax_cost=1)
 
 # -- TRAIN AUTO --
 #NETS.train_auto(auto_network, ds, 128, kmax_img=100)
@@ -115,10 +118,6 @@ if True:
 #NETS.plot_before_after(auto_network, ds, 128, 128)
 #NETS.plot_middle(auto_network, ds, 128, 128)
 
-
-
-from PIL import Image
-import Library.DataThings as DTS
 
 
 

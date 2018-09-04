@@ -9,7 +9,7 @@ import paths
 
 from Library import Screen
 from Library import DataThings as DT
-import data_classes as DC
+#import data_classes as DC
 
 
 from Library.DataThings import *
@@ -19,7 +19,7 @@ from Library.DataThings import *
 
 def load_data():
     """ """
-    path = paths.adwars2_labels
+    path = paths.pacman_labels
     images = np.array([np.array(Image.open(os.path.join(path, f))) / 255
               for f in os.listdir(path)])
     #print(images.shape)

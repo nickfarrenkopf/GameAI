@@ -88,7 +88,10 @@ class NetworkAuto(Network):
     def get_flat(self, input_data):
         """ return middle flat layer of network given feed """
         #print('Flat shape {}'.format(input_data.shape))
-        return self.batch_me(input_data, self.flat)
+        #print(input_data.shape)
+        outs = self.batch_me(input_data, self.flat)
+        #print(outs.shape)
+        return outs
 
     def get_outputs(self, input_data):
         """ return outputs of network given feed """

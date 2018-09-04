@@ -75,7 +75,14 @@ def click(x, y, n_click=1):
 
 def send_keys(text):
     """ """
-    keyAPI.type(text)
+    if text in ['left','right','up', 'down']:
+        mapp = [Key.left, Key.right, Key.up, Key.down]
+        kt = mapp[['left','right','up', 'down'].index(text)]
+        keyAPI.press(kt)
+        keyAPI.release(kt)
+        print('Hello')
+    else:
+        keyAPI.type(text)
 
 
 ### MOUSE ###
