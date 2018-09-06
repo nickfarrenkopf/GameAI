@@ -16,21 +16,16 @@ def run_program(train_me=False, save_me=True):
     """ ??? later """
 
     # clean previous game data
-    clear_gamestate_data(game)
     count = 0
 
     # loop until done
     done = False
     while not done:
 
-        # ENVIRONMENT
+        # RL EVENTS
         GS = env.get_gamestate()
-
-        # ACTION
         A = player.choose_action(GS)
         player.take_action(A)
-
-        # REWARD
         R = env.get_reward(GS)
 
         # TRAIN
@@ -114,18 +109,18 @@ def record_game_data():
 
 pause_time = 1
 
-game_name = 'pacman'
+
 game_path = paths.pacman_path
-
-
 
 auto_network = dt.load_auto(paths.network_path, 'AUTO_test_512_512_6_256')
 
-# RL
-env = RL_Environment.Environment(game_path, game_name, auto_network)
-player = RL_Agent.Agent(game_path, game_name)
 
-reward = RL_Reward.Reward(env, player)
+
+# RL components
+if True:
+    env = RL_Environment.Environment(game_path, auto_network)
+    agent = RL_Agent.Agent(game_path)
+    reward = RL_Reward.Reward(env, agent)
 
 #ds, ls, ls_hot = reward.gamedata_files_to_network_inputs()
 #reward.test_network()
@@ -133,7 +128,7 @@ reward = RL_Reward.Reward(env, player)
 
 
 #ds, ls, idxs = reward.files_to_labeled()
-reward.train_network_offline()
+#reward.train_network_offline()
 #record_game_data()
 
 

@@ -9,6 +9,20 @@ def read_file_csv(filename):
     with open(filename, 'r') as file:
         return [row.split(',') for row in file.read().split('\n')]
 
+def read_file(filename):
+    """ """
+    with open(filename, 'r') as file:
+        return file.read().split('\n')
+
+def to_one_hot_labels(labels, label_set):
+    """ """
+    one_hot = np.array([dt.new_label(label_set.index(label), len(label_set))
+                            for label in labels])
+    return one_hot
+    
+
+
+
 def read_file_split_empty(filename):
     """ """
     with open(filename, 'r') as file:

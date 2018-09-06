@@ -1,0 +1,3 @@
+0,-10,player death
+1,0,nothing
+2,1,win

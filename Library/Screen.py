@@ -27,6 +27,10 @@ def load_image(file):
     """ """
     return np.array(Image.open(file)) / 255
 
+def load_images(files):
+    """ """
+    return np.array([load_image(file) for file in files])
+
 def get_data():
     """ takes screenshot and returns normalized data """
     return np.array(ImageGrab.grab()) / 255

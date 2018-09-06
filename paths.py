@@ -15,4 +15,6 @@ network_path = join(data_path, 'networks')
 pacman_path = join(games_path, 'pacman')
 pacman_gamedata_path = join(pacman_path, 'gamedata')
 
+# images
 
+# networks

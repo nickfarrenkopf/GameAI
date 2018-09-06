@@ -13,12 +13,11 @@ class Agent(object):
 
     """
 
-    def __init__(self, games_path, game_name):
+    def __init__(self, game_path):
         """ """
 
         # environment
-        self.games_path = games_path
-        self.game_name = game_name
+        self.base_path, self.game_name = os.path.split(game_path)
         
         # file location
         self.info_path = os.path.join(games_path, 'agents.txt')
@@ -76,7 +75,7 @@ class Agent(object):
 
 if __name__ == '__main__':
 
-    path = 'C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\games'
-    ag = Agent(path, 'pacman')
+    path = 'C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\games\\pacman'
+    ag = Agent(path)
 
 
