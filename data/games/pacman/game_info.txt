@@ -1,0 +1,10 @@
+
+
+network
+reward_network
+0,-10,death
+1,0,nothing
+2,1,level_complete
+
+network
+game_model

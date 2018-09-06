@@ -4,7 +4,7 @@ import numpy as np
 from keras.models import Sequential, load_model
 from keras.layers import Dense
 
-import Screen
+from Library import Screen
 import data_things as dt
 
 
@@ -18,8 +18,10 @@ class Reward(object):
 
         self.n_classes = 3
         self.class_list = 0
-        self.network_path = agent.reward_network_path
         
+        self.network_path = agent.reward_network_path
+        self.text_info_path = os.path.join(self.env.game_path, 'rewards.txt')
+
         self.load_network()
 
 
@@ -32,7 +34,7 @@ class Reward(object):
         else:
             self.network = load_model(self.network_path)
 
-    def create_network(self, n_hidden=32, n_n_hidden=2):
+    def create_network(self, n_hidden=64, n_n_hidden=2):
         """ create ANN reward nertwork with keras """
         # first layer
         network = Sequential()
@@ -46,7 +48,7 @@ class Reward(object):
         network.compile(loss='categorical_crossentropy', optimizer='adam',
                         metrics=['accuracy'])
         # save network
-        self.save_network()
+        network.save(self.network_path)
         self.network = network
 
     def save_network(self):
@@ -61,26 +63,39 @@ class Reward(object):
         """ get prediction for keras network """
         return self.network.predict(self.env.get_gamestate(), verbose=0)
 
-
-    ### TRAIN - OFFLINE ###
-
-    def train_network_offline(self, epochs=1000):
-        """ train keras network """
+    def test_network(self):
+        """ """
         # get data
-        data, cold_labels, _ = self.gamedata_files_to_network_inputs()
-        labels = dt.to_one_hot(cold_labels, n_classes=self.n_classes)
+        data, _, hot_labels = self.gamedata_files_to_network_inputs()
         flat = self.env.auto_network.get_flat(data)
         # reshape and fit
         flat = np.reshape(flat, (flat.shape[0], -1))
-        labels = np.reshape(labels, (labels.shape[0], -1))
+        labels = np.reshape(hot_labels, (hot_labels.shape[0], -1))
+        thing = self.network.evaluate(flat, labels, verbose=0)
+        print(thing)
+
+
+    ### TRAIN - OFFLINE ###
+
+    def train_network_offline(self, epochs=3000):
+        """ train keras network """
+        # get data
+        data, cold_labels, hot_labels = self.gamedata_files_to_network_inputs()
+        flat = self.env.auto_network.get_flat(data)
+        # reshape and fit
+        flat = np.reshape(flat, (flat.shape[0], -1))
+        labels = np.reshape(hot_labels, (hot_labels.shape[0], -1))
+        
         self.network.fit(flat, labels, epochs=epochs, verbose=2)
 
     def gamedata_files_to_network_inputs(self, shuffle_me=True):
         """ """
-        # find files
-        files = self.env.get_gamedata_filepaths()
-        labels, idxs = self.load_reward_text_data()
-        # add zero data
+        # load base data
+        with open(self.text_info_path) as file:
+            text_info = file.read().split('\n')
+        idxs, labels = self.parse_reward_label_text(text_info)
+        # which files to load then add zero data
+        files = self.env.get_gamedata_paths()
         files_to_load = [file for i, file in enumerate(files) if i in idxs]
         for i in range(0, len(files), len(files) // len(labels) - 1):
             if i not in idxs:
@@ -89,24 +104,35 @@ class Reward(object):
         # load data
         data = np.array([Screen.load_image(file) for file in files_to_load])
         labels = np.array(labels)
+        label_set = list(sorted(set(labels)))
+        one_hot = np.array([dt.new_label(label_set.index(label), len(label_set))
+                            for label in labels])
         # shuffle order
         if shuffle_me:
-            combined = list(zip(data, labels))
-            random.shuffle(combined)
-            data[:], labels[:] = zip(*combined)
-        return data, labels, idxs
+            random_idxs = list(range(len(data)))
+            np.random.shuffle(random_idxs)
+            data = np.array([data[i] for i in random_idxs])
+            labels = np.array([labels[i] for i in random_idxs])
+            one_hot = np.array([one_hot[i] for i in random_idxs])
+        return data, labels, one_hot
 
-
-
-
-    def load_reward_text_data():
+    def parse_reward_label_text(self, text_data):
         """ """
-
-        # load reward data from text file!!!
-        
-        labels = 0
-        idxs = 0
-        return labels, idxs
+        all_labels = []
+        all_idxs = []
+        # loop over classes
+        for class_data in text_data:
+            label, text = class_data.split(':')
+            # loop over indexes - range vs single
+            for idx in text.split(' '):
+                if '-' in idx:
+                    ints = idx.split('-')
+                    new_labels = list(range(int(ints[0]), int(ints[1])))
+                else:
+                    new_labels = int(idx)
+                all_labels += new_labels
+                all_idxs += [int(label)] * len(new_labels)
+        return all_labels, all_idxs
 
 
     ### TRAIN - ONLINE ###  
@@ -141,6 +167,5 @@ class Reward(object):
                         all_labels += [label]
             done = text == '0'
         return all_idxs, all_labels
-
 
 

@@ -89,7 +89,7 @@ def listen_game_data():
 def record_game_data():
     """ """
     # params
-    count = 0
+    count = len(env.get_gamedata_paths())
     print('Start count: {}'.format(count))
     done = False
     while not done:
@@ -105,7 +105,6 @@ def record_game_data():
         time.sleep(0.1)
         print(count)
         count += 1
-        done = count > 500
 
 
 
@@ -120,7 +119,7 @@ game_path = paths.pacman_path
 
 
 
-auto_network = NETS.load_auto(paths.network_path, 'AUTO_test_512_512_6_256')
+auto_network = dt.load_auto(paths.network_path, 'AUTO_test_512_512_6_256')
 
 # RL
 env = RL_Environment.Environment(game_path, game_name, auto_network)
@@ -128,14 +127,14 @@ player = RL_Agent.Agent(game_path, game_name)
 
 reward = RL_Reward.Reward(env, player)
 
+#ds, ls, ls_hot = reward.gamedata_files_to_network_inputs()
+#reward.test_network()
 # do things
 
 
 #ds, ls, idxs = reward.files_to_labeled()
-#reward.train_network()
-#listen_game_data()
+reward.train_network_offline()
+#record_game_data()
 
-#-10:0-9 204-217 492-500
-#1:305-312
 
 

@@ -1,0 +1,3 @@
+0
+name:player_1
+actions:left,right,up,down
