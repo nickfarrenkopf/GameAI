@@ -8,6 +8,7 @@ from Library import Screen
 from Library import RL_Agent
 from Library import RL_Environment
 from Library import RL_Reward
+from Library import RL_Game
 
 
 ### API ###
@@ -124,13 +125,14 @@ values = ['up','right','down','left','z','x','a','s','q','r']
 
 # RL components
 if True:
+    game = RL_Game.Game(game_path, auto_network)
     env = RL_Environment.Environment(game_path, auto_network)
-    agent = RL_Agent.Agent(game_path)
-    reward = RL_Reward.Reward(env, agent)
+    agent = RL_Agent.Agent(game_path, env)
+    reward = RL_Reward.Reward(game, agent)
 
-    #reward.train_network_offline()
+    reward.train_network_offline()
 
-record_game_data()
+#record_game_data()
 
 #ds, ls, ls_hot = reward.gamedata_files_to_network_inputs()
 #reward.test_network()

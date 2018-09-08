@@ -13,13 +13,13 @@
 
 
 
-class Action(object):
+class Action(RL_Game.RLComponent):
     """ """
 
 
     def __init__(self):
         """ """
-        pass
+        self.name = 'action'
 
 
 

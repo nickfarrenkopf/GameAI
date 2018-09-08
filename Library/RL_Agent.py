@@ -3,34 +3,24 @@ from os.path import join
 from keras.models import load_model
 
 from Library import DataThings as dt
+from Library.RL_Game import RL_Component
 
 
-class Agent(object):
-    """
-
-    Agent is pacman player 1
-    Agent is pacman player 2
-    Agent is digdug player
-    Agent is aw2 player
-
-    """
+class Agent(RL_Component):
+    """ """
 
     def __init__(self, game_path, environment):
-        """ """
+        """ """ 
 
-        # environment
+        # RL components
+        self.name = 'agent'
         self.env = environment
-        self.base_path, self.game_name = os.path.split(game_path)
         
         # file location
-        self.info_path = os.path.join(game_path, 'agents.txt')
-        self.network_path = os.path.join(game_path, 'value_network.h5')
-        self.network = load_model(self.network_path)
+
 
         self.reward_network_path = join(game_path, 'reward_network.h5')
 
-        # agent info
-        #self.agent_id, self.agent_name, self.actions = self.load_text()
 
         self.text_info_path = join(game_path, 'reward_labels.txt')
         self.reward_labels = 0
@@ -41,33 +31,44 @@ class Agent(object):
 
     ### NETWORK ###
 
-    def load_network(self):
-        """ load keras agent network if exists, create otherwise """
-        if not os.path.exists(self.network_path):
-            self.create_network()
-            self.save_network()
-        else:
-            self.network = load_model(self.network_path)
-
     def create_network(self, n_hidden=64, n_layers=2):
         """ ??? """
         # first layer
         network = Sequential()
         network.add(Dense(n_hidden, activation='relu',
-                          input_shape=self.env.state_action_size))
+                          input_shape=self.game.state_action_size))
         # hidden layers
         for _ in range(n_layers - 1):
             network.add(Dense(n_hidden, activation='relu'))
         # last layer
-        network.add(Dense(self.env.state_size[0], activation='relu'))
+        network.add(Dense(1, activation='relu'))
         network.compile(loss='sgd', optimizer='adam')
         self.network = network
 
-    def save_network(self):
-        """ save agent network """
-        self.network.save(self.network_path)
-        print('Agent network saved to {}'.format(self.network_path))
-    
+
+    ### TRAIN OFFLINE ###
+
+    def train_newtork_offline(self, epochs=100):
+        """ """
+        pass
+
+    def test_network_offline(self):
+        """ """
+        pass
+
+
+    ### TRAIN ONLINE ###
+        
+    def train_newtork_online(self, epochs=10):
+        """ """
+        pass
+
+    def test_network_online(self):
+        """ """
+        pass   
+
+
+
 
     ### REWARD ###
 
@@ -90,7 +91,7 @@ class Agent(object):
         return all_labels, all_idxs
 
     def load_reward_indexes_and_labels(self):
-        """ """
+        """ FIX ME TO LOAD LABELS BASED ON KEY """
         text_info = dt.read_file(self.text_info_path)
         idxs, labels = self.parse_reward_label_text(text_info)
         
@@ -142,25 +143,5 @@ class Agent(object):
 
 
 
-    ### TRAIN OFFLINE ###
-
-    def train_newtork_offline(self, epochs=100):
-        """ """
-        pass
-
-    def test_network_offline(self):
-        """ """
-        pass
-
-
-    ### TRAIN ONLINE ###
-        
-    def train_newtork_online(self, epochs=10):
-        """ """
-        pass
-
-    def test_network_online(self):
-        """ """
-        pass   
 
   
