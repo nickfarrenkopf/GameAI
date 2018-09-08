@@ -84,7 +84,7 @@ def listen_game_data():
 def record_game_data():
     """ """
     # params
-    count = len(env.get_gamedata_paths())
+    count = len(env.get_all_gamedata_paths())
     print('Start count: {}'.format(count))
     done = False
     while not done:
@@ -95,10 +95,12 @@ def record_game_data():
             text = '0' + c
         else:
             text = c
-        path = 'image_{}'.format(text)
-        env.screencap_window(name=path)
+        key = Screen.get_key()
+        if key in keys:
+            path = 'image_{}_{}'.format(text, values[keys.index(key)])
+            env.screencap_window(name=path)
         time.sleep(0.1)
-        print(count)
+        print(key)
         count += 1
 
 
@@ -106,7 +108,7 @@ def record_game_data():
 ### PARAMS ###
 
 
-
+from pynput.keyboard import Key
 pause_time = 1
 
 
@@ -116,11 +118,19 @@ auto_network = dt.load_auto(paths.network_path, 'AUTO_test_512_512_6_256')
 
 
 
+keys = [Key.up,Key.right,Key.down,Key.left,'z','x','a','s','q','r']
+values = ['up','right','down','left','z','x','a','s','q','r']
+
+
 # RL components
 if True:
     env = RL_Environment.Environment(game_path, auto_network)
     agent = RL_Agent.Agent(game_path)
     reward = RL_Reward.Reward(env, agent)
+
+    #reward.train_network_offline()
+
+record_game_data()
 
 #ds, ls, ls_hot = reward.gamedata_files_to_network_inputs()
 #reward.test_network()

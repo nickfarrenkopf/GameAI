@@ -14,9 +14,10 @@ def read_file(filename):
     with open(filename, 'r') as file:
         return file.read().split('\n')
 
-def to_one_hot_labels(labels, label_set):
+def to_one_hot_labels(labels):
     """ """
-    one_hot = np.array([dt.new_label(label_set.index(label), len(label_set))
+    label_set = list(sorted(set(labels)))
+    one_hot = np.array([new_label(label_set.index(label), len(label_set))
                             for label in labels])
     return one_hot
     

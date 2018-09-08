@@ -22,8 +22,22 @@ class Environment(object):
         # init THIGNS
         self.window = ((215, 1239), (727, 1751))
         self.state_size = (256,)
+        self.state_action_size = (257,)
+
+        
 
         # load network
+        self.load_network()
+
+
+
+    def load_env_info(self):
+        """ """
+        path = os.path.join(self.game_path, 'environment_info.txt')
+        dt.read_file(path)
+
+        self.reward_n_classes = 0
+        self.reward_label_to_int = 0
 
 
 
@@ -75,24 +89,18 @@ class Environment(object):
         else:
             self.network = load_model(self.network_path)
 
-    def create_network(self, n_hidden=64, n_n_hidden=2):
+    def create_network(self, n_hidden=64, n_layers=2):
         """ """
         # first layer
         network = Sequential()
         network.add(Dense(n_hidden, activation='relu',
-                          input_shape=self.env.state_size))
-
-
-        
+                          input_shape=self.state_action_size))
         # hidden layers
-        for _ in range(n_n_hidden - 1):
-            network.add(Dense(n_hidden, activation='relu'))
-
-
-            
+        for _ in range(n_layers - 1):
+            network.add(Dense(n_hidden, activation='relu'))            
         # last layer
-        network.add(Dense(self.n_classes, activation='softmax'))
-        network.compile(loss='categorical_crossentropy', optimizer='adam')
+        network.add(Dense(self.state_size[0], activation='relu'))
+        network.compile(loss='sgd', optimizer='adam')
         self.network = network
 
     def save_network(self):
@@ -111,16 +119,19 @@ class Environment(object):
             label = state_data[i + 1]
             network.train(data, labels) ####
 
+    def test_network_offline(self):
+        """ """
+        pass
+
 
     ### TRAIN ONLINE ###
         
     def train_newtork_online(self, epochs=10):
         """ """
         pass
-    
 
-
-
-
+    def test_network_online(self):
+        """ """
+        pass   
 
 

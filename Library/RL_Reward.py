@@ -1,22 +1,10 @@
 import os
-from os.path import join
-import random
 import numpy as np
 from keras.models import Sequential, load_model
 from keras.layers import Dense
 
 from Library import Screen
-import data_things as dt
-
-
-class RewardClass(object):
-    """ """
-
-    def __init__(self, idx, label, text):
-        """ """
-        self.idx = idx
-        self.label = label
-        self.text = text
+from Library import DataThings as dt
 
 
 class Reward(object):
@@ -25,35 +13,16 @@ class Reward(object):
     def __init__(self, environment, agent):
         """ """
 
-        # input params
+        # agent and env
         self.env = environment
         self.agent = agent
 
-        # agent dependent        
-        self.network_path = agent.reward_network_path
-
-        # environment dependent
-
-        # extra files
-        self.text_info_path = os.path.join(self.env.game_path, 'rewards.txt')
-
-        self.reward_info_path = join(self.env.game_path, 'reward_info.txt')
-
         # load network
-        self.load_reward_class_info()
+        self.network_path = agent.reward_network_path
         self.load_network()
 
 
-
-
-    ### FILE ###
-
-    def load_reward_class_info(self):
-        """ """
-        things = dt.read_file(self.reward_info_path)
-        for row in things:
-            self.reward_classes.append(*row.split(','))
-        self.class_info = 0
+    ### NETWORK ###
 
     def load_network(self):
         """ load keras reward network if exists, create otherwise """
@@ -63,22 +32,14 @@ class Reward(object):
         else:
             self.network = load_model(self.network_path)
 
-    def save_network(self):
-        """ save reward network """
-        self.network.save(self.network_path)
-        print('Reward network saved to {}'.format(self.network_path))
-
-
-    ### NETWORK ###
-
-    def create_network(self, n_hidden=64, n_n_hidden=2):
+    def create_network(self, n_hidden=64, n_layers=2):
         """ create ANN reward nertwork with keras """
         # first layer
         network = Sequential()
         network.add(Dense(n_hidden, activation='relu',
                           input_shape=self.env.state_size))
         # hidden layers
-        for _ in range(n_n_hidden - 1):
+        for _ in range(n_layers - 1):
             network.add(Dense(n_hidden, activation='relu'))
         # last layer
         network.add(Dense(self.n_classes, activation='softmax'))
@@ -86,16 +47,10 @@ class Reward(object):
                         metrics=['accuracy'])
         self.network = network
 
-    def test_network(self):
-        """ ??? """
-        # get data
-        data, _, hot_labels = self.gamedata_files_to_network_inputs()
-        flat = self.env.auto_network.get_flat(data)
-        # reshape and fit
-        flat = np.reshape(flat, (flat.shape[0], -1))
-        labels = np.reshape(hot_labels, (hot_labels.shape[0], -1))
-        thing = self.network.evaluate(flat, labels, verbose=0)
-        print(thing)
+    def save_network(self):
+        """ save reward network """
+        self.network.save(self.network_path)
+        print('Reward network saved to {}'.format(self.network_path))
 
 
     ### RUN TIME ###
@@ -110,60 +65,57 @@ class Reward(object):
     def train_network_offline(self, epochs=3000):
         """ train keras network with saved gamestate data """
         # get data
-        data, cold_labels, hot_labels = self.gamedata_files_to_network_inputs()
+        data, _, labels = self.gamedata_files_to_network_inputs()
+        flat = self.env.auto_network.get_flat(data)
+        # loop and fit
+        self.network.fit(flat, labels, epochs=epochs, verbose=2)
+
+    def test_network_offline(self):
+        """ ??? """
+        # get data
+        data, _, hot_labels = self.gamedata_files_to_network_inputs()
         flat = self.env.auto_network.get_flat(data)
         # reshape and fit
         flat = np.reshape(flat, (flat.shape[0], -1))
         labels = np.reshape(hot_labels, (hot_labels.shape[0], -1))
-        self.network.fit(flat, labels, epochs=epochs, verbose=2)
+        thing = self.network.evaluate(flat, labels, verbose=0)
+        print(thing)
 
     def gamedata_files_to_network_inputs(self, shuffle_me=True):
         """ load gamestate images based on labeled class data """
-        # load base data
-        text_info = dt.read_file(self.text_info_path)
-        idxs, labels = self.parse_reward_label_text(text_info)
-        # which files to load then add zero data
+        # find gamestate indexes to load
+        idxs, labels = self.agent.load_reward_indexes_and_labels()
+        _, labels, files = self.add_zero_labels(idxs, labels)
+        # shuffle order
+        if shuffle_me:
+            random_idxs = list(range(len(labels)))
+            np.random.shuffle(random_idxs)
+            files = np.array([files[i] for i in random_idxs])
+            labels = np.array([labels[i] for i in random_idxs])
+        # load data and format to network
+        data = Screen.load_images(files)
+        one_hot = dt.to_one_hot_labels(labels)
+        return data, labels, one_hot
+
+    def add_zero_labels(self, idxs, labels):
+        """ """
         files = self.env.get_all_gamedata_paths()
         files_to_load = [file for i, file in enumerate(files) if i in idxs]
         for i in range(0, len(files), len(files) // len(labels) - 1):
             if i not in idxs:
                 files_to_load.append(files[i])
                 labels.append(0)
-        # format data
-        data = Screen.load_images(files_to_load)
-        one_hot = dt.to_one_hot_labels(labels)
-        # shuffle order
-        if shuffle_me:
-            random_idxs = list(range(len(data)))
-            np.random.shuffle(random_idxs)
-            data = np.array([data[i] for i in random_idxs])
-            labels = np.array([labels[i] for i in random_idxs])
-            one_hot = np.array([one_hot[i] for i in random_idxs])
-        return data, labels, one_hot
-
-    def parse_reward_label_text(self, text_data):
-        """ parse through labeled class data to return labels and indexes """
-        all_labels = []
-        all_idxs = []
-        # loop over classes
-        for class_data in text_data:
-            label, text = class_data.split(':')
-            # loop over indexes - range vs single
-            for idx in text.split(' '):
-                if '-' in idx:
-                    ints = idx.split('-')
-                    new_labels = list(range(int(ints[0]), int(ints[1])))
-                else:
-                    new_labels = int(idx)
-                all_labels += new_labels
-                all_idxs += [int(label)] * len(new_labels)
-        return all_labels, all_idxs
+        return idxs, labels, files_to_load
 
 
     ### TRAIN - ONLINE ###  
 
     def train_network_online(self, epoches=10, alpha=0.000001):
         """ ??? """
+        pass
+
+    def test_network_online(self):
+        """ """
         pass
 
     def get_reward_labels(self):
