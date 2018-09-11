@@ -132,8 +132,11 @@ if True:
 
     #reward.train_network_offline()
 
+idxs, labels = game.load_labels('left')
+print(len(idxs))
+
 #record_game_data()
-listen_game_data()
+#listen_game_data()
 
 #ds, ls, ls_hot = reward.gamedata_files_to_network_inputs()
 #reward.test_network()

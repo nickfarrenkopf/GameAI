@@ -73,7 +73,7 @@ class Reward(RL_Game.RL_Component):
         _, labels, files = self.add_zero_reward_labels(idxs, labels)
         files, labels = self.shuffle_mes(files, labels, shuffle_me)
         # load data and format to network
-        data = Screen.load_images(files)
+        data = DT.load_images(files)
         one_hot = DT.to_one_hot_labels(labels)
         return data, labels, one_hot
 

@@ -14,6 +14,9 @@ class RL_Component(object):
         self.network = None
 
 
+
+
+
     ### NETWORK ###
 
     def load_network(self):
@@ -77,6 +80,15 @@ class Game(object):
     
 
 
+    def load_labels(self, label):
+        """ """
+        data = os.listdir(self.image_path)
+        idxs = []
+        for row in data:
+            split = row.split('.')[0].split('_')
+            if label == split[-1]:
+                idxs.append(int(split[1]))
+        return idxs, [label] * len(idxs)
 
     ### WINDOW ###
 

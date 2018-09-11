@@ -83,7 +83,7 @@ def create(network_path, auto_name, h, w, hidden):
 
         # name and save path
         auto_name = 'AUTO_{}_{}_{}_{}_{}'.format(auto_name, h, w, n_layers,
-                                              flat_size)
+                                              flat_size // 2) ####
         save_path = os.path.join(network_path, auto_name)
         print(save_path)
 
@@ -124,12 +124,24 @@ def create(network_path, auto_name, h, w, hidden):
                 print(current.shape)
                 
             # flat layer
-            mid = tf.reshape(current, flat_shape, name='flat')
+            mid = tf.reshape(current, flat_shape, name='flat_1')
+            Wm = weight([int(flat_shape[1]), 128])
+            bm = bias([128])
+            hng = tf.round(tf.add(tf.matmul(mid, Wm), bm), name='flat')
+
+            print(mid.shape)
+            Wm2 = weight([128, 256])
+            bm2 = bias([mid.shape[1]])
+            mds = tf.add(tf.matmul(hng, Wm2), bm2)
+            current = mds
+            # dense
+            
+            
             #flat = tf.round(mid, name='flat')
             #current = tf.reshape(flat, current.shape)
             encoder.reverse()
             shapes.reverse()
-            print('Flat: {}'.format(mid.shape))
+            print('Flat: {}'.format(hng.shape))
 
             # decoder
             for i, sets in enumerate(shapes):
