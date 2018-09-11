@@ -1,29 +1,32 @@
 import os
 from os.path import join
-from keras.models import load_model
+from keras.models import load_model, Sequential
+from keras.layers import Dense
 
 from Library import DataThings as dt
-from Library.RL_Game import RL_Component
+from Library import RL_Game
 
 
-class Agent(RL_Component):
+class Agent(RL_Game.RL_Component):
     """ """
 
-    def __init__(self, game_path, environment):
+    def __init__(self, game, environment):
         """ """ 
 
         # RL components
         self.name = 'agent'
         self.env = environment
+        self.game = game
         
         # file location
+        self.game_path = game.game_path
 
 
-        self.reward_network_path = join(game_path, 'reward_network.h5')
+        self.reward_network_path = join(game.game_path, 'reward_network.h5')
+        self.network_path = join(self.game_path, 'agent_network.h5')
 
-
-        self.text_info_path = join(game_path, 'reward_labels.txt')
-        self.reward_labels = 0
+        self.text_info_path = join(game.game_path, 'reward_labels.txt')
+        #self.reward_labels = 0
 
         # load network
         self.load_network()
@@ -42,7 +45,7 @@ class Agent(RL_Component):
             network.add(Dense(n_hidden, activation='relu'))
         # last layer
         network.add(Dense(1, activation='relu'))
-        network.compile(loss='sgd', optimizer='adam')
+        network.compile(loss='mean_squared_error', optimizer='adam')
         self.network = network
 
 

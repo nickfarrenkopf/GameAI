@@ -3,10 +3,10 @@ from keras.layers import Dense
 
 from Library import Screen
 from Library import DataThings as DT
-from Library.RL_Game import RL_Component
+from Library import RL_Game
 
 
-class Reward(RL_Component):
+class Reward(RL_Game.RL_Component):
     """ """
 
     def __init__(self, game, agent):
@@ -18,7 +18,7 @@ class Reward(RL_Component):
         self.agent = agent
 
         # load network
-        RL_Component.__init__(self, agent.reward_network_path)
+        RL_Game.RL_Component.__init__(self, agent.reward_network_path)
         self.load_network()
 
 

@@ -2,8 +2,10 @@ import os
 import numpy as np
 from keras.models import load_model
 
+from Library import Screen
 
-class RLComponent(object):
+
+class RL_Component(object):
     """ """
 
     def __init__(self, network_path):
@@ -18,7 +20,7 @@ class RLComponent(object):
         """ load keras reward network if exists, create otherwise """
         if not os.path.exists(self.network_path):
             self.create_network()
-            self.save_network()
+            self.save_network(True)
         else:
             self.network = load_model(self.network_path)
         
@@ -66,6 +68,7 @@ class Game(object):
 
         self.n_rewards = 3
 
+        self.game_path = game_path
         self.image_path = os.path.join(game_path, 'gamedata')
         self.network_path = os.path.join(game_path, 'value_network.h5')
         

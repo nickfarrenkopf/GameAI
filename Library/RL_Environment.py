@@ -3,10 +3,10 @@ from keras.layers import Dense
 
 from Library import Screen
 from Library import DataThings as DT
-from Library.RL_Game import RL_Component
+from Library import RL_Game
 
 
-class Environment(RL_Component):
+class Environment(RL_Game.RL_Component):
     """ """
 
     def __init__(self, game):
@@ -17,7 +17,7 @@ class Environment(RL_Component):
         self.game = game
         
         # load network
-        RL_Component.__init__(self, game.environment_network_path)
+        RL_Game.RL_Component.__init__(self, game.environment_network_path)
         self.load_network()
 
 
@@ -33,8 +33,8 @@ class Environment(RL_Component):
         for _ in range(n_layers - 1):
             network.add(Dense(n_hidden, activation='relu'))            
         # last layer
-        network.add(Dense(self.state_size[0], activation='relu'))
-        network.compile(loss='sgd', optimizer='adam')
+        network.add(Dense(self.game.state_size[0], activation='relu'))
+        network.compile(loss='mean_squared_error', optimizer='adam')
         self.network = network
 
 

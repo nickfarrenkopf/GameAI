@@ -126,13 +126,14 @@ values = ['up','right','down','left','z','x','a','s','q','r']
 # RL components
 if True:
     game = RL_Game.Game(game_path, auto_network)
-    env = RL_Environment.Environment(game_path, auto_network)
-    agent = RL_Agent.Agent(game_path, env)
+    env = RL_Environment.Environment(game)
+    agent = RL_Agent.Agent(game, env)
     reward = RL_Reward.Reward(game, agent)
 
-    reward.train_network_offline()
+    #reward.train_network_offline()
 
 #record_game_data()
+listen_game_data()
 
 #ds, ls, ls_hot = reward.gamedata_files_to_network_inputs()
 #reward.test_network()
