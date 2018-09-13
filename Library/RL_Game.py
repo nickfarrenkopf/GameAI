@@ -67,7 +67,7 @@ class Game(object):
         self.auto_network = auto_network
 
 
-        self.environment_network_path = 'Fix path in GAME'
+        self.environment_network_path = join(game_data, 'reward_network.h5')
 
         self.n_rewards = 3
 

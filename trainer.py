@@ -19,7 +19,7 @@ def load_auto(auto_name):
 
 --- NEW AUTO ---
 NETS.new_auto(paths.network_path, 'test', 512, 512, [64, 32, 32, 32, 16, 16])
-NETS.new_auto(paths.network_path, 'test', 512, 512, [64, 32, 16, 8, 4, 4])
+NETS.new_auto(paths.network_path, 'test', 512, 512, [64, 32, 16, 16, 8, 4])
 
 --- LOAD AUTO ---
 auto_network = NETS.load_auto(paths.network_path, 'AUTO_test_512_512_5_1024')
@@ -42,11 +42,16 @@ dt.plot_midd???
 if __name__ == '__main__':
 
     path = paths.network_path
+
+    if 0:
+        NETS.new_auto(paths.network_path, 'test', 512, 512,
+                      [64, 32, 16, 16, 8, 4])
     
     # load auto
-    if 0:
-        auto_network = dt.load_auto(path, 'AUTO_test_512_512_6_256')
-        ds = dt.load_data()
+    if 1:
+        auto_network = dt.load_auto(path, 'AUTO_test_512_512_6_128')
+        #ds = dt.load_data()
+        ds = dt.load_hs_data()
         print('Loaded network {}'.format(auto_network.name))
         print('Data shape: {}'.format(ds.shape))
 
@@ -55,8 +60,8 @@ if __name__ == '__main__':
         dt.plot_data_multiple(ds)
 
     # train auto
-    if 0:
-        NETS.train_auto(auto_network, ds[:len(ds) // 2], 512, 512, n_train=20,
+    if 1:
+        NETS.train_auto(auto_network, ds, 512, 512, n_train=20,
                         kmax_img=1, kmax_cost=1)
 
 

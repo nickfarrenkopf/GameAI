@@ -15,12 +15,28 @@ from Library import NetworkAPI as NETS
 from Library.DataThings import *
 
 
+from os.path import join
+
+
+a = 395
+b = 286
+c = 3
+
+def load_hs_data():
+    """ """
+    width = height = 620
+    vocab = os.listdir(paths.hs_data_path)
+    imgs = [Image.open(join(paths.hs_data_path, v)) for v in vocab]
+    imgs = [img.resize((width, height), Image.ANTIALIAS) for img in imgs]
+    data = np.array([np.array(img)[:, :, :3] / 255 for img in imgs])
+    return data
+
 
 ### TEXT FILE ###
 
 def load_data():
     """ """
-    path = paths.pacman_labels
+    path = paths.pacman_gamedata_path
     images = np.array([np.array(Image.open(os.path.join(path, f))) / 255
               for f in os.listdir(path)])
     #print(images.shape)

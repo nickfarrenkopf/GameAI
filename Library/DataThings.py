@@ -43,6 +43,14 @@ def read_file_split_empty(filename):
     return data
 
 
+def subdata_mess(data):
+    """ """
+    xi = np.random.randint(0, data.shape[1] - 512)
+    yi = np.random.randint(0, data.shape[2] - 512)
+    return data[:, xi:xi+512, yi:yi+512, :]
+
+
+
 ### DATA ###
 
 def pad_me(data, pad1, pad2):

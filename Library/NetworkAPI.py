@@ -47,8 +47,8 @@ def train_auto(network, data, h, w, n_train=1000, alpha=0.0001, n_plot=40,
     """ iterate through data set to train autoencoder newtork """
     costs = []
     for k in range(n_train):
-        #subdata = DT.subdata(data, h, w)
-        subdata = data
+        subdata = DT.subdata_mess(data)
+        #subdata = data
         network.train_network(subdata, alpha)
         costs = check_cost(network, subdata, subdata, costs, k, kmax_cost)
         check_auto(network, data, subdata, h, w, k, kmax_img, n_plot)
@@ -64,7 +64,8 @@ def check_cost(network, input_data, output_data, costs, k, k_max):
 def check_auto(network, data, input_data, h, w, k, k_max, n_plot):
     """ """
     if k_max != 0 and k % k_max == 0 and k != 0:
-        subdata = input_data[:n_plot, :, :, :]
+        subdata = input_data[::10, :, :, :]
+        subdata = subdata[:n_plot]
         #md = to_middle_data(data, h, w)
         plot_middle(network, subdata, h, w, n_plot=n_plot, count=k)
 
@@ -90,13 +91,13 @@ def plot_middle(network, data, h, w, n_plot=15, random=False, count=None):
     subdata = data[start: start + n_plot]
     #print(data.shape)
     mids = network.get_flat(subdata)
-    print('Max {}  Min {}'.format(mids.max(), mids.min()))
+    #print('Max {}  Min {}'.format(mids.max(), mids.min()))
     outs = np.clip(network.get_outputs(subdata), 0, 1)
     both = [[subdata[i], outs[i], np.reshape(g, MID)]
             for i, g in enumerate(mids)]
     both = list(itertools.chain.from_iterable(both))
     save_path = 'plt_mid_{}'.format(count) if count or count == 0 else False
-    DT.plot_data_multiple(both, save_path=save_path, n_x=2, n_y=6)
+    DT.plot_data_multiple(both, save_path=save_path, n_x=4, n_y=6)
 
 def to_middle_data(data, height, width):
     """ """

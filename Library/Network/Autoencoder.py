@@ -124,16 +124,17 @@ def create(network_path, auto_name, h, w, hidden):
                 print(current.shape)
                 
             # flat layer
-            mid = tf.reshape(current, flat_shape, name='flat_1')
-            Wm = weight([int(flat_shape[1]), 128])
-            bm = bias([128])
-            hng = tf.round(tf.add(tf.matmul(mid, Wm), bm), name='flat')
+            mid = tf.reshape(current, flat_shape, name='flat')
+            current = mid
+            #Wm = weight([int(flat_shape[1]), 256])
+            #bm = bias([256])
+            #hng = tf.round(tf.add(tf.matmul(mid, Wm), bm), name='flat')
 
-            print(mid.shape)
-            Wm2 = weight([128, 256])
-            bm2 = bias([mid.shape[1]])
-            mds = tf.add(tf.matmul(hng, Wm2), bm2)
-            current = mds
+            #print(mid.shape)
+            #Wm2 = weight([256, 256])
+            #bm2 = bias([mid.shape[1]])
+            #mds = tf.add(tf.matmul(hng, Wm2), bm2)
+            #current = mds
             # dense
             
             
@@ -141,7 +142,7 @@ def create(network_path, auto_name, h, w, hidden):
             #current = tf.reshape(flat, current.shape)
             encoder.reverse()
             shapes.reverse()
-            print('Flat: {}'.format(hng.shape))
+            print('Flat: {}'.format(mid.shape))
 
             # decoder
             for i, sets in enumerate(shapes):
@@ -151,13 +152,13 @@ def create(network_path, auto_name, h, w, hidden):
                                 batch_size=batch_size)
                     
                 # conv 1
-                W1 = encoder[i][1]
+                W1 = weight(encoder[i][1].shape)
                 b1 = bias([W1.shape[3]])
                 first = tf.nn.relu(tf.add(deconv2d(pool, W1, sets[-2]), b1))
                 
                 # conv 2
                 nxtshp = input_shape if i + 1 == len(shapes) else shapes[i+1][-1]
-                W2 = encoder[i][0]
+                W2 = weight(encoder[i][0].shape)
                 b2 = bias([nxtshp[3]])
                 second = tf.nn.relu(tf.add(deconv2d(first, W2, nxtshp), b2))
 
