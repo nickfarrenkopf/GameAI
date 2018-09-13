@@ -1,13 +1,12 @@
-import os
-from os.path import join
-from keras.models import load_model, Sequential
+from keras.models import Sequential
 from keras.layers import Dense
 
-from Library import DataThings as dt
-from Library import RL_Game
+from Library.General import Screen
+from Library.General import DataThings as DT
+from Library import RL_Component
 
 
-class Agent(RL_Game.RL_Component):
+class Agent(RL_Component):
     """ """
 
     def __init__(self, game, environment):

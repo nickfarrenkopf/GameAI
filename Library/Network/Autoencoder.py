@@ -130,16 +130,7 @@ def create(network_path, auto_name, h, w, hidden):
             #bm = bias([256])
             #hng = tf.round(tf.add(tf.matmul(mid, Wm), bm), name='flat')
 
-            #print(mid.shape)
-            #Wm2 = weight([256, 256])
-            #bm2 = bias([mid.shape[1]])
-            #mds = tf.add(tf.matmul(hng, Wm2), bm2)
-            #current = mds
-            # dense
-            
-            
-            #flat = tf.round(mid, name='flat')
-            #current = tf.reshape(flat, current.shape)
+            # reverse 
             encoder.reverse()
             shapes.reverse()
             print('Flat: {}'.format(mid.shape))

@@ -1,12 +1,11 @@
 from keras.models import Sequential
 from keras.layers import Dense
 
-from Library import Screen
-from Library import DataThings as DT
-from Library import RL_Game
+from Library.General import DataThings as DT
+from Library import RL_Component
 
 
-class Reward(RL_Game.RL_Component):
+class Reward(RL_Component):
     """ """
 
     def __init__(self, game, agent):
@@ -18,7 +17,7 @@ class Reward(RL_Game.RL_Component):
         self.agent = agent
 
         # load network
-        RL_Game.RL_Component.__init__(self, agent.reward_network_path)
+        RL_Component.__init__(self, agent.reward_network_path)
         self.load_network()
 
 
@@ -90,7 +89,7 @@ class Reward(RL_Game.RL_Component):
 
     ### TRAIN - ONLINE ###  
 
-    def train_network_online(self, epoches=10, alpha=0.000001):
+    def train_network_online(self, epochs=10):
         """ ??? """
         pass
 

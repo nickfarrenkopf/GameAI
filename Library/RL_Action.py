@@ -1,33 +1,59 @@
+from keras.models import Sequential
+from keras.layers import Dense
+
+from Library.General import DataThings as DT
+from Library import RL_Component
 
 
-
-# GBA: ruld, ab, ltrt, stse => 10
-# PAC: ruld => 4
-# AW2: GBA => 10
-
-# NETWORKS
-# net1 - value network, St + At -> Qt
-# net2 - action network, St + At -> 0,1
-
-
-
-
-
-class Action(RL_Game.RLComponent):
+class Action(RLComponent):
     """ """
 
-
-    def __init__(self):
+    def __init__(self, game, agent):
         """ """
+
+        # RL components
         self.name = 'action'
+        self.game = game
+        self.agent = agent
+
+        # load network
+        #RL_Component.__init__(self, 'WHERE MY NETWORK AT')
+        #self.load_network()
 
 
+    ### NETWORK ###
 
-    def train_value_network(self, state_data, action_data):
+    def create_network(self, h_hidden=64, n_layers=2):
         """ """
-        n_actions = len(action_data) - 1
-        for i in range(n_actions):
-            old_value = 0
-            new_value = 0
-            data = state_data[i] + action_data[i]
-            network.train(data, new_value)
+        pass
+
+
+    ### RUN TIME ###
+
+    def WHAT_DO(self):
+        """ """
+        pass
+
+
+    ### TRAIN - OFFLINE ###
+
+    def train_network_offline(self, epochs=100, n_loop=10, save_me=False):
+        """ """
+        pass
+
+    def test_network_offline(self):
+        """ """
+        pass
+
+
+    ### TRAIN - ONLINE ###  
+
+    def train_network_online(self, epochs=10, save_me=False):
+        """ """
+        pass
+
+    def test_network_online(self):
+        """ """
+        pass
+
+

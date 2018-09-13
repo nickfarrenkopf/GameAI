@@ -1,12 +1,12 @@
 from keras.models import Sequential
 from keras.layers import Dense
 
-from Library import Screen
-from Library import DataThings as DT
-from Library import RL_Game
+from Library.General import Screen
+from Library.General import DataThings as DT
+from Library import RL_Component
 
 
-class Environment(RL_Game.RL_Component):
+class Environment(RL_Component):
     """ """
 
     def __init__(self, game):
@@ -17,7 +17,7 @@ class Environment(RL_Game.RL_Component):
         self.game = game
         
         # load network
-        RL_Game.RL_Component.__init__(self, game.environment_network_path)
+        RL_Component.__init__(self, game.environment_network_path)
         self.load_network()
 
 

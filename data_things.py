@@ -60,12 +60,3 @@ def load_auto(path, auto_name):
 
 
 
-### IMAGE FILE ###
-
-
-def load_images(vocab):
-    """ """
-    return [Image.open(join(paths.cards_path, v + '.png')) for v in vocab]
-
-
-
