@@ -1,12 +1,11 @@
 from keras.models import Sequential
 from keras.layers import Dense
 
-from Library.General import Screen
 from Library.General import DataThings as DT
-from Library import RL_Component
+from Library.RL_Component import RL_Component as RLC
 
 
-class Environment(RL_Component):
+class Environment(RLC):
     """ """
 
     def __init__(self, game):
@@ -17,7 +16,7 @@ class Environment(RL_Component):
         self.game = game
         
         # load network
-        RL_Component.__init__(self, game.environment_network_path)
+        RLC.__init__(self, game.environment_network_path)
         self.load_network()
 
 
@@ -61,6 +60,10 @@ class Environment(RL_Component):
         """ """
         pass
 
+    def load_network_inputs(self, shuffle_me=True):
+        """ """
+        pass
+    
 
     ### TRAIN ONLINE ###
         

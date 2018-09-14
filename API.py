@@ -4,11 +4,12 @@ import time
 import paths
 import data_things as dt
 
-from Library import Screen
+from Library.General import Screen
+from Library import RL_Game
 from Library import RL_Agent
 from Library import RL_Environment
 from Library import RL_Reward
-from Library import RL_Game
+
 
 
 ### API ###
@@ -125,12 +126,14 @@ values = ['up','right','down','left','z','x','a','s','q','r']
 
 # RL components
 if True:
+    
     game = RL_Game.Game(game_path, auto_network)
+    
     env = RL_Environment.Environment(game)
     agent = RL_Agent.Agent(game, env)
     reward = RL_Reward.Reward(game, agent)
 
-    #reward.train_network_offline()
+    reward.train_network_offline()
 
 idxs, labels = game.load_labels('left')
 print(len(idxs))

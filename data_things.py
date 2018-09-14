@@ -6,13 +6,13 @@ from PIL import Image
 
 import paths
 
-from Library import Screen
-from Library import DataThings as DT
+from Library.General import Screen
+from Library.General import DataThings as DT
 
 from Library import NetworkAPI as NETS
 
 
-from Library.DataThings import *
+from Library.General.DataThings import *
 
 
 from os.path import join

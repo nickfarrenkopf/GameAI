@@ -2,10 +2,10 @@ from keras.models import Sequential
 from keras.layers import Dense
 
 from Library.General import DataThings as DT
-from Library import RL_Component
+from Library.RL_Component import RL_Component as RLC
 
 
-class Action(RLComponent):
+class Action(RLC):
     """ """
 
     def __init__(self, game, agent):
@@ -17,7 +17,7 @@ class Action(RLComponent):
         self.agent = agent
 
         # load network
-        #RL_Component.__init__(self, 'WHERE MY NETWORK AT')
+        #RLC.__init__(self, 'WHERE MY NETWORK AT')
         #self.load_network()
 
 

@@ -2,10 +2,10 @@ from keras.models import Sequential
 from keras.layers import Dense
 
 from Library.General import DataThings as DT
-from Library import RL_Component
+from Library.RL_Component import RL_Component as RLC
 
 
-class Reward(RL_Component):
+class Reward(RLC):
     """ """
 
     def __init__(self, game, agent):
@@ -17,7 +17,7 @@ class Reward(RL_Component):
         self.agent = agent
 
         # load network
-        RL_Component.__init__(self, agent.reward_network_path)
+        RLC.__init__(self, agent.reward_network_path)
         self.load_network()
 
 
@@ -50,29 +50,25 @@ class Reward(RL_Component):
 
     def train_network_offline(self, epochs=3000, n_loop=10, save_me=False):
         """ train keras network with saved gamestate data """
-        # get data
-        pre_data, _, labels = self.gamedata_files_to_reward_network_inputs()
-        data = self.game.auto_network.get_flat(pre_data)
-        # loop and fit
+        data, _, labels = self.load_network_data()
         for _ in range(n_loop):
             self.network.fit(data, labels, epochs=epochs//n_loop, verbose=0)
-            metrics = self.network.evaluate(data, labels, verbose=0)
-            print('Metrics: {}'.format(metrics))
+            self.print_metrics(data, labels)            
         self.save_network(save_me)
 
     def test_network_offline(self):
         """ test network against all data """
-        # group by zeros and non zero labels
-        pass
+        data, _, labels = self.load_network_inputs()
+        self.print_metrics(data, labels)
 
-    def gamedata_files_to_reward_network_inputs(self, shuffle_me=True):
+    def load_network_data(self, shuffle_me=True):
         """ load gamestate images based on labeled class data """
-        # find gamestate indexes to load
-        idxs, labels = self.agent.load_reward_indexes_and_labels()
+        # find data based on agent rewards
+        idxs, labels = self.game.find_game_data(self.agent.reward_labels)
         _, labels, files = self.add_zero_reward_labels(idxs, labels)
         files, labels = self.shuffle_mes(files, labels, shuffle_me)
         # load data and format to network
-        data = DT.load_images(files)
+        data = self.game.auto_network.get_flat(DT.load_images(files))
         one_hot = DT.to_one_hot_labels(labels)
         return data, labels, one_hot
 
@@ -80,6 +76,7 @@ class Reward(RL_Component):
         """ add zero reward labels given pre-labeled indexes """
         files = self.game.get_all_gamedata_paths()
         files_to_load = [files[i] for i in idxs]
+        # loop over files and add every n in not in indexes
         for i in range(0, len(files), len(files) // len(labels) - 1):
             if i not in idxs:
                 files_to_load.append(files[i])
@@ -96,5 +93,13 @@ class Reward(RL_Component):
     def test_network_online(self):
         """ """
         pass
+
+
+    ### HELPER ###
+
+    def print_metrics(self, data, labels):
+        """ """
+        metrics = self.network.evaluate(data, labels, verbose=0)
+        print('Metrics: {}'.format(metrics))
 
 

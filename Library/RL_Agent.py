@@ -3,10 +3,12 @@ from keras.layers import Dense
 
 from Library.General import Screen
 from Library.General import DataThings as DT
-from Library import RL_Component
+from Library.RL_Component import RL_Component as RLC
 
 
-class Agent(RL_Component):
+import os
+
+class Agent(RLC):
     """ """
 
     def __init__(self, game, environment):
@@ -14,21 +16,23 @@ class Agent(RL_Component):
 
         # RL components
         self.name = 'agent'
-        self.env = environment
         self.game = game
+        self.env = environment
         
         # file location
         self.game_path = game.game_path
+        self.
 
+        self.reward_network_path = os.path.join(game.game_path, 'reward_network.h5')
+        self.network_path = os.path.join(self.game_path, 'agent_network.h5')
 
-        self.reward_network_path = join(game.game_path, 'reward_network.h5')
-        self.network_path = join(self.game_path, 'agent_network.h5')
-
-        self.text_info_path = join(game.game_path, 'reward_labels.txt')
+        self.text_info_path = os.path.join(game.game_path, 'reward_labels.txt')
+        
         #self.reward_labels = 0
 
         # load network
-        self.load_network()
+        #RLC.__init__(self, agent.reward_network_path)
+        #self.load_network()
 
 
     ### NETWORK ###
@@ -48,9 +52,20 @@ class Agent(RL_Component):
         self.network = network
 
 
+    ### ACTION ###
+
+    def choose_action(self):
+        """ """
+        pass
+
+    def take_action(self, action):
+        """ """
+        pass
+
+
     ### TRAIN OFFLINE ###
 
-    def train_newtork_offline(self, epochs=100):
+    def train_newtork_offline(self, epochs=100, n_loop=10, save_me=False):
         """ """
         pass
 
@@ -58,6 +73,10 @@ class Agent(RL_Component):
         """ """
         pass
 
+    def load_network_inputs(self, shuffle_me=True):
+        """ """
+        pass
+    
 
     ### TRAIN ONLINE ###
         
@@ -130,18 +149,7 @@ class Agent(RL_Component):
         print('Created new agent at {}'.format(new_path))
 
 
-    ### ACTION ###
 
-    def choose_action(self, gamestate):
-        """ """
-        pass
-
-    def take_action(self, action):
-        """ """
-        if action not in self.actions:
-            print('Action not in list: {}'.format(self.actions))
-            return False
-        Screen.send_keys(a)
 
 
 

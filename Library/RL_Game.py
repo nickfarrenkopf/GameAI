@@ -18,7 +18,7 @@ class Game(object):
         self.auto_network = auto_network
 
 
-        self.environment_network_path = os.path.join(game_data,
+        self.environment_network_path = os.path.join(game_path,
                                                      'reward_network.h5')
 
         self.n_rewards = 3
@@ -26,11 +26,22 @@ class Game(object):
         self.game_path = game_path
         self.image_path = os.path.join(game_path, 'gamedata')
         self.network_path = os.path.join(game_path, 'value_network.h5')
+        label_dict = {'enter':-10, 'space':1, 'left':0, 'right':0, 'up':0,
+                      'down':0}
         
         # init THIGNS
         self.window = ((215, 1239), (727, 1751))
     
 
+    def find_game_data(self, labels):
+        """ """
+        all_idxs = []
+        all_labs = []
+        for label in labels:
+            idxs, labs = self.load_labels(label)
+            all_idxs += idxs
+            all_labs += (label_dict[label] * len(labs))
+        return all_idxs, all_labs
 
     def load_labels(self, label):
         """ """
