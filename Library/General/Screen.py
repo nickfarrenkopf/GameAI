@@ -25,18 +25,18 @@ def get_data():
     """ returns a normalized screenshot """
     return np.array(ImageGrab.grab()) / 255
 
+def get_data_box(x1, y1, x2, y2):
+    """ returns a normalized subsection of screen given box """
+    return get_data()[y1: y2, x1: x2, :]
+    
+def get_data_coord(x, y, width, height):
+    """ returns a normalized subsection of screen given coordinates """
+    return get_data_box(x-width//2, y-height//2, x+width//2, y+height//2)
+
 def get_data_resized(width, height):
     """ returns a normalized screenshot of specificed size """
     img = ImageGrab.grab()
     return np.array(img.resize((height, width), Image.ANTIALIAS)) / 255
-
-def get_data_box(x1, y1, x2, y2):
-    """ returns a normalized subsection of screen given box """
-    return subimage(get_data(), (x1+x2)//2, (y1+y2)//2, (x2-x1)//2, (y2-y1)//2) 
-    
-def get_data_subimage(x, y, width, height):
-    """ returns a normalized subsection of screen given coordinates """
-    return get_data_box(x-widht//2, y-height//2, x+width//2, y+height//2)
 
 def save_image(data, save_path):
     """ saves data as image to path, un-normalizing if necessary """

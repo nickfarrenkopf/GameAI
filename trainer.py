@@ -43,12 +43,12 @@ if __name__ == '__main__':
 
     path = paths.network_path
 
-    if 0:
+    if 1:
         NETS.new_auto(paths.network_path, 'test', 512, 512,
                       [64, 32, 16, 16, 8, 4])
     
     # load auto
-    if 1:
+    if 0:
         auto_network = dt.load_auto(path, 'AUTO_test_512_512_6_128')
         #ds = dt.load_data()
         ds = dt.load_hs_data()
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         dt.plot_data_multiple(ds)
 
     # train auto
-    if 1:
+    if 0:
         NETS.train_auto(auto_network, ds, 512, 512, n_train=20,
                         kmax_img=1, kmax_cost=1)
 

@@ -35,16 +35,3 @@ class RL_Component(object):
         print('Metrics: {}'.format(metrics))
 
 
-    ### HELPER ###
-
-    def shuffle_mes(self, array1, array2, shuffle_me):
-        """ """
-        if not shuffle_me:
-            return array1, array2
-        random_idxs = list(range(len(array1)))
-        np.random.shuffle(random_idxs)
-        array1 = np.array([array1[i] for i in random_idxs])
-        array2 = np.array([array2[i] for i in random_idxs])
-        return array1, array2
-
-

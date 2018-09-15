@@ -65,25 +65,20 @@ p_ksize = [1, stride, stride, 1]
 
 ### CREATE ###
 
-def create(network_path, auto_name, h, w, hidden):
+def create(network_path, auto_name, h, w, hidden, length=3, e=1e-8):
     """ create convolutional autoencoder network """
 
     with tf.device('/gpu:0'):
 
-        # additional params
-        length = 3
-        e = 1e-8
-
         # shapes
         n_layers = len(hidden) 
         input_shape = (batch_size, h, w, length)
-        flat_size = int(h * w / (stride * stride) ** n_layers
-                        * hidden[-1])
+        flat_size = int(h * w / (stride * stride) ** n_layers * hidden[-1])
         flat_shape = (batch_size, flat_size)
 
         # name and save path
         auto_name = 'AUTO_{}_{}_{}_{}_{}'.format(auto_name, h, w, n_layers,
-                                              flat_size // 2) ####
+                                                 flat_size) ###
         save_path = os.path.join(network_path, auto_name)
         print(save_path)
 
@@ -121,19 +116,21 @@ def create(network_path, auto_name, h, w, hidden):
                 encoder.append((W1, W2, mask))
                 shapes.append((first.shape, second.shape, pool.shape))
                 current = pool
-                print(current.shape)
+                print('Encode: {}'.format(current.shape))
                 
             # flat layer
-            mid = tf.reshape(current, flat_shape, name='flat')
-            current = mid
-            #Wm = weight([int(flat_shape[1]), 256])
-            #bm = bias([256])
-            #hng = tf.round(tf.add(tf.matmul(mid, Wm), bm), name='flat')
+            mid = tf.reshape(current, flat_shape)
+            #mid = tf.reshape(current, flat_shape, name='flat')
 
-            # reverse 
+            # binary layer
+            mean, _ = tf.metrics.mean(mid)
+            binary = tf.cast(tf.greater(mid, mean), tf.float32, name='flat')
+
+            # reverse
+            current = binary
             encoder.reverse()
             shapes.reverse()
-            print('Flat: {}'.format(mid.shape))
+            print('Flat: {}'.format(current.shape))
 
             # decoder
             for i, sets in enumerate(shapes):
@@ -143,18 +140,21 @@ def create(network_path, auto_name, h, w, hidden):
                                 batch_size=batch_size)
                     
                 # conv 1
-                W1 = weight(encoder[i][1].shape)
+                W1 = encoder[i][1]
+                # W1 = weight(encoder[i][1].shape)
                 b1 = bias([W1.shape[3]])
                 first = tf.nn.relu(tf.add(deconv2d(pool, W1, sets[-2]), b1))
                 
                 # conv 2
                 nxtshp = input_shape if i + 1 == len(shapes) else shapes[i+1][-1]
-                W2 = weight(encoder[i][0].shape)
+                W2 = encoder[i][0]
+                # W2 = weight(encoder[i][0].shape)
                 b2 = bias([nxtshp[3]])
                 second = tf.nn.relu(tf.add(deconv2d(first, W2, nxtshp), b2))
 
                 # save values
                 current = second
+                print('Decode: {}'.format(current.shape))
             
             # metrics
             outputs = tf.identity(current, name='outputs')

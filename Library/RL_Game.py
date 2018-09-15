@@ -1,9 +1,10 @@
 import os
+from os.path import join
+import itertools
 import numpy as np
 
 from Library.General import Screen
 from Library.General import DataThings as DT
-
 
 
 class Game(object):
@@ -12,29 +13,38 @@ class Game(object):
     def __init__(self, game_path, auto_network):
         """ """
 
+        # base params
+        self.game_path = game_path
+        self.game_name = os.path.basename(game_path)
+        self.auto_network = auto_network
+        
+        # environment
+        self.window = ((215, 1239), (727, 1751))
         self.state_size = (256,)
         self.state_action_size = (257,)
 
-        self.auto_network = auto_network
 
-
-        self.environment_network_path = os.path.join(game_path,
-                                                     'reward_network.h5')
-
-        self.n_rewards = 3
-
-        self.game_path = game_path
-        self.image_path = os.path.join(game_path, 'gamedata')
+        # location
+        self.images_path = join(game_path, 'images')
+        self.state_path = join(game_path, 'gamedata')
         
-        self.network_path = os.path.join(game_path, 'value_network.h5')
+
+        # locations
+        self.environment_network_path = join(game_path, 'reward_network.h5')
+        self.value_network_path = join(game_path, 'value_network.h5')
+        
+        # rewards
+        self.n_rewards = 3
         label_dict = {'enter':-10, 'space':1, 'left':0, 'right':0, 'up':0,
                       'down':0}
         
-        # init THIGNS
-        self.window = ((215, 1239), (727, 1751))
-
+   
 
     ### FIELS ###
+
+    """
+    ?
+    """
 
     def find_game_data(self, labels):
         """ """
@@ -56,12 +66,19 @@ class Game(object):
                 idxs.append(int(split[1]))
         return idxs, [label] * len(idxs)
 
+
     ### WINDOW ###
+
+    """
+    self.window
+    self.game_name
+    self.images_path
+    Screen
+    """
 
     def get_window(self):
         """ """
-        w = self.window
-        return Screen.get_data()[w[0][0]:w[1][0], w[0][1]:w[1][1], :]
+        return Screen.get_data_box(*itertools.chain.from_iterable(self.window))
 
     def set_window(self, radius=256):
         """ """
@@ -72,95 +89,48 @@ class Game(object):
         Y = np.mean([y0, y1], dtype=np.int)
         self.window = ((Y - radius, X - radius), (Y + radius, X + radius))
         print(' - set window to {} {}'.format(*self.window))
-        self.screencap_window()
+        self.screencap_window(name='new_window')
 
     def screencap_window(self, name='main_window'):
         """ """
-        new_path = os.path.join(self.image_path, '{}.png'.format(name))
+        new_path = os.path.join(self.images_path, '{}.png'.format(name))
         Screen.save_image(self.get_window(), new_path)
 
 
     ### GAMESTATE ###
 
+    """
+    self.auto_network
+    self.state_path
+    """
+
     def get_gamestate(self):
-        """ """
-        data = self.get_window()
-        flat = self.auto_network.get_flat(np.reshape(data, (1, 512, 512, 3)))
-        return flat
+        """ gets current gamestate from screen """
+        return self.auto_network.get_flat(self.get_window())
 
     def get_all_gamedata_paths(self):
-        """ """
-        path = self.image_path
-        return [os.path.join(path, file) for file in os.listdir(path)]
+        """ returns file locations for all gamestates """
+        return [join(self.state_path, f) for f in os.listdir(self.state_path)]
 
 
+    ### HELPER ###
 
-
+    """
+    NONE
+    """
 
     def combine(self, state, action):
-        """ """
+        """ combines gamestate and action into one array """
         return np.array(list(state) + list(action))
 
-
-    # 
-
-    ### REWARD ###
-
-    def parse_reward_label_text(self, text_data):
-        """ parse through labeled class data to return labels and indexes """
-        all_labels = []
-        all_idxs = []
-        # loop over classes
-        for class_data in text_data:
-            label, text = class_data.split(':')
-            # loop over indexes - range vs single
-            for idx in text.split(' '):
-                if '-' in idx:
-                    ints = idx.split('-')
-                    new_labels = list(range(int(ints[0]), int(ints[1])))
-                else:
-                    new_labels = int(idx)
-                all_labels += new_labels
-                all_idxs += [int(label)] * len(new_labels)
-        return all_labels, all_idxs
-
-    def load_reward_indexes_and_labels(self):
-        """ FIX ME TO LOAD LABELS BASED ON KEY """
-        text_info = dt.read_file(self.text_info_path)
-        idxs, labels = self.parse_reward_label_text(text_info)
-        
-
-        
-        #self.agent_0
-        return idxs, labels
-
-
-    ### FILE ###
-
-    def load_text(self):
-        """ FIX ME """
-        with open(self.info_path, 'r') as file:
-            data = file.read().split('\n')
-        for row in data:
-            if ':' not in row:
-                agent_id = row
-            else:
-                key, value = row.split(':')
-                if key == 'name':
-                    name = value
-                if key == 'actions':
-                    actions = value
-        return agent_id, name, actions.split(',')
-
-    def create_text(self, name, actions):
-        """ FIX ME """
-        index = 1
-        new_path = self.info_path.replace('.', '._1')
-        data = '\n'.join([index, name, ','.join(actions)])
-        with open(new_path, 'w') as file:
-            file.write(data)
-        print('Created new agent at {}'.format(new_path))
-
-
-
+    def shuffle_mes(self, array1, array2, shuffle_me):
+        """ shuffle two arrays (data and labels) together """
+        if not shuffle_me:
+            return array1, array2
+        random_idxs = list(range(len(array1)))
+        np.random.shuffle(random_idxs)
+        array1 = np.array([array1[i] for i in random_idxs])
+        array2 = np.array([array2[i] for i in random_idxs])
+        return array1, array2
+    
 

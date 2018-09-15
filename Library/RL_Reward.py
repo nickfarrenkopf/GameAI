@@ -87,7 +87,7 @@ class Reward(RLC):
     ### TRAIN - ONLINE ###  
 
     def train_network_online(self, epochs=10):
-        """ ??? """
+        """ """
         pass
 
     def test_network_online(self):

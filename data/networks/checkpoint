@@ -1,2 +1,2 @@
-model_checkpoint_path: "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\data\\networks\\AUTO_test_512_512_6_128"
-all_model_checkpoint_paths: "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\data\\networks\\AUTO_test_512_512_6_128"
+model_checkpoint_path: "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\data\\networks\\AUTO_test_512_512_6_256"
+all_model_checkpoint_paths: "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\data\\networks\\AUTO_test_512_512_6_256"
