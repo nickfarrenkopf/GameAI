@@ -41,7 +41,7 @@ class Reward(RLC):
 
     ### RUN TIME ###
 
-    def get_reward(self):
+    def predict_reward(self):
         """ get prediction given environment gamestate """
         return self.network.predict(self.game.get_gamestate(), verbose=0)
 
@@ -93,13 +93,5 @@ class Reward(RLC):
     def test_network_online(self):
         """ """
         pass
-
-
-    ### HELPER ###
-
-    def print_metrics(self, data, labels):
-        """ """
-        metrics = self.network.evaluate(data, labels, verbose=0)
-        print('Metrics: {}'.format(metrics))
 
 

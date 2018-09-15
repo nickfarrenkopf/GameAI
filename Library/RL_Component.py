@@ -1,9 +1,7 @@
-
-
 import os
 import numpy as np
-
 from keras.models import load_model
+
 
 class RL_Component(object):
     """ """
@@ -11,7 +9,6 @@ class RL_Component(object):
     def __init__(self, network_path):
         """ """
         self.network_path = network_path
-        self.network = None
 
 
     ### NETWORK ###
@@ -32,6 +29,11 @@ class RL_Component(object):
         self.network.save(self.network_path)
         print('{} network saved to {}'.format(self.name, self.network_path))
 
+    def print_metrics(self, data, labels):
+        """ """
+        metrics = self.network.evaluate(data, labels, verbose=0)
+        print('Metrics: {}'.format(metrics))
+
 
     ### HELPER ###
 
@@ -45,8 +47,4 @@ class RL_Component(object):
         array2 = np.array([array2[i] for i in random_idxs])
         return array1, array2
 
-    
-    def combine(self, state, action):
-        """ """
-        return np.array(list(state) + list(action))
-        
+

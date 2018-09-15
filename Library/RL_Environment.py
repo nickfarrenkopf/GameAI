@@ -39,28 +39,23 @@ class Environment(RLC):
 
     ### RUN TIME ###
 
-    def get_next_state(self, action):
+    def predict_next_state(self, action):
         """ """
-        network_inputs = self.combine(self.game.get_game_state(), action)
-        return self.newtork.predict(network_inputs, verbose=0)
+        network_inputs = self.game.combine(self.game.get_game_state(), action)
+        return self.newtork.predict(network_inputs, verbose=0)[0]
     
 
     ### TRAIN OFFLINE ###
 
     def train_newtork_offline(self, epochs=100, n_loop=10, save_me=False):
         """ """
-        n_actions = len(action_data) - 1
-        for i in range(n_actions):
-            data = state_data[i] + action_data[i]
-            label = state_data[i + 1]
-            network.train(data, labels) ####
-        self.save_network(save_me)
+        pass
 
     def test_network_offline(self):
         """ """
         pass
 
-    def load_network_inputs(self, shuffle_me=True):
+    def load_network_data(self, shuffle_me=True):
         """ """
         pass
     

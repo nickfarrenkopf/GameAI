@@ -8,13 +8,12 @@ from Library.RL_Component import RL_Component as RLC
 class Action(RLC):
     """ """
 
-    def __init__(self, game, agent):
+    def __init__(self, game):
         """ """
 
         # RL components
         self.name = 'action'
         self.game = game
-        self.agent = agent
 
         # load network
         #RLC.__init__(self, 'WHERE MY NETWORK AT')

@@ -25,13 +25,16 @@ class Game(object):
 
         self.game_path = game_path
         self.image_path = os.path.join(game_path, 'gamedata')
+        
         self.network_path = os.path.join(game_path, 'value_network.h5')
         label_dict = {'enter':-10, 'space':1, 'left':0, 'right':0, 'up':0,
                       'down':0}
         
         # init THIGNS
         self.window = ((215, 1239), (727, 1751))
-    
+
+
+    ### FIELS ###
 
     def find_game_data(self, labels):
         """ """
@@ -89,6 +92,75 @@ class Game(object):
         """ """
         path = self.image_path
         return [os.path.join(path, file) for file in os.listdir(path)]
+
+
+
+
+
+    def combine(self, state, action):
+        """ """
+        return np.array(list(state) + list(action))
+
+
+    # 
+
+    ### REWARD ###
+
+    def parse_reward_label_text(self, text_data):
+        """ parse through labeled class data to return labels and indexes """
+        all_labels = []
+        all_idxs = []
+        # loop over classes
+        for class_data in text_data:
+            label, text = class_data.split(':')
+            # loop over indexes - range vs single
+            for idx in text.split(' '):
+                if '-' in idx:
+                    ints = idx.split('-')
+                    new_labels = list(range(int(ints[0]), int(ints[1])))
+                else:
+                    new_labels = int(idx)
+                all_labels += new_labels
+                all_idxs += [int(label)] * len(new_labels)
+        return all_labels, all_idxs
+
+    def load_reward_indexes_and_labels(self):
+        """ FIX ME TO LOAD LABELS BASED ON KEY """
+        text_info = dt.read_file(self.text_info_path)
+        idxs, labels = self.parse_reward_label_text(text_info)
+        
+
+        
+        #self.agent_0
+        return idxs, labels
+
+
+    ### FILE ###
+
+    def load_text(self):
+        """ FIX ME """
+        with open(self.info_path, 'r') as file:
+            data = file.read().split('\n')
+        for row in data:
+            if ':' not in row:
+                agent_id = row
+            else:
+                key, value = row.split(':')
+                if key == 'name':
+                    name = value
+                if key == 'actions':
+                    actions = value
+        return agent_id, name, actions.split(',')
+
+    def create_text(self, name, actions):
+        """ FIX ME """
+        index = 1
+        new_path = self.info_path.replace('.', '._1')
+        data = '\n'.join([index, name, ','.join(actions)])
+        with open(new_path, 'w') as file:
+            file.write(data)
+        print('Created new agent at {}'.format(new_path))
+
 
 
 
