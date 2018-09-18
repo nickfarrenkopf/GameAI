@@ -21,7 +21,7 @@ centipede_path = join(games_path, 'centipede')
 kirby_path = join(games_path, 'kirby')
 mariokart_path = join(games_path, 'mariokart')
 
-all_paths = [pacman_path, aw2_path, mario_path, centipede_path, kirby_path, mariokart_path]
+all_paths = [pacman_path]#, aw2_path, mario_path, centipede_path, kirby_path, mariokart_path]
 
 # images
 

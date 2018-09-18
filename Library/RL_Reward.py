@@ -48,7 +48,7 @@ class Reward(RLC):
 
     ### TRAIN - OFFLINE ###
 
-    def train_network_offline(self, epochs=3000, n_loop=10, save_me=False):
+    def train_network_offline(self, epochs=1000, n_loop=100, save_me=False):
         """ train keras network with saved gamestate data """
         data, _, labels = self.load_network_data()
         for _ in range(n_loop):

@@ -34,13 +34,15 @@ class Game(object):
         self.action_keys = [Key.left,Key.right,Key.up,Key.down,'x', 'z','w','q']
         self.label_keys = [Key.enter, Key.space]
 
+        self.action_labels = ['left','right','down','up','x', 'z','w','q']
+
         # locations
         self.environment_network_path = join(game_path, 'reward_network.h5')
         self.value_network_path = join(game_path, 'value_network.h5')
         
         # rewards
         self.n_rewards = 3
-        label_dict = {'enter':-10, 'space':1, 'left':0, 'right':0, 'up':0,
+        self.label_dict = {'enter':-10, 'space':1, 'left':0, 'right':0, 'up':0,
                       'down':0}
         
    
@@ -58,16 +60,17 @@ class Game(object):
         for label in labels:
             idxs, labs = self.load_labels(label)
             all_idxs += idxs
-            all_labs += (label_dict[label] * len(labs))
+            all_labs += (label * len(labs))
         return all_idxs, all_labs
 
     def load_labels(self, label):
         """ """
-        data = os.listdir(self.image_path)
+        print(label)
+        data = os.listdir(self.state_path)
         idxs = []
         for row in data:
-            split = row.split('.')[0].split('_')
-            if label == split[-1]:
+            split = row.split('_')
+            if label == split[-2]:
                 idxs.append(int(split[1]))
         return idxs, [label] * len(idxs)
 

@@ -46,11 +46,11 @@ if __name__ == '__main__':
     trains = 1
 
     if 0:
-        NETS.new_auto(paths.network_path, 'test', 512, 512,
-                      [64, 64, 32, 32, 16, 4])
+        NETS.new_auto(paths.network_path, 'pacman', 512, 512,
+                      [32, 16, 16, 8, 8, 4])
     
     # load auto
-    if 1:
+    if 0:
         auto_network = dt.load_auto(path, 'AUTO_test_512_512_6_256')
         #ds = dt.load_all_data()
         #ds = dt.load_hs_data()
@@ -64,6 +64,7 @@ if __name__ == '__main__':
     # train auto
     if 1:
         print('Training...')
+        auto_network = dt.load_auto(path, 'AUTO_pacman_512_512_6_256')
         from os.path import join
         import itertools
         game_filepaths = [[join(p, 'gamedata', f)
@@ -72,6 +73,6 @@ if __name__ == '__main__':
         game_filepaths = list(itertools.chain.from_iterable(game_filepaths))
         #print(len(game_filepaths))
         NETS.train_auto(auto_network, game_filepaths, 512, 512,
-                        n_train=100, kmax_img=5, kmax_cost=1)
+                        n_train=20, kmax_img=1, kmax_cost=1)
 
 

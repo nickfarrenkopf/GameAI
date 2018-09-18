@@ -107,7 +107,7 @@ from pynput.keyboard import Key
 pause_time = 1
 
 
-game_path = paths.mariokart_path
+game_path = paths.pacman_path
 
 auto_network = dt.load_auto(paths.network_path, 'AUTO_test_512_512_6_256')
 
@@ -124,7 +124,7 @@ if True:
     
     game = RL_Game.Game(game_path, auto_network)
     
-    #env = RL_Environment.Environment(game)
+    env = RL_Environment.Environment(game)
     #agent = RL_Agent.Agent(game, env)
     #reward = RL_Reward.Reward(game, agent)
 
@@ -133,7 +133,12 @@ if True:
 #idxs, labels = game.load_labels('left')
 #print(len(idxs))
 
-record_game_data()
+
+idxs, labels = game.find_game_data(game.action_labels)
+
+#ds, acs, ls = env.load_network_data()
+
+#record_game_data()
 #listen_game_data()
 
 #ds, ls, ls_hot = reward.gamedata_files_to_network_inputs()
