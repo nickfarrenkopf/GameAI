@@ -2,5 +2,3 @@
 checkpoint
 __init__.py
 emulator/
-data/images/labels
-data/cards

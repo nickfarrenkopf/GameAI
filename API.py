@@ -50,29 +50,11 @@ def train_networks(GS, A, R):
     # load specified data
     gamestate_data = 0
     action_data = 0
-    # train model
-    env.train_model_network(gamestate_data, action_data)
-    # train value
-    agent.train_value_network(gamestate_data, action_data)
-    # train binary action
-    # pass for now
-    # train reward network
     if R != 0:
-        # train reward network
         pass
 
 
-
 ### HELPER ###
-
-def clear_gamestate_data():
-    """ clears all images from filepath """
-    path = os.path.join(game_path, 'gamedata')
-    print(path)
-    _ = [os.remove(os.path.join(path, file)) for file in os.listdir(path)
-         if '.png' in file]
-    
-
 
 def listen_game_data():
     """ """
@@ -82,28 +64,39 @@ def listen_game_data():
         print(list(pred).index(pred.max()))
         time.sleep(0.25)
 
-
 def record_game_data():
     """ """
-    # params
-    count = len(env.get_all_gamedata_paths())
+    # starting file counter
+    count = 0
+    if len(os.listdir(game.state_path)) > 0:
+        count = int(os.listdir(game.state_path)[-1].split('_')[1]) + 1
     print('Start count: {}'.format(count))
+    # wait for key
     done = False
     while not done:
-        c = str(count)
-        if count < 10:
-            text = '00' + c
-        elif count < 100:
-            text = '0' + c
-        else:
-            text = c
         key = Screen.get_key()
-        if key in keys:
-            path = 'image_{}_{}'.format(text, values[keys.index(key)])
-            env.screencap_window(name=path)
-        time.sleep(0.1)
         print(key)
-        count += 1
+        # if in whitelist, take screencap
+        if key in game.action_keys or key in game.label_keys:
+            text = '0' * (4 - len(str(count))) + str(count)
+            names = ['image_{}_{}_0'.format(text, values[keys.index(key)])]
+            windows = [game.get_window()]
+            if key in game.action_keys:         
+                for i in range(1, 3):
+                    text = '0' * (4 - len(str(count))) + str(count)
+                    names.append('image_{}_{}_{}'.format(text,
+                                                         values[keys.index(key)],
+                                                         i))
+                    windows.append(game.get_window())
+                    time.sleep(0.1)
+            for name, window in zip(names, windows):
+                path = os.path.join(game.state_path, name + '.png')
+                Screen.save_image(window, path)
+            count += 1
+        done = key == 'p'
+        
+        
+        
 
 
 
@@ -114,14 +107,16 @@ from pynput.keyboard import Key
 pause_time = 1
 
 
-game_path = paths.pacman_path
+game_path = paths.mariokart_path
 
 auto_network = dt.load_auto(paths.network_path, 'AUTO_test_512_512_6_256')
 
 
 
-keys = [Key.up,Key.right,Key.down,Key.left,'z','x','a','s','q','r']
-values = ['up','right','down','left','z','x','a','s','q','r']
+keys = [Key.up,Key.right,Key.down,Key.left,'z','x','a','s','q','r','w',
+        Key.enter,Key.space]
+values = ['up','right','down','left','z','x','a','s','q','r','w',
+          'enter','space']
 
 
 # RL components
@@ -129,16 +124,16 @@ if True:
     
     game = RL_Game.Game(game_path, auto_network)
     
-    env = RL_Environment.Environment(game)
-    agent = RL_Agent.Agent(game, env)
-    reward = RL_Reward.Reward(game, agent)
+    #env = RL_Environment.Environment(game)
+    #agent = RL_Agent.Agent(game, env)
+    #reward = RL_Reward.Reward(game, agent)
 
-    reward.train_network_offline()
+    #reward.train_network_offline()
 
-idxs, labels = game.load_labels('left')
-print(len(idxs))
+#idxs, labels = game.load_labels('left')
+#print(len(idxs))
 
-#record_game_data()
+record_game_data()
 #listen_game_data()
 
 #ds, ls, ls_hot = reward.gamedata_files_to_network_inputs()

@@ -65,7 +65,7 @@ class NetworkAuto(Network):
                 get_tensor = self.graph.get_tensor_by_name
                 self.flat = get_tensor('{}/flat:0'.format(self.name))
 
-    def batch_me(self, data, func, alpha=0, batch=1):
+    def batch_me(self, data, func, alpha=0, batch=4):
         """ """
         datas = []
         for i in range(data.shape[0] // batch + 1):

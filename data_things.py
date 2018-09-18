@@ -34,9 +34,17 @@ def load_hs_data():
 
 ### TEXT FILE ###
 
-def load_data():
+def load_all_data():
     """ """
-    path = paths.pacman_gamedata_path
+    import itertools
+    ps = [[os.path.join(pp, 'gamedata', f) for f in os.listdir(os.path.join(pp, 'gamedata'))]
+          for pp in paths.all_paths]
+    ps = list(itertools.chain.from_iterable(ps))
+    dss = np.array([np.array(Image.open(p)) / 255 for p in ps])
+    return dss
+
+def load_data(path):
+    """ """
     images = np.array([np.array(Image.open(os.path.join(path, f))) / 255
               for f in os.listdir(path)])
     #print(images.shape)

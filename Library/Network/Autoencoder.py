@@ -55,7 +55,7 @@ def unpooled(net, mask, input_shape, output_shape, batch_size=4):
 
 ### PARAMS ###
 
-batch_size = 1
+batch_size = 4
 patch = 3
 stride = 2
 c_strides = [1, 1, 1, 1]
@@ -119,18 +119,21 @@ def create(network_path, auto_name, h, w, hidden, length=3, e=1e-8):
                 print('Encode: {}'.format(current.shape))
                 
             # flat layer
-            mid = tf.reshape(current, flat_shape)
-            #mid = tf.reshape(current, flat_shape, name='flat')
+            #mid = tf.reshape(current, flat_shape)
+            mid = tf.reshape(current, flat_shape, name='flat')
 
             # binary layer
-            mean, _ = tf.metrics.mean(mid)
-            binary = tf.cast(tf.greater(mid, mean), tf.float32, name='flat')
+            #mean, _ = tf.metrics.mean(mid)
+            #binary = tf.cast(tf.greater(mid, mean), tf.float32, name='flat')
 
             # reverse
-            current = binary
+            #print(mid.shape)
+            #print(current.shape)
+            #mids = np.reshape(mid, current.shape)
+            #current = mids
             encoder.reverse()
             shapes.reverse()
-            print('Flat: {}'.format(current.shape))
+            print('Flat: {}'.format(mid.shape))
 
             # decoder
             for i, sets in enumerate(shapes):

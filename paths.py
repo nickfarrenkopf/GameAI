@@ -15,6 +15,14 @@ network_path = join(data_path, 'networks')
 pacman_path = join(games_path, 'pacman')
 pacman_gamedata_path = join(pacman_path, 'gamedata')
 
+aw2_path = join(games_path, 'advanced_wars_2')
+mario_path = join(games_path, 'super_mario_advance_4')
+centipede_path = join(games_path, 'centipede')
+kirby_path = join(games_path, 'kirby')
+mariokart_path = join(games_path, 'mariokart')
+
+all_paths = [pacman_path, aw2_path, mario_path, centipede_path, kirby_path, mariokart_path]
+
 # images
 
 # networks

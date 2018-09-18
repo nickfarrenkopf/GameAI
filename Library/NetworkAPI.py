@@ -1,5 +1,6 @@
 import os
 import time
+import random
 import itertools
 import numpy as np
 import matplotlib.pyplot as plt
@@ -39,13 +40,19 @@ load_auto = Networks.NetworkAuto
 
 
 ### TRAIN ###
+import tensorflow as tf
+import random
 
-def train_auto(network, data, h, w, n_train=1000, alpha=0.0001, n_plot=40,
+def train_auto(network, filepaths, h, w, n_train=1000, alpha=0.0001, n_plot=20,
                kmax_cost=10, kmax_img=100, kmax_save=0):
     """ iterate through data set to train autoencoder newtork """
     costs = []
+    #network.sess.run(tf.initialize_all_variables())
     for k in range(n_train):
-        subdata = DT.subdata_mess(data)
+        idxs = random.sample(range(len(filepaths)), 100)
+        data = DT.load_images([filepaths[i] for i in idxs])
+        data = DT.pad_me(data, 4, 4)
+        subdata = DT.subdata(data, 512, 512)
         #subdata = data
         network.train_network(subdata, alpha)
         costs = check_cost(network, subdata, subdata, costs, k, kmax_cost)
@@ -58,14 +65,14 @@ def check_cost(network, input_data, output_data, costs, k, k_max):
         costs, m = get_cost_slope(network, input_data, output_data, costs)
         print('Cost {} {:.7f} {:.7f}'.format(k, costs[-1], m))
     return costs
-     
+
+
 def check_auto(network, data, input_data, h, w, k, k_max, n_plot):
     """ """
     if k_max != 0 and k % k_max == 0 and k != 0:
-        subdata = input_data[::10, :, :, :]
-        subdata = subdata[:n_plot]
-        #md = to_middle_data(data, h, w)
-        plot_middle(network, subdata, h, w, n_plot=n_plot, count=k)
+        idxs = random.sample(range(len(input_data)), n_plot)
+        ds = np.array([input_data[i] for i in idxs])
+        plot_middle(network, ds, h, w, n_plot=n_plot, count=k)
 
 
 ### HELPER ###

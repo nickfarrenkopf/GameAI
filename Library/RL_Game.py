@@ -3,6 +3,8 @@ from os.path import join
 import itertools
 import numpy as np
 
+from pynput.keyboard import Key
+
 from Library.General import Screen
 from Library.General import DataThings as DT
 
@@ -27,7 +29,10 @@ class Game(object):
         # location
         self.images_path = join(game_path, 'images')
         self.state_path = join(game_path, 'gamedata')
-        
+
+
+        self.action_keys = [Key.left,Key.right,Key.up,Key.down,'x', 'z','w','q']
+        self.label_keys = [Key.enter, Key.space]
 
         # locations
         self.environment_network_path = join(game_path, 'reward_network.h5')
@@ -93,7 +98,7 @@ class Game(object):
 
     def screencap_window(self, name='main_window'):
         """ """
-        new_path = os.path.join(self.images_path, '{}.png'.format(name))
+        new_path = os.path.join(self.state_path, '{}.png'.format(name))
         Screen.save_image(self.get_window(), new_path)
 
 

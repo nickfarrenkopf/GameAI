@@ -27,7 +27,7 @@ def get_data():
 
 def get_data_box(x1, y1, x2, y2):
     """ returns a normalized subsection of screen given box """
-    return get_data()[y1: y2, x1: x2, :]
+    return get_data()[x1: x2, y1: y2, :]
     
 def get_data_coord(x, y, width, height):
     """ returns a normalized subsection of screen given coordinates """
@@ -100,7 +100,7 @@ def on_key(key):
     try:
         mkey = key.char
     except AttributeError:
-        pass
+        mkey = key
     return False
 
 def get_key(message=None):
@@ -108,7 +108,7 @@ def get_key(message=None):
     global mkey
     if message:
         print(message)
-    with keyboard.Listener(on_release=on_key) as listener:
+    with keyboard.Listener(on_press=on_key) as listener:
         listener.join()
     return mkey
 
