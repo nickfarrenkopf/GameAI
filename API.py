@@ -1,21 +1,21 @@
 import os
 import time
+from pynput.keyboard import Key
 
 import paths
 import data_things as dt
 
 from Library.General import Screen
-from Library import RL_Game
-from Library import RL_Agent
-from Library import RL_Environment
-from Library import RL_Reward
-
+from Library.RL import Game
+from Library.RL import Agent
+from Library.RL import Environment
+from Library.RL import Reward
 
 
 ### API ###
 
 def run_program(train_me=False, save_me=True):
-    """ ??? later """
+    """ """
 
     # clean previous game data
     count = 0
@@ -39,15 +39,14 @@ def run_program(train_me=False, save_me=True):
             save_path = os.path.join(THING, '{}.png'.format(count))
             Screen.save_image(GS, save_path)
             count += 1
-        time.sleep(pause_time)
+        time.sleep(0.5)
 
 
 ### TRAIN ####
 
 def train_networks(GS, A, R):
     """ """
-    # what_input = input('I want some number here I think')
-    # load specified data
+    print('Training? ')
     gamestate_data = 0
     action_data = 0
     if R != 0:
@@ -94,61 +93,42 @@ def record_game_data():
                 Screen.save_image(window, path)
             count += 1
         done = key == 'p'
-        
-        
-        
-
 
 
 ### PARAMS ###
 
-
-from pynput.keyboard import Key
-pause_time = 1
-
-
+# location
 game_path = paths.pacman_path
 
+# network
 auto_network = dt.load_auto(paths.network_path, 'AUTO_test_512_512_6_256')
 
-
-
+# key mappings
 keys = [Key.up,Key.right,Key.down,Key.left,'z','x','a','s','q','r','w',
         Key.enter,Key.space]
 values = ['up','right','down','left','z','x','a','s','q','r','w',
           'enter','space']
 
 
-# RL components
+### PROGRAM ###
+
 if True:
     
     game = RL_Game.Game(game_path, auto_network)
-    
     env = RL_Environment.Environment(game)
-    #agent = RL_Agent.Agent(game, env)
-    #reward = RL_Reward.Reward(game, agent)
+    agent = RL_Agent.Agent(game, env)
+    reward = RL_Reward.Reward(game, agent)
 
-    #reward.train_network_offline()
+
+# train
+#reward.train_network_offline()
+
 
 #idxs, labels = game.load_labels('left')
-#print(len(idxs))
-
 
 idxs, labels = game.find_game_data(game.action_labels)
 
-#ds, acs, ls = env.load_network_data()
-
 #record_game_data()
 #listen_game_data()
-
-#ds, ls, ls_hot = reward.gamedata_files_to_network_inputs()
-#reward.test_network()
-# do things
-
-
-#ds, ls, idxs = reward.files_to_labeled()
-#reward.train_network_offline()
-#record_game_data()
-
 
 

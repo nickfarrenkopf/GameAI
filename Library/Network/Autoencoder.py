@@ -78,7 +78,7 @@ def create(network_path, auto_name, h, w, hidden, length=3, e=1e-8):
 
         # name and save path
         auto_name = 'AUTO_{}_{}_{}_{}_{}'.format(auto_name, h, w, n_layers,
-                                                 flat_size) ###
+                                                 flat_size)
         save_path = os.path.join(network_path, auto_name)
         print(save_path)
 

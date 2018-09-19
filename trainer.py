@@ -3,7 +3,7 @@ import numpy as np
 
 import paths
 import data_things as dt
-from Library import NetworkAPI as NETS
+from Library.Network import NetworkAPI as NETS
 
 
 ### FILE ###
@@ -43,11 +43,10 @@ if __name__ == '__main__':
 
     path = paths.network_path
 
-    trains = 1
 
     if 0:
         NETS.new_auto(paths.network_path, 'pacman', 512, 512,
-                      [32, 16, 16, 8, 8, 4])
+                      [64, 32, 16, 16, 8, 4])
     
     # load auto
     if 0:
@@ -64,15 +63,15 @@ if __name__ == '__main__':
     # train auto
     if 1:
         print('Training...')
-        auto_network = dt.load_auto(path, 'AUTO_pacman_512_512_6_256')
         from os.path import join
         import itertools
+        auto_network = dt.load_auto(path, 'AUTO_pacman_512_512_6_256')
         game_filepaths = [[join(p, 'gamedata', f)
                            for f in os.listdir(join(p, 'gamedata'))]
                           for p in paths.all_paths]
         game_filepaths = list(itertools.chain.from_iterable(game_filepaths))
         #print(len(game_filepaths))
         NETS.train_auto(auto_network, game_filepaths, 512, 512,
-                        n_train=20, kmax_img=1, kmax_cost=1)
+                        n_train=10, kmax_img=1, kmax_cost=1)
 
 

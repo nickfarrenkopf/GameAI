@@ -3,7 +3,7 @@ from keras.layers import Dense
 
 from Library.General import Screen
 from Library.General import DataThings as DT
-from Library.RL_Component import RL_Component as RLC
+from Library.RL.Component import Component as RLC
 
 
 class Agent(RLC):

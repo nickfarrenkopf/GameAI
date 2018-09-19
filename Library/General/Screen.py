@@ -1,6 +1,4 @@
 import os
-import cv2
-import time
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image, ImageGrab
@@ -16,7 +14,8 @@ mouseAPI = mouse.Controller()
 
 mkey = ''
 keyAPI = keyboard.Controller()
-key_dict = {'left': K.left, 'right': K.right, 'up': K.up, 'down': K.down}
+key_dict = {'left': K.left, 'right': K.right, 'up': K.up, 'down': K.down,
+            'enter': K.enter, 'space': K.space}
 
 
 ### SCREEN ###
