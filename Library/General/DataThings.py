@@ -1,6 +1,9 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
+
+from Library.Network import NetworkAPI as NETS
 
 
 ### TEXT FILE ###
@@ -30,14 +33,21 @@ def load_image(file):
 
 def load_images(files):
     """ returns normalized data for images files """
-    return np.array([load_image(file) for file in files])
+    return np.array([load_image(os.path.join(files, f)) for f in os.listdir(files)])
 
+def load_datas(files):
+    """ """
+    return np.array([load_image(file) for file in files])
 
 ### NETWORK FILE ###
 
 def load_keras_network(filename):
     """ """
     return load_model(filename)
+
+def load_auto(path, auto_name):
+    """ """
+    return NETS.load_auto(path, auto_name)
 
 
 ### DATA ###
@@ -71,7 +81,7 @@ def to_one_hot(labels, n_classes=0):
     label_set = list(sorted(set(labels)))
     n_classes = len(label_set) if n_classes == 0 else n_classes
     one_hot = [new_label(label_set.index(lab), n_classes) for lab in labels]
-    return one_hot
+    return np.array(one_hot)
 
 
 ### PLOT ###

@@ -51,6 +51,8 @@ class Reward(RLC):
     def train_network_offline(self, epochs=1000, n_loop=100, save_me=False):
         """ train keras network with saved gamestate data """
         data, _, labels = self.load_network_data()
+        print(data.shape)
+        print(labels.shape)
         for _ in range(n_loop):
             self.network.fit(data, labels, epochs=epochs//n_loop, verbose=0)
             self.print_metrics(data, labels)            
@@ -64,12 +66,12 @@ class Reward(RLC):
     def load_network_data(self, shuffle_me=True):
         """ load gamestate images based on labeled class data """
         # find data based on agent rewards
-        idxs, labels = self.game.find_game_data(self.agent.reward_labels)
+        idxs, labels = self.game.find_game_data(self.game.reward_labels)
         _, labels, files = self.add_zero_reward_labels(idxs, labels)
-        files, labels = self.shuffle_mes(files, labels, shuffle_me)
+        files, labels = self.game.shuffle_mes(files, labels, shuffle_me)
         # load data and format to network
-        data = self.game.auto_network.get_flat(DT.load_images(files))
-        one_hot = DT.to_one_hot_labels(labels)
+        data = self.game.auto_network.get_flat(DT.load_datas(files))
+        one_hot = DT.to_one_hot(labels, n_classes=3)
         return data, labels, one_hot
 
     def add_zero_reward_labels(self, idxs, labels):

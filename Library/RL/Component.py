@@ -3,7 +3,7 @@ import numpy as np
 from keras.models import load_model
 
 
-class RL_Component(object):
+class Component(object):
     """ """
 
     def __init__(self, network_path):

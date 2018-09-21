@@ -3,13 +3,13 @@ import time
 from pynput.keyboard import Key
 
 import paths
-import data_things as dt
 
 from Library.General import Screen
-from Library.RL import Game
-from Library.RL import Agent
-from Library.RL import Environment
-from Library.RL import Reward
+from Library.General import DataThings as dt
+from Library.RL import Game as GG
+from Library.RL import Agent as AA
+from Library.RL import Environment as EE
+from Library.RL import Reward as RR
 
 
 ### API ###
@@ -114,10 +114,10 @@ values = ['up','right','down','left','z','x','a','s','q','r','w',
 
 if True:
     
-    game = RL_Game.Game(game_path, auto_network)
-    env = RL_Environment.Environment(game)
-    agent = RL_Agent.Agent(game, env)
-    reward = RL_Reward.Reward(game, agent)
+    game = GG.Game(game_path, auto_network)
+    env = EE.Environment(game)
+    agent = AA.Agent(game, env)
+    reward = RR.Reward(game, agent)
 
 
 # train
@@ -126,7 +126,7 @@ if True:
 
 #idxs, labels = game.load_labels('left')
 
-idxs, labels = game.find_game_data(game.action_labels)
+#idxs, labels = game.find_game_data(game.reward_labels)
 
 #record_game_data()
 #listen_game_data()
