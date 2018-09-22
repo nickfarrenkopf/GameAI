@@ -1,5 +1,6 @@
 import os
 import time
+import numpy as np
 from pynput.keyboard import Key
 
 import paths
@@ -59,7 +60,7 @@ def listen_game_data():
     """ """
     done = False
     while not done:
-        pred = reward.get_reward()[0]
+        pred = reward.predict_reward()[0]
         print(list(pred).index(pred.max()))
         time.sleep(0.25)
 
@@ -130,5 +131,6 @@ if True:
 
 #record_game_data()
 #listen_game_data()
+#reward.test_network_offline()
 
-
+#datas, data, _, labels = reward.load_network_data()

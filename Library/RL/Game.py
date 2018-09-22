@@ -114,7 +114,9 @@ class Game(object):
 
     def get_gamestate(self):
         """ gets current gamestate from screen """
-        return self.auto_network.get_flat(self.get_window())
+        wind = np.reshape(self.get_window(), (-1, 512, 512, 3))
+        wind = np.array(list(wind) * 2)
+        return self.auto_network.get_flat(wind)
 
     def get_all_gamedata_paths(self):
         """ returns file locations for all gamestates """

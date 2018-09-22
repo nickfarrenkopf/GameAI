@@ -5,7 +5,7 @@ from PIL import Image, ImageGrab
 from pynput import mouse, keyboard
 from pynput.keyboard import Key as K
 
-
+import numpy as np
 ### PARAMS ###
 
 # global listeners
