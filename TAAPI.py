@@ -18,30 +18,27 @@ from Library.TA import Test
 
 def run_program(train_me=False, save_me=True):
     """ """
-
-    # clean previous game data
-    count = 0
-
+    
     # loop until done
     done = False
     while not done:
 
         # RL EVENTS
-        GS = env.get_gamestate()
-        A = player.choose_action(GS)
-        player.take_action(A)
-        R = env.get_reward(GS)
+        done = True
 
-        # TRAIN
-        if train_me:
-            train_networks(GS, A, R)
-            
-        # END OF LOOP
-        if save_me:
-            save_path = os.path.join(THING, '{}.png'.format(count))
-            Screen.save_image(GS, save_path)
-            count += 1
-        time.sleep(0.5)
+
+def listen_for_actions():
+    """ """
+    done = False
+    while not done:
+        
+
+
+def listen_action():
+    """ """
+    pass
+    # keyboard keyS and mouse action listener
+
 
 
 ### TRAIN ####
@@ -50,26 +47,24 @@ def train_networks():
     """ """
     print('Training')
 
-
-### HELPER ###
-
-def listen_game_data():
-    """ """
-    done = False
-    while not done:
-        pred = reward.predict_reward()[0]
-        print(list(pred).index(pred.max()))
-        time.sleep(0.25)
-
 def train_auto_network_online():
     """ """
     done = False
+    count = 0
     while not done:
         data = np.reshape(test.get_window(), (-1, h, w, 3))
         print(data.shape)
         NETS.train_auto(auto_network, data, h, w, n_train=5, kmax_img=100,
                         kmax_cost=5)
         time.sleep(0.5)
+        count += 1
+        if count % 3 == 0:
+            NETS.plot_middle(auto_network, data, h, w, n_plot=1, count=count)
+
+
+
+### HELPER ###
+
 
 def record_game_data():
     """ """
@@ -103,6 +98,37 @@ def record_game_data():
         done = key == 'p'
 
 
+
+from threading import Timer
+from pynput.keyboard import Key
+exit_loop = True
+
+def end_of_time():
+    """ """
+    exit_loop = True
+
+def get_keys():
+    """ """
+    done = False
+    keys = []
+    while not done:
+        t = Timer(1, end_of_time)
+        t.start()
+        key = Screen.get_key()
+        keys.append(key)
+        done = key == Key.enter
+    want_keys = []
+    for key in keys:
+        if type(key) == str:
+            want_keys.append(key)
+        if key == Key.space:
+            want_keys.append(' ')
+    print(''.join(want_keys))
+    return want_keys
+    
+    
+
+
 ### PARAMS ###
 
 # location
@@ -125,15 +151,16 @@ if 0:
 # create auto network
 if 0:
     print('Creating AUTO...')
-    NETS.new_auto(paths.automation_path, 'test', h, w, [64,32,16,16,8,8,4],
+    NETS.new_auto(paths.automation_path, 'test', h, w, [32,16,16,8,8,8,4],
                   batch_size=1)
 
 # train auto network
-if 1:
+if 0:
     print('Training AUTO...')
     auto_network = DT.load_auto(base_path, 'AUTO_test_1024_1024_7_256')
     test = Test.Test(test_path, auto_network)
     train_auto_network_online()
 
 
+get_keys()
     
