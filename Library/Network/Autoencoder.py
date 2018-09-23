@@ -55,7 +55,7 @@ def unpooled(net, mask, input_shape, output_shape, batch_size=4):
 
 ### PARAMS ###
 
-batch_size = 4
+
 patch = 3
 stride = 2
 c_strides = [1, 1, 1, 1]
@@ -65,7 +65,7 @@ p_ksize = [1, stride, stride, 1]
 
 ### CREATE ###
 
-def create(network_path, auto_name, h, w, hidden, length=3, e=1e-8):
+def create(network_path, auto_name, h, w, hidden, length=3, e=1e-8, batch_size=4):
     """ create convolutional autoencoder network """
 
     with tf.device('/gpu:0'):

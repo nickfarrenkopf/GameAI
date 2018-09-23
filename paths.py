@@ -23,3 +23,6 @@ mariokart_path = join(games_path, 'mariokart')
 all_paths = [pacman_path]#, aw2_path, mario_path, centipede_path, kirby_path, mariokart_path]
 
 
+
+automation_path = join(data_path, 'automation_tests')
+

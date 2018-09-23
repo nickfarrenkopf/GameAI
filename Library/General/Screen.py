@@ -37,6 +37,12 @@ def get_data_resized(width, height):
     img = ImageGrab.grab()
     return np.array(img.resize((height, width), Image.ANTIALIAS)) / 255
 
+def get_data_resized_xy(x1, y1, x2, y2, width, height):
+    """ returns a normalized screenshot of specificed size """
+    img = ImageGrab.grab()
+    img = img.crop((y1, x1, y2, x2))
+    return np.array(img.resize((height, width), Image.ANTIALIAS)) / 255
+
 def save_image(data, save_path):
     """ saves data as image to path, un-normalizing if necessary """
     data = data * 255 if data.max() <= 1.0 else data

@@ -43,20 +43,23 @@ load_auto = Networks.NetworkAuto
 import tensorflow as tf
 import random
 
-def train_auto(network, filepaths, h, w, n_train=1000, alpha=0.0001, n_plot=20,
+def train_auto(network, data, h, w, n_train=1000, alpha=0.0001, n_plot=20,
                kmax_cost=10, kmax_img=100, kmax_save=0):
     """ iterate through data set to train autoencoder newtork """
     costs = []
     for k in range(n_train):
         #idxs = random.sample(range(len(filepaths)), 100)
-        data = DT.load_images(filepaths)
-        data = DT.pad_me(data, 4, 4)
-        subdata = DT.subdata(data, 512, 512)
+        #data = DT.load_images(filepaths)
+        #data = DT.pad_me(data, 4, 4)
+        #print(data.shape)
+        #subdata = DT.subdata(data, h, w)
+        #print(subdata.shape)
+        subdata = data
         #subdata = data
         network.train_network(subdata, alpha)
         costs = check_cost(network, subdata, subdata, costs, k, kmax_cost)
-        check_auto(network, subdata, h, w, k, kmax_img, n_plot)
-        check_save(network, k, kmax_save)
+        #check_auto(network, subdata, h, w, k, kmax_img, n_plot)
+        #check_save(network, k, kmax_save)
 
 def check_cost(network, input_data, output_data, costs, k, k_max):
     """ check to print cost """
