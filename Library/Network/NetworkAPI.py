@@ -58,7 +58,7 @@ def train_auto(network, data, h, w, n_train=1000, alpha=0.0001, n_plot=20,
         #subdata = data
         network.train_network(subdata, alpha)
         costs = check_cost(network, subdata, subdata, costs, k, kmax_cost)
-        #check_auto(network, subdata, h, w, k, kmax_img, n_plot)
+        check_auto(network, subdata, h, w, k, kmax_img, n_plot)
         #check_save(network, k, kmax_save)
 
 def check_cost(network, input_data, output_data, costs, k, k_max):

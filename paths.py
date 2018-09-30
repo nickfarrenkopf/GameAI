@@ -26,3 +26,4 @@ all_paths = [pacman_path]#, aw2_path, mario_path, centipede_path, kirby_path, ma
 
 automation_path = join(data_path, 'automation_tests')
 
+auto_data_path = join(automation_path, 'images')

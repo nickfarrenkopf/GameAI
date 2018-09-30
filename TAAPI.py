@@ -31,6 +31,7 @@ def listen_for_actions():
     """ """
     done = False
     while not done:
+        pass
         
 
 
@@ -60,6 +61,16 @@ def train_auto_network_online():
         count += 1
         if count % 3 == 0:
             NETS.plot_middle(auto_network, data, h, w, n_plot=1, count=count)
+
+def train_auto_offline():
+    """ """
+    p = paths.auto_data_path
+    ps = [os.path.join(p, file) for file in os.listdir(p)]
+    data = DT.load_datas(ps)
+    print(data.shape)
+    NETS.train_auto(auto_network, data, h, w, n_train=50, kmax_img=2,
+                    kmax_cost=1)
+    
 
 
 
@@ -155,12 +166,12 @@ if 0:
                   batch_size=1)
 
 # train auto network
-if 0:
+if 1:
     print('Training AUTO...')
     auto_network = DT.load_auto(base_path, 'AUTO_test_1024_1024_7_256')
     test = Test.Test(test_path, auto_network)
-    train_auto_network_online()
+    train_auto_offline()
 
 
-get_keys()
+
     

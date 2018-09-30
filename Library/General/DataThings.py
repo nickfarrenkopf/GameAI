@@ -29,7 +29,7 @@ def read_file_split_empty(filename):
 
 def load_image(file):
     """ returns normalized data for image file """
-    return np.array(Image.open(file)) / 255
+    return np.array(Image.open(file))[:, :, :3] / 255
 
 def load_images(files):
     """ returns normalized data for images files """
