@@ -1,6 +1,7 @@
 import os
 import time
 import numpy as np
+from pynput import keyboard
 from pynput.keyboard import Key
 
 import paths
@@ -25,20 +26,6 @@ def run_program(train_me=False, save_me=True):
 
         # RL EVENTS
         done = True
-
-
-def listen_for_actions():
-    """ """
-    done = False
-    while not done:
-        pass
-        
-
-
-def listen_action():
-    """ """
-    pass
-    # keyboard keyS and mouse action listener
 
 
 
@@ -67,79 +54,72 @@ def train_auto_offline():
     p = paths.auto_data_path
     ps = [os.path.join(p, file) for file in os.listdir(p)]
     data = DT.load_datas(ps)
-    print(data.shape)
     NETS.train_auto(auto_network, data, h, w, n_train=50, kmax_img=2,
                     kmax_cost=1)
     
 
 
 
-### HELPER ###
+### LISTENER ###
 
+from pynput import mouse
 
-def record_game_data():
+def mouse_on_click(x, y, button, pressed):
     """ """
-    # starting file counter
-    count = 0
-    if len(os.listdir(game.state_path)) > 0:
-        count = int(os.listdir(game.state_path)[-1].split('_')[1]) + 1
-    print('Start count: {}'.format(count))
-    # wait for key
-    done = False
-    while not done:
-        key = Screen.get_key()
-        print(key)
-        # if in whitelist, take screencap
-        if key in game.action_keys or key in game.label_keys:
-            text = '0' * (4 - len(str(count))) + str(count)
-            names = ['image_{}_{}_0'.format(text, values[keys.index(key)])]
-            windows = [game.get_window()]
-            if key in game.action_keys:         
-                for i in range(1, 3):
-                    text = '0' * (4 - len(str(count))) + str(count)
-                    names.append('image_{}_{}_{}'.format(text,
-                                                         values[keys.index(key)],
-                                                         i))
-                    windows.append(game.get_window())
-                    time.sleep(0.1)
-            for name, window in zip(names, windows):
-                path = os.path.join(game.state_path, name + '.png')
-                Screen.save_image(window, path)
-            count += 1
-        done = key == 'p'
-
-
-
-from threading import Timer
-from pynput.keyboard import Key
-exit_loop = True
-
-def end_of_time():
-    """ """
-    exit_loop = True
-
-def get_keys():
-    """ """
-    done = False
-    keys = []
-    while not done:
-        t = Timer(1, end_of_time)
-        t.start()
-        key = Screen.get_key()
-        keys.append(key)
-        done = key == Key.enter
-    want_keys = []
-    for key in keys:
-        if type(key) == str:
-            want_keys.append(key)
-        if key == Key.space:
-            want_keys.append(' ')
-    print(''.join(want_keys))
-    return want_keys
+    global all_keys, key_listener
+    print(button)
     
     
 
+def keyboard_on_release(keyed):
+    """ """
+    global all_keys
+    all_keys += key_to_char(keyed)
+    if keyed == Key.enter:
+        return False
+        
 
+def listen_action():
+    """ """
+    global all_keys, mouse_lisener
+    print('Listening for action...')
+
+    # loop until done
+    done = False
+    while not done:
+        all_keys = ''
+
+        # listen for action
+        with keyboard.Listener(on_release=keyboard_on_release) as key_listener:
+            try:
+                key_listener.join()
+            except:
+                print('Exception when listening')
+
+        print('Keys: ' + all_keys)
+        done = all_keys == 'q'
+    print('Ended')
+    mouse_listener.stop()
+
+def key_to_char(keyed):
+    """ """
+    try:
+        return keyed.char
+    except AttributeError:
+        if keyed == Key.space:
+            return ' '
+        if keyed == Key.enter:
+            return ''
+        return '_'
+
+
+
+mouse_listener = mouse.Listener(on_click=mouse_on_click)
+mouse_listener.start()
+#mouse_listener.stop()
+all_keys = ''
+
+    
 ### PARAMS ###
 
 # location
@@ -166,12 +146,13 @@ if 0:
                   batch_size=1)
 
 # train auto network
-if 1:
+if 0:
     print('Training AUTO...')
     auto_network = DT.load_auto(base_path, 'AUTO_test_1024_1024_7_256')
     test = Test.Test(test_path, auto_network)
     train_auto_offline()
 
 
+ass = listen_action()
+#print(ass)
 
-    

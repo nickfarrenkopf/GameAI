@@ -1,11 +1,10 @@
-import os
-import time
+
 from pynput import mouse
-from pynput.keyboard import Key, Listener
+from pynput.keyboard import Listener
 
 
 
-from pynput import keyboard
+
 
 def on_function(key):
     """ """
