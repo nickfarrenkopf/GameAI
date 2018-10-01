@@ -54,7 +54,7 @@ def train_auto_offline():
     p = paths.auto_data_path
     ps = [os.path.join(p, file) for file in os.listdir(p)]
     data = DT.load_datas(ps)
-    NETS.train_auto(auto_network, data, h, w, n_train=50, kmax_img=2,
+    NETS.train_auto(auto_network, data, h, w, n_train=30, kmax_img=1,
                     kmax_cost=1)
     
 
@@ -114,8 +114,8 @@ def key_to_char(keyed):
 
 
 
-mouse_listener = mouse.Listener(on_click=mouse_on_click)
-mouse_listener.start()
+#mouse_listener = mouse.Listener(on_click=mouse_on_click)
+#mouse_listener.start()
 #mouse_listener.stop()
 all_keys = ''
 
@@ -142,17 +142,17 @@ if 0:
 # create auto network
 if 0:
     print('Creating AUTO...')
-    NETS.new_auto(paths.automation_path, 'test', h, w, [32,16,16,8,8,8,4],
+    NETS.new_auto(paths.automation_path, 'test', h, w, [32,16,16,16,16,8,4],
                   batch_size=1)
 
 # train auto network
-if 0:
+if 1:
     print('Training AUTO...')
     auto_network = DT.load_auto(base_path, 'AUTO_test_1024_1024_7_256')
     test = Test.Test(test_path, auto_network)
     train_auto_offline()
 
 
-ass = listen_action()
+#ass = listen_action()
 #print(ass)
 

@@ -72,6 +72,7 @@ def check_auto(network, input_data, h, w, k, k_max, n_plot):
     """ """
     if k_max != 0 and k % k_max == 0:
         idxs = random.sample(range(len(input_data)), n_plot)
+        #idxs = list(range(n_plot))
         ds = np.array([input_data[i] for i in idxs])
         plot_middle(network, ds, h, w, n_plot=n_plot, count=k)
 
