@@ -64,12 +64,54 @@ def listen_game_data():
         print(list(pred).index(pred.max()))
         time.sleep(0.25)
 
-def record_game_data():
+def record_data():
+    """ """
+    base_path = os.path.join(paths.base_path, 'data', 'image', 'hearthstone')
+    k = len(os.listdir(base_path))
+    print(k)
+    while 1:
+        data = Screen.get_data_resized(1024, 1024)
+        path = os.path.join(base_path, 'hearthstone_{}.png'.format(k))
+        Screen.save_image(data, path)
+        k += 1
+        time.sleep(0.25)
+
+def remove_things():
+    """ """
+    base_path = os.path.join(paths.base_path, 'data', 'image', 'hearthstone')
+    filepaths = [os.path.join(base_path, f) for f in os.listdir(base_path)]
+    idxs = [int(f.split('.')[0].split('_')[-1]) for f in os.listdir(base_path)]
+    print('Num files: {}'.format(len(filepaths)))
+    # loop through first 10
+    rems = []
+    ds = list(dt.load_image(filepaths[0]))
+    for i in range(1, len(idxs[1:1000])):
+        ds.append(list(dt.load_image(filepaths[i])))
+        if len(ds) > 2:
+            ds = ds[1:]
+        mean = np.abs(np.mean(ds[1] - ds[0]))
+        if mean < 1e-4:
+            print(i)
+            rems.append(i)
+    return rems
+    
+def rename_idxs():
+    """ """
+    base_path = os.path.join(paths.base_path, 'data', 'image', 'hearthstone')
+    filepaths = [os.path.join(base_path, f) for f in os.listdir(base_path)]
+    idxs = [f.split('.')[0].split('_')[-1] for f in os.listdir(base_path)]
+    for i, idx in enumerate(idxs):
+        if int(idx) < 1000:
+            old_path = filepaths[i]
+            new_path = filepaths[i].replace(idx, '0' * (4 - len(idx)) + idx)
+            #os.rename(old_path, new_path)
+
+def record_game_data(path):
     """ """
     # starting file counter
     count = 0
-    if len(os.listdir(game.state_path)) > 0:
-        count = int(os.listdir(game.state_path)[-1].split('_')[1]) + 1
+    if len(os.listdir(path)) > 0:
+        count = int(os.listdir(path)[-1].split('_')[1]) + 1
     print('Start count: {}'.format(count))
     # wait for key
     done = False
@@ -99,21 +141,25 @@ def record_game_data():
 ### PARAMS ###
 
 # location
-game_path = paths.pacman_path
+#game_path = paths.pacman_path
 
 # network
-auto_network = dt.load_auto(paths.network_path, 'AUTO_test_512_512_6_256')
+#auto_network = dt.load_auto(paths.network_path, 'AUTO_test_512_512_6_256')
 
 # key mappings
-keys = [Key.up,Key.right,Key.down,Key.left,'z','x','a','s','q','r','w',
-        Key.enter,Key.space]
-values = ['up','right','down','left','z','x','a','s','q','r','w',
-          'enter','space']
+#keys = [Key.up,Key.right,Key.down,Key.left,'z','x','a','s','q','r','w',
+#        Key.enter,Key.space]
+#values = ['up','right','down','left','z','x','a','s','q','r','w',
+#          'enter','space']
 
 
 ### PROGRAM ###
 
-if True:
+if 1:
+    rems = remove_things()
+    print(len(rems))
+
+if 0:
     
     game = GG.Game(game_path, auto_network)
     env = EE.Environment(game)
