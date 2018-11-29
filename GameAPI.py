@@ -13,6 +13,39 @@ from Library.NeuralNetworks.Classifier import ClassifierAPI as CLASS
 
 ### PROGRAM ###
 
+
+
+def record_game_data(path):
+    """ """
+    # starting file counter
+    count = 0
+    if len(os.listdir(path)) > 0:
+        count = int(os.listdir(path)[-1].split('_')[1]) + 1
+    print('Start count: {}'.format(count))
+    # wait for key
+    done = False
+    while not done:
+        key = Screen.get_key()
+        print(key)
+        # if in whitelist, take screencap
+        if key in game.action_keys or key in game.label_keys:
+            text = '0' * (4 - len(str(count))) + str(count)
+            names = ['image_{}_{}_0'.format(text, values[keys.index(key)])]
+            windows = [game.get_window()]
+            if key in game.action_keys:         
+                for i in range(1, 3):
+                    text = '0' * (4 - len(str(count))) + str(count)
+                    names.append('image_{}_{}_{}'.format(text,
+                                                         values[keys.index(key)],
+                                                         i))
+                    windows.append(game.get_window())
+                    time.sleep(0.1)
+            for name, window in zip(names, windows):
+                path = os.path.join(game.state_path, name + '.png')
+                Screen.save_image(window, path)
+            count += 1
+        done = key == 'p'
+
 if __name__ == '__main__':
 
 

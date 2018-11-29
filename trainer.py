@@ -1,41 +1,59 @@
 import os
 import numpy as np
+from random import shuffle
 
 import paths
-from Library.General import DataThings as dt
-from Library.Network import NetworkAPI as NETS
+
+import sys
+sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
+from Library.General import DataThings as DT
+from Library.General import FileThings as FT
+from Library.NeuralNetworks.Autoencoder import AutoencoderAPI as AUTO
 
 
 ### PROGRAM ###
 
 if __name__ == '__main__':
 
-    s = 512
-    path = paths.pacman_path
-    net_path = os.path.join(path, 'networks')
 
-    if 0:
-        NETS.new_auto(paths.network_path, name, s, s, [64, 32, 16, 16, 8, 4])
-    
-    # load auto
-    if 1:
-        auto_network = dt.load_auto(net_path, 'AUTO_pacman_512_512_6_256')
-        data = dt.load_images(os.path.join(path, 'gamedata'))
-        print('Loaded network {}'.format(auto_network.name))
-        print('Data shape: {}'.format(data.shape))
+    """ GAME """
 
-    # test auto
-    if 1:
-        #dt.plot_data_multiple(data)
-        for i in range(10):
-            NETS.check_auto(auto_network, data, s, s, i, 1, 30)
+    name = 'hearthstone'
+    paths.set_base(name)
+    json_data = paths.load_json()
 
-    # train auto
-    if 0:
-        print('Training...')
-        auto_network = dt.load_auto(net_path, 'AUTO_pacman_512_512_6_256')
-        data = dt.load_images(os.path.join(path, 'gamedata'))
-        NETS.train_auto(auto_network, data, size, size,
-                        n_train=10, kmax_img=1, kmax_cost=1)
+    auto_path = paths.network_path
+    n = 32
+    h = 1024
+    w = 1024
+    le = 3
+    h_d = 1024
+    w_d = 1024
+
+
+    """ AUTO """
+
+    if 0: # LOAD
+        auto_network = AUTO.load_auto(name, json_data)
+
+    if 1: # CREATE
+        hidden = [20, 16, 16, 16, 16, 16, 16, 16]
+        json_data = AUTO.new_auto(paths, name, h, w, hidden, length=3,
+                                  with_binary=True)
+
+    if 1: # TRAIN
+        auto_network = AUTO.load_auto(name, json_data)
+        ds = FT.load_images_4d(paths.get_game_images()[7:7+n], h_d, w_d, le)
+        print('Data shape: {}'.format(ds.shape))
+        AUTO.train_auto_data(auto_network, ds, h, w, n_train=10000,
+                             kmax_img=25, kmax_cost=10, alpha=0.001)
+
+    if 0: # LEARN
+        ds = np.reshape(DT.load_datas(paths.get_game_images()[:16]), (-1, h2, w2, 3))
+        print('Data shape: {}'.format(ds.shape))
+        AUTO.learn_auto_data(auto_network, ds, h, w, kmax_cost=5, slope_min=1e-3,
+                             slope_count_max=10)
+
+
 
 
