@@ -22,7 +22,7 @@ class Sarsa_Tabular(object):
         self.Q = dict()
         self.S, self.S_next = None, None
         self.A, self.A_next = None, None
-        self.A_all = environment.action_profile()
+        self.A_all = environment.get_action_profile()
         self.set_parameters()
         self.action_counter = 0
         self.episode_counter = 0
@@ -33,8 +33,7 @@ class Sarsa_Tabular(object):
  
     def initial_state(self):
         """ resets environment and returns initial state """
-        self.environment.reset()
-        return tuple(self.environment.state)
+        return tuple(self.environment.reset())
 
     def take_action(self, action):
         """ returns next state and reward given action """

@@ -10,7 +10,7 @@ base_path = os.path.dirname(os.path.realpath(__file__))
 json_path = join(base_path, 'data', 'json_data.txt')
 image_path = ''
 network_path = ''
-
+small_ds = join(base_path, 'old', 'small_ds')
 
 
 ### SET PATHS ###

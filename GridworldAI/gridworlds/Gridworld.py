@@ -125,11 +125,12 @@ class Gridworld(object):
         for i in range(self.size):
             self.state[i] = 0
         self.first_state()
+        return self.state
 
 
     ### HELPER ###
 
-    def action_profile(self):
+    def get_action_profile(self):
         """ returns a list consisting of all possible action combos """
         action_values = [action.values for action in self.actions]
         return list(itertools.product(*action_values))  
