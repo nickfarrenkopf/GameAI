@@ -33,7 +33,8 @@ class Sarsa_Tabular(object):
  
     def initial_state(self):
         """ resets environment and returns initial state """
-        return tuple(self.environment.reset())
+        self.environment.reset_state()
+        return tuple(self.environment.state)
 
     def take_action(self, action):
         """ returns next state and reward given action """

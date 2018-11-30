@@ -11,7 +11,7 @@ from gridworlds import gridworld_6 as GD6
 
 
 
-num = 6
+num = 1
 
 if num == 1:
     env = GD1.Gridworld_1(5)

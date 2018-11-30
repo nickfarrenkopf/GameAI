@@ -13,9 +13,9 @@ class Gridworld_1(Gridworld.Gridworld):
 
     ### DEFAULTS ###
 
-    def default_terminal_states(self):
+    def set_terminal_states(self):
         """ """
-        return [0, self.size - 1]
+        return [0, self.state_size - 1]
 
     def define_method(self):
         """ """
@@ -29,7 +29,7 @@ class Gridworld_1(Gridworld.Gridworld):
             color_grid[location] = colors.ORANGE
         return color_grid
 
-    def first_state(self):
+    def set_initial_state(self):
         """ """
         self.state[self.random_nonterminal_state()] = 1
 
