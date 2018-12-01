@@ -1,5 +1,5 @@
 *.pyc
 checkpoint
 __init__.py
-emulator/
-data/
+Emulator/emulator/
+Emulator/data/

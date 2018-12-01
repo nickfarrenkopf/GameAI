@@ -1,17 +1,21 @@
 import pygame
 
-import colors
 
 # define which gridworld
 from gridworlds import gridworld_1 as GD1
 from gridworlds import gridworld_2 as GD2
 from gridworlds import gridworld_3 as GD3
 from gridworlds import gridworld_4 as GD4
-from gridworlds import gridworld_6 as GD6
+from gridworlds import gridworld_5 as GD5
 
 
 
-num = 1
+import sys
+sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
+from Library.General import Colors
+
+
+num = 4
 
 if num == 1:
     env = GD1.Gridworld_1(5)
@@ -21,8 +25,8 @@ elif num == 3:
     env = GD3.Gridworld_3(4, 12)
 elif num == 4:
     env = GD4.Gridworld_4(7, 10)
-elif num == 6:
-    env = GD6.Gridworld_6(5, 5)
+elif num == 5:
+    env = GD6.Gridworld_5(5, 5)
 
 
 ### PARAMS ###
@@ -95,14 +99,14 @@ while not done:
         env.sarsa.next_time_step()  
     
     # --- update visual
-    screen.fill(colors.BLACK)
+    screen.fill(Colors.BLACK)
     for row in range(env.height):
         for col in range(env.width):
             
             # color grid depending on value and state
             color = env.color_grid[row * env.width + col]
             if env.grid[row][col] == 1:
-                color = colors.GREEN if env.in_terminal_state() else colors.RED
+                color = Colors.GREEN if env.in_terminal_state() else Colors.RED
             
             # draw rectangle at location
             x = (MARGIN + WIDTH) * col + MARGIN

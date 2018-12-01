@@ -1,9 +1,11 @@
 import itertools
 import numpy as np
 
-import colors
+import sys
+sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
+from Library.General import Colors
+from Library.Learning import EnvironmentController as Environment
 
-import Environment
 
 
 
@@ -27,7 +29,7 @@ class Gridworld(object):
         self.state_size = height * width
         self.state = np.zeros(self.state_size, dtype=int)
         
-        self.terminal_states = self.set_terminal_states()
+        
 
         self.grid = np.reshape(self.state, (height, width))
 
@@ -39,25 +41,33 @@ class Gridworld(object):
         self.actions = self.define_actions()
 
         # gridworld dependent
-        
-        self.sarsa = self.define_method()
-        self.color_grid = self.default_color_grid()
+        self.set_terminal_states()
+        self.set_initial_method()
+        self.set_initial_color_grid()
 
 
-    ### STATE - ENV ###
+    ### STATE - BASE ###
+
+    def set_initial_state(self):
+        """ todo """
+        pass
+
+    def set_terminal_states(self):
+        """ todo """
+        pass
 
     def in_terminal_state(self):
         """ """
         return self.location_of(self.AGENT) in self.terminal_states
 
-    
-    ### STATE - GRID ###
-
-    def reset_state(self):
+    def reset_environment(self):
         """ """
         for i in range(self.state_size):
             self.state[i] = 0
         self.set_initial_state()
+        
+    
+    ### STATE - HELPER ###
 
     def random_terminal_state(self, piece):
         """ """
@@ -73,8 +83,15 @@ class Gridworld(object):
             idx = np.random.randint(self.state_size)
         return idx
 
+    def random_empty_state(self):
+        """ """
+        idx = np.random.randint(self.state_size)
+        while self.state[idx] != 0:
+            idx = np.random.randint(self.state_size)
+        return idx
+        
 
-    ### ACTION - ENV ###
+    ### ACTION - BASE ###
 
     def define_actions(self):
         """ defines actions player can take """
@@ -82,12 +99,16 @@ class Gridworld(object):
         a2 = Environment.Action('x movement', [-1, 0, 1])
         return [a1, a2]
 
+    def take_action(self):
+        """ todo """
+        pass
+    
 
-    ### ACTION - GRID ###
+    ### ACTION - HELPER ###
 
-    def move_piece_direction(self, piece, grid_change):
+    def move_piece_direction(self, agent, grid_change):
         """ moves piece desired direction """
-        start = self.location_of(piece, grid=True)
+        start = self.location_of(agent, grid=True)
         end = np.array(start) + np.array(grid_change)
         if self.on_grid(end) and self.valid_move(grid_change):
             self.move_piece_to(start, end)
@@ -104,9 +125,16 @@ class Gridworld(object):
         return movement <= self.max_move and movement >= self.min_move
 
 
+    ### LEARNING ###
+
+    def define_method(self):
+        """ todo """
+        pass
+    
+
     ### GRID ###
 
-    def default_color_grid(self):
+    def set_initial_color_grid(self):
         """ """
         pass
 
