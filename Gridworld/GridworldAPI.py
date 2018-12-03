@@ -1,123 +1,126 @@
 import pygame
 
-
-# define which gridworld
-from gridworlds import gridworld_1 as GD1
-from gridworlds import gridworld_2 as GD2
-from gridworlds import gridworld_3 as GD3
-from gridworlds import gridworld_4 as GD4
-from gridworlds import gridworld_5 as GD5
-
-
+import GW1
+import GW2
+import GW3
+import GW4
+import GW5
 
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
 
 
-num = 4
+### API ###
 
-if num == 1:
-    env = GD1.Gridworld_1(5)
-elif num == 2:
-    env = GD2.Gridworld_2(5)
-elif num == 3:
-    env = GD3.Gridworld_3(4, 12)
-elif num == 4:
-    env = GD4.Gridworld_4(7, 10)
-elif num == 5:
-    env = GD6.Gridworld_5(5, 5)
+def run(margin=20, height=100, width=100):
+    """ initiate Gridworld with lerning """
+    initialize_pygame(width, height, margin)
+    done = False
+    while not done:
+        done = check_pygame_events()
+        gridworld.run_learning(listening_to_keys)
+        draw_screen(width, height, margin)
+        end_pygame_loop()
+    exit_pygame()
+
+def initialize_pygame(width, height, margin):
+    """ run pygame.init(), build screen, start clock """
+    global screen, clock
+    pygame.init()
+    pygame.display.set_caption('Gridworld')
+    h = height * gridworld.height + margin * (gridworld.height + 1)
+    w = width * gridworld.width + margin * (gridworld.width + 1)
+    screen = pygame.display.set_mode((w, h))
+    clock = pygame.time.Clock()
+
+def check_pygame_events():
+    """ loop over pygame events, exiting or execute actions """
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            return True
+        if listening_to_keys:
+            check_manual_events(event)
+        else:
+            check_automated_events(event)
+    return False
+
+def end_pygame_loop():
+    """ tick counter and draw screen """
+    clock.tick(game_speed)
+    pygame.display.flip()
+
+def exit_pygame():
+    """ close display """
+    pygame.display.quit()
+    pygame.quit()
+
+
+### ACTIONS ###
+    
+def check_manual_events(event, sarsa):
+    """ move with arrow keys ? fix how I do this """
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LEFT: # left arrow -> move left
+            gridworld.take_action((0,-1))
+        if event.key == pygame.K_RIGHT: # right arrow -> move right
+            gridworld.take_action((0,1))
+        if event.key == pygame.K_UP: # up arrow -> move up
+            gridworld.take_action((-1,0))
+        if event.key == pygame.K_DOWN: # down arrow -> move down
+            gridworld.take_action((1,0))
+
+def check_automated_events(event):
+    """ speed up or slow down actions """
+    global game_speed
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_UP: # up arrow -> speed up
+            game_speed += 1 if game_speed < 60 else 0
+        if event.key == pygame.K_DOWN: # down arrow -> speed down
+            game_speed -= 1 if game_speed > 2 else  0
+
+
+### HELPER ###
+
+def set_gridworld(num):
+    """ define gridworld by version number """
+    global gridworld
+    if num == 1:
+        gridworld = GW1.Gridworld_1(5)
+    elif num == 2:
+        gridworld = GW2.Gridworld_2(5)
+    elif num == 3:
+        gridworld = GW3.Gridworld_3(4, 12)
+    elif num == 4:
+        gridworld = GW4.Gridworld_4(7, 10)
+    elif num == 5:
+        gridworld = GW5.Gridworld_5(5, 5)
+
+def draw_screen(width, height, margin):
+    """ draw gridworld on screen """
+    screen.fill(Colors.BLACK)
+    for i in range(gridworld.height):
+        for j in range(gridworld.width):
+            color = gridworld.color_grid[i * gridworld.width + j]
+            x = (margin + width) * j + margin
+            y = (margin + height) * i + margin
+            pygame.draw.rect(screen, color, [x, y, width, width])
 
 
 ### PARAMS ###
 
-# display size params
-MARGIN = 20
-HEIGHT = 100
-WIDTH = 100
-SCREEN_HEIGHT = HEIGHT * env.height + MARGIN * (env.height + 1)
-SCREEN_WIDTH = WIDTH * env.width + MARGIN * (env.width + 1)
-
-# other params
-GAME_SPEED_MIN = 2
-GAME_SPEED_MAX = 60
-N_BEFORE_EPISODES = 0
-
-# variable
+# pygame
+gridworld = ''
+screen = ''
+clock = ''
 game_speed = 30
-key_check = False
+listening_to_keys = False
 
 
 ### PROGRAM ###
 
-# initialize pygame
-pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Gridworld')
-
-# run episodes prior to gridworld
-if env.sarsa.episode_counter < N_BEFORE_EPISODES:
-    for _ in range(N_BEFORE_EPISODES):
-        env.sarsa.first_time_step()
-        while not env.in_terminal_state():
-             env.sarsa.next_time_step()
-
-# loop until done
-done = False
-clock = pygame.time.Clock()
-while not done:
-    
-    # --- main pygame event
-    for event in pygame.event.get():
-
-        # exit loop of pygame closure
-        if event.type == pygame.QUIT:
-            done = True
-            
-        # speed up or slow down auto world
-        if event.type == pygame.KEYDOWN and not key_check:
-            if event.key == pygame.K_UP:
-                game_speed += 1 if game_speed < GAME_SPEED_MAX else 0
-            if event.key == pygame.K_DOWN:
-                game_speed -= 1 if game_speed > GAME_SPEED_MIN else  0
-                
-        # user selected action for manual world
-        if event.type == pygame.KEYDOWN and key_check:
-            if event.key == pygame.K_LEFT:
-                sarsa.environment.take_action((0,-1))
-            if event.key == pygame.K_RIGHT:
-                sarsa.environment.take_action((0,1))
-            if event.key == pygame.K_UP:
-                sarsa.environment.take_action((-1,0))
-            if event.key == pygame.K_DOWN:
-                sarsa.environment.take_action((1,0))
-
-    # --- take next SARSA step
-    if env.sarsa.end_of_episode:
-        env.sarsa.first_time_step()
-    elif not key_check:
-        env.sarsa.next_time_step()  
-    
-    # --- update visual
-    screen.fill(Colors.BLACK)
-    for row in range(env.height):
-        for col in range(env.width):
-            
-            # color grid depending on value and state
-            color = env.color_grid[row * env.width + col]
-            if env.grid[row][col] == 1:
-                color = Colors.GREEN if env.in_terminal_state() else Colors.RED
-            
-            # draw rectangle at location
-            x = (MARGIN + WIDTH) * col + MARGIN
-            y = (MARGIN + HEIGHT) * row + MARGIN
-            pygame.draw.rect(screen, color, [x, y, WIDTH, WIDTH])
-
-    # --- end pygames loop
-    clock.tick(game_speed)
-    pygame.display.flip()
-
-pygame.display.quit()
-pygame.quit()
+# stat GridworldAPI
+set_gridworld(5)
+run()
 
 

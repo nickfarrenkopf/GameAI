@@ -1,4 +1,4 @@
-from gridworlds import Gridworld
+import Gridworld
 
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
@@ -21,7 +21,7 @@ class Gridworld_4(Gridworld.Gridworld):
 
     def set_initial_state(self):
         """ specific starting place """
-        self.state[self.starting_place] = 1
+        self.state[self.starting_place] = self.AGENT_VAL
 
     def set_terminal_states(self):
         """ spot in middle to the right behind the wind """
@@ -29,29 +29,41 @@ class Gridworld_4(Gridworld.Gridworld):
 
     def set_initial_method(self):
         """ with decay """
-        self.sarsa = SarsaTabular.SarsaTabular(self)
-        self.sarsa.set_parameters(lambdas=0.5, epsilon_decay=0.99)
+        self.method = SarsaTabular.SarsaTabular(self)
+        self.method.set_parameters(lambdas=0.5, epsilon_decay=0.99)
 
-    def set_initial_color_grid(self):
+    def set_color_grid(self):
         """ start to left, leftward windin middle, goal to the right """
-        self.color_grid = [Colors.WHITE for _ in self.state]
+        self.reset_color_grid()
         for i in range(self.height):
             for j in self.wind_1:
                 self.color_grid[self.grid_to_state((i, j))] = Colors.LIGHTBLUE
             for j in self.wind_2:
                 self.color_grid[self.grid_to_state((i, j))] = Colors.SKYBLUE
-        for location in self.terminal_states:
-            self.color_grid[location] = Colors.ORANGE
+        self.draw_terminal_states()
+        self.draw_agent()
 
     def take_action(self, action):
-        """ ? """
-        self.move_piece_direction(1, action)
-        reward = 0 if self.in_terminal_state() else -1
-        # apply wind
-        _, x = self.location_of(1, grid=True)
+        """ move agent, apply wind, find reward, set new color grid """
+        self.agent_take_action(self.AGENT_VAL, action)
+        self.apply_wind()
+        self.reward = self.get_reward()
+        self.set_color_grid()
+
+    def get_reward(self):
+        """ penalty if not in terminal state """
+        if self.in_terminal_state():
+            return 0
+        return -1
+
+
+    ### HELPER ###
+
+    def apply_wind(self):
+        """ """
+        _, x = self.location_of(self.AGENT_VAL, grid=True)
         if x in self.wind_1 + self.wind_2 and not self.in_terminal_state():
             for _ in range(2 if x in self.wind_2 else 1):
-                self.move_piece_direction(1, (-1, 0))
-        return self.state, reward
+                self.agent_take_action(self.AGENT_VAL, (-1, 0))
 
 

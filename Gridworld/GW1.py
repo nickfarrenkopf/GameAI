@@ -1,4 +1,4 @@
-from gridworlds import Gridworld
+import Gridworld
 
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
@@ -18,7 +18,7 @@ class Gridworld_1(Gridworld.Gridworld):
 
     def set_initial_state(self):
         """ random non-terminal start """
-        self.state[self.random_nonterminal_state()] = 1
+        self.state[self.get_random_state_idx(terminal=False)] = self.AGENT_VAL
         
     def set_terminal_states(self):
         """ top-left and bottom right corners """
@@ -26,18 +26,24 @@ class Gridworld_1(Gridworld.Gridworld):
 
     def set_initial_method(self):
         """ basic SARSA """
-        self.sarsa = SarsaTabular.SarsaTabular(self)
+        self.method = SarsaTabular.SarsaTabular(self)
 
-    def set_initial_color_grid(self):
-        """ only terminal states  """
-        self.color_grid = [Colors.WHITE for _ in self.state]
-        for location in self.terminal_states:
-            self.color_grid[location] = Colors.ORANGE
+    def set_color_grid(self):
+        """ default states  """
+        self.reset_color_grid()
+        self.draw_terminal_states()
+        self.draw_agent()
 
     def take_action(self, action):
-        """ ? """
-        self.move_piece_direction(1, action)
-        reward = 0 if self.in_terminal_state() else -1
-        return self.state, reward
+        """ move agent, find reward, set new color grid """
+        self.agent_take_action(self.AGENT_VAL, action)
+        self.reward = self.get_reward()
+        self.set_color_grid()
 
-    
+    def get_reward(self):
+        """ penalty if not in terminal state """
+        if self.in_terminal_state():
+            return 0
+        return -1
+
+
