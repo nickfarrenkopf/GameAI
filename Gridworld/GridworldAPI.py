@@ -1,5 +1,6 @@
 import pygame
 
+import paths
 import GW1
 import GW2
 import GW3
@@ -9,6 +10,7 @@ import GW5
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
+from Library.NeuralNetworks.Regression import RegressionAPI as REG
 
 
 ### API ###
@@ -86,15 +88,15 @@ def set_gridworld(num):
     """ define gridworld by version number """
     global gridworld
     if num == 1:
-        gridworld = GW1.Gridworld_1(5)
+        gridworld = GW1.Gridworld_1(5, json_data)
     elif num == 2:
-        gridworld = GW2.Gridworld_2(5)
+        gridworld = GW2.Gridworld_2(5, json_data)
     elif num == 3:
-        gridworld = GW3.Gridworld_3(4, 12)
+        gridworld = GW3.Gridworld_3(4, 12, json_data)
     elif num == 4:
-        gridworld = GW4.Gridworld_4(7, 10)
+        gridworld = GW4.Gridworld_4(7, 10, json_data)
     elif num == 5:
-        gridworld = GW5.Gridworld_5(5, 5)
+        gridworld = GW5.Gridworld_5(5, 5, json_data)
 
 def draw_screen(width, height, margin):
     """ draw gridworld on screen """
@@ -120,7 +122,10 @@ listening_to_keys = False
 ### PROGRAM ###
 
 # stat GridworldAPI
-set_gridworld(5)
+json_data = paths.load_json()
+set_gridworld(1)
 run()
+
+#REG.new_reg(paths, 'test', 27, [32, 32], 1)
 
 

@@ -6,6 +6,7 @@ import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
 from Library.Learning import EnvironmentController as Environment
+from Library.NeuralNetworks.Regression import RegressionAPI as REG
 
 
 """
@@ -21,7 +22,7 @@ TODO
 class Gridworld(Environment.Environment):
     """ Base Gridworld object """
 
-    def __init__(self, height, width):
+    def __init__(self, height, width, json_data):
         """ """
         Environment.Environment.__init__(self)
 
@@ -39,6 +40,10 @@ class Gridworld(Environment.Environment):
         self.max_move = self.min_move = 1
         self.actions = self.default_actions()
         self.action_profile = [a for a in self.get_action_profile() if 0 in a]
+
+        # network params
+        self.json_data = json_data
+        self.network = REG.load_reg('test', json_data)
         
         # initial params
         self.set_terminal_states()
