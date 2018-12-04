@@ -1,3 +1,4 @@
+import os
 import random
 import itertools
 import numpy as np
@@ -22,7 +23,7 @@ TODO
 class Gridworld(Environment.Environment):
     """ Base Gridworld object """
 
-    def __init__(self, height, width, json_data):
+    def __init__(self, height, width, paths):
         """ """
         Environment.Environment.__init__(self)
 
@@ -37,13 +38,14 @@ class Gridworld(Environment.Environment):
         self.grid = np.reshape(self.state, (height, width))
 
         # action params
-        self.max_move = self.min_move = 1
+        self.max_move = 1
         self.actions = self.default_actions()
-        self.action_profile = [a for a in self.get_action_profile() if 0 in a]
+        self.action_profile = self.get_action_profile()
 
         # network params
-        self.json_data = json_data
-        self.network = REG.load_reg('test', json_data)
+        self.paths = paths
+        self.json_data = paths.load_json()
+        self.network = self.load_network()
         
         # initial params
         self.set_terminal_states()
@@ -109,7 +111,9 @@ class Gridworld(Environment.Environment):
     def get_action_profile(self):
         """ returns a list consisting of all possible action combos """
         action_values = [action.values for action in self.actions]
-        return list(itertools.product(*action_values))  
+        action_values = list(itertools.product(*action_values))
+        action_values = [action for action in action_values if 0 in action]
+        return action_values
 
     def agent_take_action(self, agent, grid_change):
         """ moves piece desired direction """
@@ -131,6 +135,7 @@ class Gridworld(Environment.Environment):
         """ """
         if self.method.end_of_episode:
             self.method.first_time_step()
+            self.set_color_grid()
         elif not listening_to_keys:
             self.method.next_time_step()
 
@@ -140,6 +145,22 @@ class Gridworld(Environment.Environment):
             self.method.first_time_step()
             while not self.in_terminal_state():
                  self.method.next_time_step()
+
+
+    ### NETWORK ###
+
+    def create_network(self):
+        """ """
+        REG.new_reg(self.paths, self.name, 27, [32, 32], 1, True)
+
+    def load_network(self):
+        """ """
+        json_data = self.json_data['network']['reg']
+        if self.name in json_data and not os.path.exists(json_data[self.name]['filepath']):
+            self.create_network()
+        if self.name not in json_data:
+            self.create_network()
+        return REG.load_reg(self.name, self.json_data)
 
 
     ### DRAW SCREEN ###

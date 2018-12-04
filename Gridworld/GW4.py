@@ -9,12 +9,12 @@ from Library.Learning import SarsaTabular
 class Gridworld_4(Gridworld.Gridworld):
     """ wind pushing to the left, with goal inside columns of wind """
 
-    def __init__(self, height, width):
+    def __init__(self, name, height, width, paths):
         """ Gridworld size 7x10 """
         self.starting_place = width * 3
         self.wind_1 = [3, 4, 5, 8]
         self.wind_2 = [6, 7]
-        Gridworld.Gridworld.__init__(self, height, width)
+        Gridworld.Gridworld.__init__(self, height, width, paths)
 
 
     ### OVERRIDES ###
@@ -45,8 +45,8 @@ class Gridworld_4(Gridworld.Gridworld):
 
     def take_action(self, action):
         """ move agent, apply wind, find reward, set new color grid """
-        self.agent_take_action(self.AGENT_VAL, action)
         self.apply_wind()
+        self.agent_take_action(self.AGENT_VAL, action)
         self.reward = self.get_reward()
         self.set_color_grid()
 

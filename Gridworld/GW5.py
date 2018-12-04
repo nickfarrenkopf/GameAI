@@ -12,9 +12,10 @@ from Library.Learning import SarsaTabular
 class Gridworld_5(Gridworld.Gridworld):
     """ avoid the randomly moving enemy """
 
-    def __init__(self, height, width):
+    def __init__(self, name, height, width, paths):
         """ Gridworld size 5x5 """
-        Gridworld.Gridworld.__init__(self, height, width)
+        self.name = name
+        Gridworld.Gridworld.__init__(self, height, width, paths)
 
 
     ### OVERRIDES ###
@@ -36,20 +37,20 @@ class Gridworld_5(Gridworld.Gridworld):
     def set_color_grid(self):
         """ only terminal state  """
         self.reset_color_grid()
-        self.draw_terminal_states()
+        self.draw_terminal_states(color=Colors.BLUE)
         self.draw_agent()
 
     def take_action(self, action):
         """ return next state and reward given action """
         self.agent_take_action(self.AGENT_VAL, action)
-        self.move_terminal_states(color=Colors.BLUE)
+        self.move_terminal_states()
         self.reward = self.get_reward()
         self.set_color_grid()
 
     def get_reward(self):
         """ penalty if not in terminal state """
         if self.in_terminal_state():
-            return -1
+            return -10
         return 0
 
 

@@ -9,10 +9,11 @@ from Library.Learning import SarsaTabular
 class Gridworld_3(Gridworld.Gridworld):
     """  """
 
-    def __init__(self, height, width):
+    def __init__(self, name, height, width, paths):
         """ Gridworld size 4x12 """
+        self.name = name
         self.starting_place = width * (height - 1)
-        Gridworld.Gridworld.__init__(self, height, width)
+        Gridworld.Gridworld.__init__(self, height, width, paths)
 
 
     ### OVERRIDES ###

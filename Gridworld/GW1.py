@@ -3,15 +3,17 @@ import Gridworld
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
+from Library.Learning import SarsaTabular
 from Library.Learning import SarsaNetwork
 
 
 class Gridworld_1(Gridworld.Gridworld):
     """ Win if top-left or bottom-right corner """
 
-    def __init__(self, size, json_data):
+    def __init__(self, name, size, paths):
         """ Gridworld size 5x5 """
-        Gridworld.Gridworld.__init__(self, size, size, json_data)
+        self.name = name
+        Gridworld.Gridworld.__init__(self, size, size, paths)
 
 
     ### OVERRIDES ###
@@ -25,8 +27,10 @@ class Gridworld_1(Gridworld.Gridworld):
         self.terminal_states = [0, self.state_size - 1]
 
     def set_initial_method(self):
-        """ basic SARSA """
+        """ with decay """
+        #self.method = SarsaTabular.SarsaTabular(self)
         self.method = SarsaNetwork.SarsaNetwork(self)
+        #self.method.set_parameters(epsilon_decay=0.99)
 
     def set_color_grid(self):
         """ default states  """

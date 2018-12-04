@@ -1,20 +1,20 @@
 {
    "network": {
+      "class": {},
       "reg": {
-         "test": {
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_test_27_2_1",
+         "gridworld1": {
             "input_shape": [
                null,
                27
             ],
             "n_output": 1,
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_gridworld1_27_2_1",
             "layers": [
                32,
                32
             ]
          }
       },
-      "class": {},
       "auto": {}
    }
 }
