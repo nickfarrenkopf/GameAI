@@ -127,9 +127,10 @@ set_gridworld(1)
 
 # run previous episodes
 print('Running episodes...')
-gridworld.run_episodes(n_episodes=30)
+gridworld.run_episodes(n_episodes=50)
 
 print('Running program')
+print(gridworld.action_profile)
 run()
 
 #REG.new_reg(paths, 'test', 27, [32, 32], 1)

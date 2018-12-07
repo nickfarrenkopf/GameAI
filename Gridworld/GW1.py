@@ -30,7 +30,7 @@ class Gridworld_1(Gridworld.Gridworld):
         """ with decay """
         #self.method = SarsaTabular.SarsaTabular(self)
         self.method = SarsaNetwork.SarsaNetwork(self)
-        #self.method.set_parameters(epsilon_decay=0.99)
+        self.method.set_parameters(epsilon_decay=0.9)
 
     def set_color_grid(self):
         """ default states  """
@@ -47,7 +47,7 @@ class Gridworld_1(Gridworld.Gridworld):
     def get_reward(self):
         """ penalty if not in terminal state """
         if self.in_terminal_state():
-            return 0
-        return -1
+            return 1
+        return 0
 
 

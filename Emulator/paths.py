@@ -18,8 +18,8 @@ small_ds = join(base_path, 'old', 'small_ds')
 def set_base(game):
     """ """
     global image_path, network_path
-    image_path = join(base_path, 'data', 'image', game)
-    network_path = join(base_path, 'data', 'network', game)
+    image_path = join(base_path, 'data', game, 'image')
+    network_path = join(base_path, 'data', game, 'network')
     
 
 ### GET PATHS ###

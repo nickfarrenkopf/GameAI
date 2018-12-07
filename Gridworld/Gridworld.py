@@ -113,7 +113,7 @@ class Gridworld(Environment.Environment):
         action_values = [action.values for action in self.actions]
         action_values = list(itertools.product(*action_values))
         action_values = [action for action in action_values if 0 in action]
-        return action_values
+        return sorted(action_values)
 
     def agent_take_action(self, agent, grid_change):
         """ moves piece desired direction """
@@ -151,13 +151,13 @@ class Gridworld(Environment.Environment):
 
     def create_network(self):
         """ """
-        REG.new_reg(self.paths, self.name, 27, [32, 32], 1, True)
+        REG.new_reg(self.paths, self.name, 27, [64], 1, True)
 
     def load_network(self):
         """ """
         json_data = self.json_data['network']['reg']
-        if self.name in json_data and not os.path.exists(json_data[self.name]['filepath']):
-            self.create_network()
+        #if self.name in json_data and not os.path.exists(json_data[self.name]['filepath']):
+        #    self.create_network()
         if self.name not in json_data:
             self.create_network()
         return REG.load_reg(self.name, self.json_data)

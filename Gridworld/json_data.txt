@@ -1,5 +1,6 @@
 {
    "network": {
+      "auto": {},
       "class": {},
       "reg": {
          "gridworld1": {
@@ -7,14 +8,12 @@
                null,
                27
             ],
-            "n_output": 1,
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_gridworld1_27_2_1",
             "layers": [
-               32,
-               32
-            ]
+               64
+            ],
+            "n_output": 1,
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_gridworld1_27_1_1"
          }
-      },
-      "auto": {}
+      }
    }
 }
