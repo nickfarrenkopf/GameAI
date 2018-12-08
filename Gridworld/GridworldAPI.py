@@ -13,15 +13,22 @@ from Library.General import Colors
 from Library.NeuralNetworks.Regression import RegressionAPI as REG
 
 
-### API ###
 
-def run(margin=20, height=100, width=100):
-    """ initiate Gridworld with lerning """
+"""
+TODO
+ - dicth listening_to_keys var when update manual mode
+
+"""
+
+### PYGAME ###
+
+def run(height=100, width=100, margin=20):
+    """ initiate Gridworld with reinforcement lerning """
     initialize_pygame(width, height, margin)
     done = False
     while not done:
         done = check_pygame_events()
-        gridworld.run_learning(listening_to_keys)
+        gridworld.run_learning(listening_to_keys) #
         draw_screen(width, height, margin)
         end_pygame_loop()
     exit_pygame()
@@ -46,6 +53,16 @@ def check_pygame_events():
         else:
             check_automated_events(event)
     return False
+
+def draw_screen(width, height, margin):
+    """ draw gridworld on screen """
+    screen.fill(Colors.BLACK)
+    for i in range(gridworld.height):
+        for j in range(gridworld.width):
+            color = gridworld.color_grid[i * gridworld.width + j]
+            x = (margin + width) * j + margin
+            y = (margin + height) * i + margin
+            pygame.draw.rect(screen, color, [x, y, width, width])
 
 def end_pygame_loop():
     """ tick counter and draw screen """
@@ -88,25 +105,17 @@ def set_gridworld(num):
     """ define gridworld by version number """
     global gridworld
     if num == 1:
-        gridworld = GW1.Gridworld_1('gridworld1', 5, paths)
+        gridworld = GW1.Gridworld_1(paths)
     elif num == 2:
-        gridworld = GW2.Gridworld_2('gridworld2', 5, paths)
+        gridworld = GW2.Gridworld_2(paths)
     elif num == 3:
-        gridworld = GW3.Gridworld_3('gridworld3', 4, 12, paths)
+        gridworld = GW3.Gridworld_3(paths)
     elif num == 4:
-        gridworld = GW4.Gridworld_4('gridworld4', 7, 10, paths)
+        gridworld = GW4.Gridworld_4(paths)
     elif num == 5:
-        gridworld = GW5.Gridworld_5('gridworld5', 5, 5, paths)
+        gridworld = GW5.Gridworld_5(paths)
 
-def draw_screen(width, height, margin):
-    """ draw gridworld on screen """
-    screen.fill(Colors.BLACK)
-    for i in range(gridworld.height):
-        for j in range(gridworld.width):
-            color = gridworld.color_grid[i * gridworld.width + j]
-            x = (margin + width) * j + margin
-            y = (margin + height) * i + margin
-            pygame.draw.rect(screen, color, [x, y, width, width])
+
 
 
 ### PARAMS ###
@@ -127,7 +136,7 @@ set_gridworld(1)
 
 # run previous episodes
 print('Running episodes...')
-gridworld.run_episodes(n_episodes=50)
+#gridworld.run_episodes(n_episodes=50)
 
 print('Running program')
 print(gridworld.action_profile)

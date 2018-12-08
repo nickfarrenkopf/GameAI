@@ -7,6 +7,8 @@ import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
 from Library.Learning import EnvironmentController as Environment
+from Library.Learning.Methods import SarsaTabular
+from Library.Learning.Methods import SarsaNetwork
 from Library.NeuralNetworks.Regression import RegressionAPI as REG
 
 
@@ -25,6 +27,7 @@ class Gridworld(Environment.Environment):
 
     def __init__(self, height, width, paths):
         """ """
+        self.Colors = Colors
         Environment.Environment.__init__(self)
 
         # agent params
@@ -47,7 +50,9 @@ class Gridworld(Environment.Environment):
         self.json_data = paths.load_json()
         self.network = self.load_network()
         
-        # initial params
+
+    def initialize(self):
+        """ """
         self.set_terminal_states()
         self.set_initial_state()
         self.set_initial_method()
@@ -62,10 +67,6 @@ class Gridworld(Environment.Environment):
 
     def set_terminal_states(self):
         """ STATE """
-        pass
-
-    def set_initial_method(self):
-        """ LEARNING """
         pass
 
     def set_color_grid(self):
@@ -83,6 +84,14 @@ class Gridworld(Environment.Environment):
     
     ### STATE ###
 
+    def set_default_initial_state(self):
+        """ random non-terminal start """
+        self.state[self.get_random_state_idx(terminal=False)] = self.AGENT_VAL
+
+    def set_starting_idx_state(self):
+        """ specific starting place """
+        self.state[self.start_idx] = self.AGENT_VAL
+    
     def in_terminal_state(self):
         """ checks if agent is in terminal state """
         return self.location_of(self.AGENT_VAL) in self.terminal_states
@@ -107,6 +116,12 @@ class Gridworld(Environment.Environment):
         a1 = Environment.Action('y movement', [-1, 0, 1])
         a2 = Environment.Action('x movement', [-1, 0, 1])
         return [a1, a2]
+
+    def take_default_action(self, action):
+        """ """
+        self.agent_take_action(self.AGENT_VAL, action)
+        self.reward = self.get_reward()
+        self.set_color_grid()
 
     def get_action_profile(self):
         """ returns a list consisting of all possible action combos """
@@ -149,17 +164,26 @@ class Gridworld(Environment.Environment):
 
     ### NETWORK ###
 
+    def set_initial_method(self):
+        """ with decay """
+        #self.method = SarsaTabular.SarsaTabular(self)
+        self.method = SarsaNetwork.SarsaNetwork(self)
+        self.method.set_parameters(epsilon_decay=0.9)
+        self.method.set_parameters(lambdas=0.5, epsilon_decay=0.99)
+
     def create_network(self):
         """ """
-        REG.new_reg(self.paths, self.name, 27, [64], 1, True)
+        a_size = self.height * self.width + len(self.action_profile[0])
+        REG.new_reg(self.paths, self.name, a_size, [64], 1, True)
 
     def load_network(self):
         """ """
         json_data = self.json_data['network']['reg']
-        #if self.name in json_data and not os.path.exists(json_data[self.name]['filepath']):
-        #    self.create_network()
+        if self.name in json_data and not os.path.exists(json_data[self.name]['filepath']):
+            self.create_network()
         if self.name not in json_data:
             self.create_network()
+        self.json_data = self.paths.load_json()
         return REG.load_reg(self.name, self.json_data)
 
 
@@ -178,6 +202,12 @@ class Gridworld(Environment.Environment):
         """ color agent depending on current state """
         color = Colors.GREEN if self.in_terminal_state() else Colors.RED
         self.color_grid[self.location_of(self.AGENT_VAL)] = color
+    
+    def set_default_color_grid(self):
+        """ default states  """
+        self.reset_color_grid()
+        self.draw_terminal_states()
+        self.draw_agent()
 
 
     ### GRID ###
