@@ -44,13 +44,14 @@ class Gridworld(Environment.Environment):
         self.max_move = 1
         self.actions = self.default_actions()
         self.action_profile = self.get_action_profile()
+        self.action_size = len(self.action_profile[0])
+        self.SA_size = self.state_size + self.action_size
 
         # network params
         self.paths = paths
         self.json_data = paths.load_json()
-        self.network = self.load_network()
+        self.network = self.load_network() # ?
         
-
     def initialize(self):
         """ """
         self.set_terminal_states()
@@ -61,25 +62,11 @@ class Gridworld(Environment.Environment):
 
     ### TODO ###
 
-    def set_initial_state(self):
-        """ STATE """
-        pass
-
-    def set_terminal_states(self):
-        """ STATE """
-        pass
-
-    def set_color_grid(self):
-        """ GRID """
-        pass
-
-    def take_action(self):
-        """ ACTION """
-        pass
-
-    def get_reward(self):
-        """ REWARD """
-        pass
+    #def set_initial_state(self):
+    #def set_terminal_states(self):
+    #def set_color_grid(self):
+    #def take_action(self):
+    #def get_reward(self):
     
     
     ### STATE ###
@@ -88,7 +75,7 @@ class Gridworld(Environment.Environment):
         """ random non-terminal start """
         self.state[self.get_random_state_idx(terminal=False)] = self.AGENT_VAL
 
-    def set_starting_idx_state(self):
+    def set_starting_initial_state(self):
         """ specific starting place """
         self.state[self.start_idx] = self.AGENT_VAL
     
@@ -117,7 +104,7 @@ class Gridworld(Environment.Environment):
         a2 = Environment.Action('x movement', [-1, 0, 1])
         return [a1, a2]
 
-    def take_default_action(self, action):
+    def default_take_action(self, action):
         """ """
         self.agent_take_action(self.AGENT_VAL, action)
         self.reward = self.get_reward()
@@ -127,8 +114,10 @@ class Gridworld(Environment.Environment):
         """ returns a list consisting of all possible action combos """
         action_values = [action.values for action in self.actions]
         action_values = list(itertools.product(*action_values))
-        action_values = [action for action in action_values if 0 in action]
-        return sorted(action_values)
+        action_values = [action for action in action_values
+                         if np.sum(np.abs(action)) <= self.max_move]
+        action_values = sorted(action_values)
+        return action_values
 
     def agent_take_action(self, agent, grid_change):
         """ moves piece desired direction """
@@ -144,7 +133,32 @@ class Gridworld(Environment.Environment):
         self.grid[end[0], end[1]] = agent
 
 
+    ### NETWORK ###
+
+    def create_network(self, hidden=[64]):
+        """ """
+        REG.new_reg(self.paths, self.name, self.SA_size, hidden, 1)
+
+    def load_network(self):
+        """ """
+        json_data = self.paths.load_json()['network']['reg']
+        #if self.name in json_data and not os.path.exists(json_data[self.name]['filepath']):
+        #    self.create_network()
+        if self.name not in json_data:
+            self.create_network()
+        self.json_data = self.paths.load_json()
+        return REG.load_reg(self.name, self.json_data)
+
+
+
    ### LEARNING ###
+   
+    def set_initial_method(self):
+        """ with decay """
+        #self.method = SarsaTabular.SarsaTabular(self)
+        self.method = SarsaNetwork.SarsaNetwork(self)
+        self.method.set_parameters(epsilon_decay=0.9)
+        self.method.set_parameters(lambdas=0.5, epsilon_decay=0.99)
     
     def run_learning(self, listening_to_keys):
         """ """
@@ -162,34 +176,9 @@ class Gridworld(Environment.Environment):
                  self.method.next_time_step()
 
 
-    ### NETWORK ###
-
-    def set_initial_method(self):
-        """ with decay """
-        #self.method = SarsaTabular.SarsaTabular(self)
-        self.method = SarsaNetwork.SarsaNetwork(self)
-        self.method.set_parameters(epsilon_decay=0.9)
-        self.method.set_parameters(lambdas=0.5, epsilon_decay=0.99)
-
-    def create_network(self):
-        """ """
-        a_size = self.height * self.width + len(self.action_profile[0])
-        REG.new_reg(self.paths, self.name, a_size, [64], 1, True)
-
-    def load_network(self):
-        """ """
-        json_data = self.json_data['network']['reg']
-        if self.name in json_data and not os.path.exists(json_data[self.name]['filepath']):
-            self.create_network()
-        if self.name not in json_data:
-            self.create_network()
-        self.json_data = self.paths.load_json()
-        return REG.load_reg(self.name, self.json_data)
-
-
     ### DRAW SCREEN ###
 
-    def reset_color_grid(self):
+    def draw_blank_grid(self):
         """ reset color grid to all white """
         self.color_grid = [Colors.WHITE for _ in self.state]
 
@@ -203,15 +192,20 @@ class Gridworld(Environment.Environment):
         color = Colors.GREEN if self.in_terminal_state() else Colors.RED
         self.color_grid[self.location_of(self.AGENT_VAL)] = color
     
-    def set_default_color_grid(self):
+    def draw_default_color_grid(self):
         """ default states  """
-        self.reset_color_grid()
+        self.draw_blank_grid()
         self.draw_terminal_states()
         self.draw_agent()
 
 
     ### GRID ###
 
+    def location_of(self, agent, grid=False):
+        """ returns the first board position of piece """
+        idx = list(self.state).index(agent)
+        return idx if not grid else self.state_to_grid(idx)
+    
     def state_to_grid(self, state_index):
         """ convert state index to grid coordinate """
         return [state_index // self.width, state_index % self.width]
@@ -225,10 +219,5 @@ class Gridworld(Environment.Environment):
         row_check = x >= 0 and x < self.height
         col_check = y >= 0 and y < self.width
         return row_check and col_check
-
-    def location_of(self, agent, grid=False):
-        """ returns the first board position of piece """
-        idx = list(self.state).index(agent)
-        return idx if not grid else self.state_to_grid(idx)
 
 

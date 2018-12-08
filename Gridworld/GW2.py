@@ -10,7 +10,7 @@ class Gridworld_2(Gridworld.Gridworld):
         Gridworld.Gridworld.__init__(self, 5, 5, paths)
 
         self.set_initial_state = self.set_default_initial_state
-        self.set_color_grid = self.set_default_color_grid
+        self.set_color_grid = self.draw_default_color_grid
         self.take_action = self.take_default_action
         self.initialize()
     

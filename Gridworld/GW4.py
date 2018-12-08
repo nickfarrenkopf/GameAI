@@ -14,7 +14,7 @@ class Gridworld_4(Gridworld.Gridworld):
         self.wind_2 = [6, 7]
         Gridworld.Gridworld.__init__(self, self.height, self.width, paths)
 
-        self.set_initial_state = self.set_starting_idx_state
+        self.set_initial_state = self.set_starting_initial_state
         self.initialize()
 
 

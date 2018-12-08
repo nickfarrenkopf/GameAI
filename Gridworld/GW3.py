@@ -12,8 +12,8 @@ class Gridworld_3(Gridworld.Gridworld):
         self.start_idx = self.width * (self.height - 1)
         Gridworld.Gridworld.__init__(self, self.height, self.width, paths)
 
-        self.set_initial_state = self.set_starting_idx_state
-        self.take_action = self.take_default_action
+        self.set_initial_state = self.set_starting_initial_state
+        self.take_action = self.default_take_action
         self.initialize()
 
 

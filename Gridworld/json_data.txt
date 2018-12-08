@@ -1,91 +1,22 @@
 {
    "network": {
-      "auto": {},
       "class": {},
+      "auto": {},
       "reg": {
-         "gridworld_2": {
-            "create_time": 1.126997947692871,
-            "n_output": 1,
-            "input_shape": [
-               null,
-               27
-            ],
-            "input_size": 27,
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_gridworld_2_27_1_1",
-            "layers": [
-               64
-            ],
-            "epsilon": true
-         },
          "gridworld_1": {
-            "create_time": 1.142953634262085,
-            "n_output": 1,
+            "epsilon": 1e-08,
             "input_shape": [
                null,
                27
             ],
             "input_size": 27,
             "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_gridworld_1_27_1_1",
+            "create_time": 3.070248603820801,
             "layers": [
                64
             ],
-            "epsilon": true
-         },
-         "gridworld_3": {
-            "create_time": 1.181354284286499,
-            "n_output": 1,
-            "input_shape": [
-               null,
-               50
-            ],
-            "input_size": 50,
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_gridworld_3_50_1_1",
-            "layers": [
-               64
-            ],
-            "epsilon": true
-         },
-         "gridworld5": {
-            "create_time": 1.160409688949585,
-            "n_output": 1,
-            "input_shape": [
-               null,
-               27
-            ],
-            "input_size": 27,
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_gridworld5_27_1_1",
-            "layers": [
-               64
-            ],
-            "epsilon": true
-         },
-         "gridworld_4": {
-            "create_time": 1.1379659175872803,
-            "n_output": 1,
-            "input_shape": [
-               null,
-               72
-            ],
-            "input_size": 72,
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_gridworld_4_72_1_1",
-            "layers": [
-               64
-            ],
-            "epsilon": true
-         },
-         "gridworld1": {
-            "create_time": 1.1309752464294434,
-            "n_output": 1,
-            "input_shape": [
-               null,
-               27
-            ],
-            "input_size": 27,
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Gridworld\\network\\REG_gridworld1_27_1_1",
-            "layers": [
-               64
-            ],
-            "epsilon": true
+            "trained": 0,
+            "n_output": 1
          }
       }
    }
