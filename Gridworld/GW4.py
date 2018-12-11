@@ -26,7 +26,7 @@ class Gridworld_4(Gridworld.Gridworld):
 
     def set_color_grid(self):
         """ start to left, leftward windin middle, goal to the right """
-        self.reset_color_grid()
+        self.draw_blank_grid()
         g2s = self.grid_to_state
         for i in range(self.height):
             for j in self.wind_1:
@@ -39,7 +39,7 @@ class Gridworld_4(Gridworld.Gridworld):
     def take_action(self, action):
         """ move agent, apply wind, find reward, set new color grid """
         self.apply_wind()
-        self.take_default_action(action)
+        self.default_take_action(action)
 
     def get_reward(self):
         """ penalty if not in terminal state """

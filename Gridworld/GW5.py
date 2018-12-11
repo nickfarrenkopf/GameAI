@@ -29,7 +29,7 @@ class Gridworld_5(Gridworld.Gridworld):
     
     def set_color_grid(self):
         """ only terminal state  """
-        self.reset_color_grid()
+        self.draw_blank_grid()
         self.draw_terminal_states(color=self.Colors.BLUE)
         self.draw_agent()
 

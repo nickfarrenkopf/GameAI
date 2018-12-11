@@ -28,7 +28,8 @@ def reset_json():
                 {'auto': {},
                  'class': {},
                  'reg': {}
-                 }
+                 },
+            'learning': {}
             }
     write_json(data)
 

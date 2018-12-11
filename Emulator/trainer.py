@@ -8,10 +8,10 @@ import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import DataThings as DT
 from Library.General import FileThings as FT
-from Library.NeuralNetworks import NetworkAPI as NETS
+from Library.NeuralNetworks import NetworkThings as NETS
 from Library.NeuralNetworks.Autoencoder import AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Autoencoder import TrainAutoencoder as AUTO_T
-from Library.NeuralNetworks.Classifier import ClassifierAPI as CLASS
+#from Library.NeuralNetworks.Classifier import ClassifierAPI as CLASS
 
 
 ### PROGRAM ###
@@ -21,35 +21,35 @@ if __name__ == '__main__':
 
     """ GAME """
 
-    name = 'pacman'
+    name = 'test'
     paths.set_base(name)
-    json_data = paths.load_json()
 
     auto_path = paths.network_path
+    auto_hidden = [32, 32, 32, 32, 32, 32, 64, 64]
+    
     n = 64
     h = 512
     w = 512
     le = 3
-    h_d = 544
-    w_d = 544
+    h_f = 544
+    w_f = 544
 
 
     """ AUTO """
 
-    if 1: # LOAD
-        auto_network = AUTO.load_auto(name, json_data)
+    if 0: # LOAD
+        auto_network = AUTO.load_auto(name, paths.load_json())
 
-    if 0: # CREATE
-        hidden = [32, 32, 32, 32, 32, 32, 64, 64]
-        json_data = AUTO.new_auto(paths, name, h, w, hidden, length=3,
-                                  with_binary=True)
+    if 1: # CREATE
+        AUTO.new(paths, name, h, w, auto_hidden, length=3, with_binary=True,
+                 reuse_weights=True)
 
-    if 0: # TRAIN - DATA
-        ds = FT.load_images_4d(paths.get_game_images()[7:7+n], h_d, w_d, le)
+    if 1: # TRAIN - DATA
+        ds = FT.load_images_4d(paths.get_game_images()[:n], h_f, w_f, le)
         print('Data shape: {}'.format(ds.shape))
-        auto_network = AUTO.load_auto(name, json_data)
-        AUTO.train_auto_data(auto_network, ds, h, w, n_train=200,
-                             kmax_img=20, kmax_cost=10, alpha=0.001)
+        auto_network = AUTO.load(name, paths.load_json())
+        AUTO.train_data(auto_network, ds, h, w, n_train=200, alpha=0.001,
+                        kmax_img=20, kmax_cost=10)
 
     if 0: # TRAIN - PATHS
         data_path = paths.get_game_images()
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     if 0: # LOAD
         class_network = CLASS.class_auto(name, json_data)
 
-    if 1: # CREATE
+    if 0: # CREATE
         name = 'test'
         hidden = [64, 64, 64]
         json_data = CLASS.new_class(paths, name, size, hidden, n_classes)

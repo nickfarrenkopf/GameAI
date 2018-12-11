@@ -150,15 +150,14 @@ class Gridworld(Environment.Environment):
         return REG.load_reg(self.name, self.json_data)
 
 
-
    ### LEARNING ###
    
     def set_initial_method(self):
         """ with decay """
         #self.method = SarsaTabular.SarsaTabular(self)
-        self.method = SarsaNetwork.SarsaNetwork(self)
-        self.method.set_parameters(epsilon_decay=0.9)
-        self.method.set_parameters(lambdas=0.5, epsilon_decay=0.99)
+        self.method = SarsaNetwork.SarsaNetwork(self, True, True)
+        self.method.set_parameters(initial_value=1.0)
+        #self.method.set_parameters(lambdas=0.5, epsilon_decay=0.99)
     
     def run_learning(self, listening_to_keys):
         """ """
@@ -175,6 +174,16 @@ class Gridworld(Environment.Environment):
             while not self.in_terminal_state():
                  self.method.next_time_step()
 
+    def write_q_value(self):
+        """ """
+        data = self.paths.load_json()
+        data['learning'].update({self.name: {}})
+        for k in self.method.Q.keys():
+            SA = ','.join([str(i) for i in list(k)])
+            V = self.method.Q[k].value
+            data['learning'][self.name][SA] = V
+        self.paths.write_json(data)
+        
 
     ### DRAW SCREEN ###
 

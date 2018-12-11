@@ -25,7 +25,7 @@ class Gridworld_3(Gridworld.Gridworld):
 
     def set_color_grid(self):
         """ bottom row death, left corner start, right corner end """
-        self.reset_color_grid()
+        self.draw_default_color_grid()
         self.draw_terminal_states(color=self.Colors.BLUE)
         self.color_grid[-1] = self.Colors.ORANGE
         self.draw_agent()
@@ -34,7 +34,7 @@ class Gridworld_3(Gridworld.Gridworld):
         """ goal is right corner, fall of on bottom edge, penalty for slow """
         if self.in_terminal_state():
             if self.state[-1] == 1:
-                return 0
+                return 10
             return -100
         return -1
 

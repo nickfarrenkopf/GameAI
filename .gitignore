@@ -3,3 +3,4 @@ checkpoint
 __init__.py
 Emulator/emulator/
 Emulator/data/
+Gridworld/network/

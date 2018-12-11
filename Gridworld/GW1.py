@@ -24,7 +24,7 @@ class Gridworld_1(Gridworld.Gridworld):
     def get_reward(self):
         """ penalty if not in terminal state """
         if self.in_terminal_state():
-            return 1
-        return 0
+            return 0
+        return -1
 
 

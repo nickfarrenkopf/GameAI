@@ -73,6 +73,7 @@ def exit_pygame():
     """ close display """
     pygame.display.quit()
     pygame.quit()
+    gridworld.write_q_value()
 
 
 ### ACTIONS ###

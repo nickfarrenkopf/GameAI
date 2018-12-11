@@ -29,13 +29,6 @@ def get_game_images():
     files = [join(image_path, f) for f in os.listdir(image_path)]
     return files
 
-def get_audio_image_files():
-    """ """
-    global image_audio_path
-    files = [join(image_audio_path, f) for f in os.listdir(image_audio_path)
-             if '.png' in f]
-    return files
-
 
 ### JSON ###
 
@@ -60,7 +53,8 @@ def reset_json():
                 {'auto': {},
                  'class': {},
                  'reg': {}
-                 }
+                 },
+            'learning': {}
             }
     write_json(data)
 

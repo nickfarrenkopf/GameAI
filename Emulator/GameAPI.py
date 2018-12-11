@@ -7,6 +7,8 @@ import paths
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import DataThings as DT
+from Library.General import FileThings as FT
+from Library.General import Screen
 from Library.NeuralNetworks.Autoencoder import AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Classifier import ClassifierAPI as CLASS
 
@@ -51,16 +53,9 @@ if __name__ == '__main__':
 
     """ APP """
 
-    game = 'test'
+    game = 'kirby'
     paths.set_base(game)
     json_data = paths.load_json()
-
-
-    """ DATA GENERATION """
-    
-    if 0: # record audio
-        #SR.record_single_timed(paths.audio_path, 'test')
-        SR.record_until_done(paths.audio_path, 'test')
 
 
     """ AUTO """
@@ -70,25 +65,25 @@ if __name__ == '__main__':
         h = w = 512
         h2 = w2 = 544
 
-    if 0: # LOAD
+    if 1: # LOAD
         auto_network = AUTO.load_auto(game, json_data)
 
-    if 0: # CREATE
+    if 1: # CREATE
         json_data = paths.load_json()
-        hidden = [32, 32, 32, 32, 32, 32, 32, 64] # 1st iteration
+        hidden = [32, 32, 32, 32, 32, 32, 32, 64]
         json_data = AUTO.new_auto(paths, game, h, w, hidden, length=3)
         auto_network = AUTO.load_auto(game, json_data)    
 
     if 0: # TRAIN
-        ds = np.reshape(DT.load_datas(paths.get_game_images()[:32]), (-1, h2, w2, 3))
+        ds = FT.load_images_4d(paths.get_game_images()[:32], h2, w2, 3)
         print(ds.shape)
-        AUTO.train_auto_data(paths, ds, h, w, n_train=10000,
-                             kmax_img=10, kmax_cost=1)
+        AUTO.train_auto_data(auto_network, ds, h, w, n_train=300,
+                             kmax_img=15, kmax_cost=5)
 
-    if 1: # LEARN
-        ds = np.reshape(DT.load_datas(paths.get_game_images()[:16]), (-1, h2, w2, 3))
+    if 0: # LEARN
+        ds = FT.load_images_4d(paths.get_game_images(), h2, w2, 3)
         print('Data shape: {}'.format(ds.shape))
-        AUTO.learn_auto_data(paths, ds, h, w, kmax_cost=5, slope_min=1e-3,
+        AUTO.learn_auto_data(paths, ds, h, w, kmax_cost=2, slope_min=1e-3,
                              slope_count_max=10)
 
 
