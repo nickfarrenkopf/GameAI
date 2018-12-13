@@ -25,7 +25,7 @@ TODO
 class Gridworld(Environment.Environment):
     """ Base Gridworld object """
 
-    def __init__(self, height, width, paths):
+    def __init__(self, height, width, paths, run_train, run_pred):
         """ """
         self.Colors = Colors
         Environment.Environment.__init__(self)
@@ -39,6 +39,7 @@ class Gridworld(Environment.Environment):
         self.state_size = height * width
         self.state = np.zeros(self.state_size, dtype=int)
         self.grid = np.reshape(self.state, (height, width))
+        
 
         # action params
         self.max_move = 1
@@ -51,6 +52,10 @@ class Gridworld(Environment.Environment):
         self.paths = paths
         self.json_data = paths.load_json()
         self.network = self.load_network() # ?
+
+        self.train_start = 0
+        self.run_train = run_train
+        self.run_pred = run_pred
         
     def initialize(self):
         """ """
@@ -137,7 +142,7 @@ class Gridworld(Environment.Environment):
 
     def create_network(self, hidden=[64]):
         """ """
-        REG.new_reg(self.paths, self.name, self.SA_size, hidden, 1)
+        REG.new(self.paths, self.name, self.SA_size, hidden, 1)
 
     def load_network(self):
         """ """
@@ -147,16 +152,19 @@ class Gridworld(Environment.Environment):
         if self.name not in json_data:
             self.create_network()
         self.json_data = self.paths.load_json()
-        return REG.load_reg(self.name, self.json_data)
+        return REG.load(self.name, self.json_data)
 
 
    ### LEARNING ###
    
     def set_initial_method(self):
         """ with decay """
-        #self.method = SarsaTabular.SarsaTabular(self)
-        self.method = SarsaNetwork.SarsaNetwork(self, True, True)
-        self.method.set_parameters(initial_value=1.0)
+        if not self.run_train and not self.run_pred:
+            self.method = SarsaTabular.SarsaTabular(self)
+        else:
+            self.method = SarsaNetwork.SarsaNetwork(self, self.run_train,
+                                                    self.run_pred)
+        #self.method.set_parameters(initial_value=1.0)run_pred
         #self.method.set_parameters(lambdas=0.5, epsilon_decay=0.99)
     
     def run_learning(self, listening_to_keys):

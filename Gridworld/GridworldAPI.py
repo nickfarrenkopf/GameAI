@@ -106,15 +106,16 @@ def set_gridworld(num):
     """ define gridworld by version number """
     global gridworld
     if num == 1:
-        gridworld = GW1.Gridworld_1(paths)
+        gridworld = GW1.Gridworld_1(paths, run_train, run_pred)
     elif num == 2:
-        gridworld = GW2.Gridworld_2(paths)
+        gridworld = GW2.Gridworld_2(paths, run_train, run_pred)
     elif num == 3:
-        gridworld = GW3.Gridworld_3(paths)
+        gridworld = GW3.Gridworld_3(paths, run_train, run_pred)
+        gridworld.method.train_start = 50
     elif num == 4:
-        gridworld = GW4.Gridworld_4(paths)
+        gridworld = GW4.Gridworld_4(paths, run_train, run_pred)
     elif num == 5:
-        gridworld = GW5.Gridworld_5(paths)
+        gridworld = GW5.Gridworld_5(paths, run_train, run_pred)
 
 
 
@@ -129,14 +130,17 @@ game_speed = 30
 listening_to_keys = False
 
 
+run_train = True
+run_pred = False
+
 ### PROGRAM ###
 
 # stat GridworldAPI
-set_gridworld(1)
+set_gridworld(3)
 
 # run previous episodes
 print('Running episodes...')
-#gridworld.run_episodes(n_episodes=50)
+gridworld.run_episodes(n_episodes=50)
 
 print('Running program')
 run()

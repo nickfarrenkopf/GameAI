@@ -10,7 +10,6 @@ from Library.General import DataThings as DT
 from Library.General import FileThings as FT
 from Library.NeuralNetworks import NetworkThings as NETS
 from Library.NeuralNetworks.Autoencoder import AutoencoderAPI as AUTO
-from Library.NeuralNetworks.Autoencoder import TrainAutoencoder as AUTO_T
 #from Library.NeuralNetworks.Classifier import ClassifierAPI as CLASS
 
 
@@ -21,12 +20,15 @@ if __name__ == '__main__':
 
     """ GAME """
 
+    # base folder
     name = 'test'
     paths.set_base(name)
+    fs = paths.get_game_images()
 
-    auto_path = paths.network_path
-    auto_hidden = [32, 32, 32, 32, 32, 32, 64, 64]
-    
+    # auto network
+    auto_hidden = [32, 32, 32, 32, 32, 32, 32, 64]
+
+    # auto data
     n = 64
     h = 512
     w = 512
@@ -37,27 +39,38 @@ if __name__ == '__main__':
 
     """ AUTO """
 
-    if 0: # LOAD
-        auto_network = AUTO.load_auto(name, paths.load_json())
-
     if 1: # CREATE
-        AUTO.new(paths, name, h, w, auto_hidden, length=3, with_binary=True,
-                 reuse_weights=True)
+        AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
+                 with_binary=True, reuse_weights=False, print_me=True,
+                 hidden_feedforward=[])
 
-    if 1: # TRAIN - DATA
-        ds = FT.load_images_4d(paths.get_game_images()[:n], h_f, w_f, le)
-        print('Data shape: {}'.format(ds.shape))
+    if 1: # LOAD - NETWORK
         auto_network = AUTO.load(name, paths.load_json())
-        AUTO.train_data(auto_network, ds, h, w, n_train=200, alpha=0.001,
-                        kmax_img=20, kmax_cost=10)
 
-    if 0: # TRAIN - PATHS
-        data_path = paths.get_game_images()
-        print('Number files: {}'.format(len(data_path)))
-        auto_network = AUTO.load_auto(name, json_data)
-        AUTO.train_auto_paths(auto_network, data_path,
-                              h, w, h_d, w_d, n_train=500, alpha=0.001, n_plot=n,
-                              kmax_img=50, kmax_cost=10)
+    if 1: # LOAD - DATA
+        fs = paths.get_game_images()
+        ds = FT.load_images_4d(fs[:n], h_f, w_f, le)
+        print('Data shape: {}'.format(ds.shape))
+
+    if 1: # TRAIN ITER - DATA
+        AUTO.train_data(auto_network, ds, h, w, n_train=1000, alpha=5e-3, n_plot=n//2,
+                        kmax_img=50, kmax_cost=20, plot_r=True, plot_i=True,
+                        do_subdata=True)
+
+    if 0: # TRAIN FULL - DATA
+        AUTO.train_data_full(auto_network, fs, h, w, h_f, w_f, n_train=200,
+                             alpha=1e-3,
+                             n_plot=n//2, do_subdata=True, kmax_cost=20)
+
+    if 0: # TRAIN ITER - PATHS
+        AUTO.train_paths(auto_network, fs, h, w, h_f, w_f, n_train=500,
+                         alpha=1e-3, n_plot=n//2, kmax_cost=10, kmax_img=50,
+                         plot_r=True, plot_i=True, do_subdata=True)
+
+    if 0: # TRAIN FULL - PATHS
+        AUTO.train_paths_full(auto_network, fs, h, w, h_f, w_f,
+                              alpha=1e-3, n_plot=n//2, kmax_cost=20,
+                              do_subdata=True)
 
     if 0: # LEARN
         ds = np.reshape(DT.load_datas(paths.get_game_images()[:16]), (-1, h2, w2, 3))
@@ -67,13 +80,13 @@ if __name__ == '__main__':
 
     if 0: # TEST
         for i in range(10):
-            fp = NETS.get_subset(paths.get_game_images(), 64, True)
-            ds = FT.load_images_4d(fp, h_d, w_d, le)
-            ds = DT.subdata(ds, h, w)
-            AUTO_T.check_auto(auto_network, ds, h, w, 16, i, 1)
+            fp = DT.get_subset(fs, n, True)
+            dss = DT.subdata(FT.load_images_4d(fp, h_f, w_f, le), h, w)
+            AUTO.check_auto(auto_network, dss, h, w, n // 2, True, True, i, 1)
 
 
-    """ CLASS - AUTO """
+
+    """ CLASS """
 
     if 1: # PARAMS
         class_path = paths.network_path

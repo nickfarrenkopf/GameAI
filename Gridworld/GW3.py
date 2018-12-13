@@ -4,13 +4,13 @@ import Gridworld
 class Gridworld_3(Gridworld.Gridworld):
     """  """
 
-    def __init__(self, paths):
+    def __init__(self, paths, run_training, run_pred):
         """ Gridworld size 4x12 """
         self.name = 'gridworld_3'
         self.height = 4
         self.width = 12
         self.start_idx = self.width * (self.height - 1)
-        Gridworld.Gridworld.__init__(self, self.height, self.width, paths)
+        Gridworld.Gridworld.__init__(self, self.height, self.width, paths, run_training, run_pred)
 
         self.set_initial_state = self.set_starting_initial_state
         self.take_action = self.default_take_action
@@ -34,8 +34,8 @@ class Gridworld_3(Gridworld.Gridworld):
         """ goal is right corner, fall of on bottom edge, penalty for slow """
         if self.in_terminal_state():
             if self.state[-1] == 1:
-                return 10
-            return -100
+                return 0
+            return -10
         return -1
 
 

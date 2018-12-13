@@ -35,42 +35,35 @@ if __name__ == '__main__':
     
     # load mnist data
     mnist_path = os.path.join(paths.base_path, 'data', 't10k-images-idx3-ubyte')
-    data = load_data(n=100)
-    data = np.reshape(data, (-1, 28, 28, 1))
-    n, h, w, le = data.shape
-    print('Data shape: {}'.format(data.shape))
+    ds = load_data(n=100)
+    ds = np.reshape(ds, (-1, 28, 28, 1))
+    ds = np.pad(ds, ((0,0), (2,2), (2,2), (0,0)), mode='constant',
+                  constant_values=0)
+    n, h, w, le = ds.shape
+    print('Data shape: {}'.format(ds.shape))
 
 
-    auto_hidden = [16, 8]
+    auto_hidden = [16, 16, 16, 16]
 
 
     """ AUTO """
 
-    if 0: # LOAD
-        auto_network = AUTO.load_auto(name, paths.load_json())
-
     if 0: # CREATE
-        AUTO.new(paths, name, h, w, auto_hidden, length=1, with_binary=False)
+        AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
+                 with_binary=True, reuse_weights=True, print_me=True,
+                 hidden_feedforward=[])
+
+    if 0: # LOAD - NETOWRK
+        auto_network = AUTO.load(name, paths.load_json())
 
     if 0: # TRAIN - DATA
-        auto_network = AUTO.load(name, paths.load_json())
-        AUTO.train_data(auto_network, data, h, w, n_train=1000,
-                             kmax_img=100, kmax_cost=50, alpha=0.001)
-
-    if 0: # TRAIN - PATHS
-        data_path = paths.get_game_images()
-        print('Number files: {}'.format(len(data_path)))
-        auto_network = AUTO.load_auto(name, json_data)
-        AUTO.train_auto_paths(auto_network, data_path,
-                              h, w, h_d, w_d, n_train=500, alpha=0.001, n_plot=n,
-                              kmax_img=50, kmax_cost=10)
-
+        AUTO.train_data(auto_network, ds, h, w, n_train=200, alpha=1e-3, n_plot=n//2,
+                        kmax_img=20, kmax_cost=10, plot_r=True, plot_i=False,
+                        do_subdata=True)
+    
     if 1: # LEARN
-        LA.learn_by_data(paths, data)
+        LA.learn_by_data(paths, ds)
 
     if 0: # TEST
         for i in range(10):
-            fp = NETS.get_subset(paths.get_game_images(), 64, True)
-            ds = FT.load_images_4d(fp, h_d, w_d, le)
-            ds = DT.subdata(ds, h, w)
-            AUTO_T.check_auto(auto_network, ds, h, w, 16, i, 1)
+            pass

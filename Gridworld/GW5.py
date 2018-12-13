@@ -7,12 +7,12 @@ import Gridworld
 class Gridworld_5(Gridworld.Gridworld):
     """ avoid the randomly moving enemy """
 
-    def __init__(self, paths):
+    def __init__(self, paths, run_training, run_pred):
         """ Gridworld size 5x5 """
         self.name = 'gridworld5'
         self.height = 5
         self.width = 5
-        Gridworld.Gridworld.__init__(self, self.height, self.width, paths)
+        Gridworld.Gridworld.__init__(self, self.height, self.width, paths, run_training, run_pred)
         self.initialize()
 
 
@@ -43,7 +43,7 @@ class Gridworld_5(Gridworld.Gridworld):
     def get_reward(self):
         """ penalty if not in terminal state """
         if self.in_terminal_state():
-            return -100
+            return -1
         return 0
 
 
