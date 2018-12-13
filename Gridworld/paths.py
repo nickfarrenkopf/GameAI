@@ -6,13 +6,13 @@ import json
 
 # top level
 base_path = os.path.dirname(os.path.realpath(__file__))
-json_path = os.path.join(base_path, 'json_data.txt')
+json_path = os.path.join(base_path, '_json_data.txt')
 network_path = os.path.join(base_path, 'network')
 
 
 ### JSON ###
 
-def load_json():
+.def load_json():
     """ """
     with open(json_path, 'r') as file:  
         return json.load(file)

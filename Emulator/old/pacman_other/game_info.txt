@@ -1,6 +1,0 @@
-
-
-REWARDS - index,reward,description
-0,-10,player_death
-1,0,nothing
-2,1,level_complete

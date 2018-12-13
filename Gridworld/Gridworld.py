@@ -160,8 +160,10 @@ class Gridworld(Environment.Environment):
     def set_initial_method(self):
         """ with decay """
         if not self.run_train and not self.run_pred:
+            print('Using SARSA tabular')
             self.method = SarsaTabular.SarsaTabular(self)
         else:
+            print('Using SARSA Network')
             self.method = SarsaNetwork.SarsaNetwork(self, self.run_train,
                                                     self.run_pred)
         #self.method.set_parameters(initial_value=1.0)run_pred
@@ -182,7 +184,7 @@ class Gridworld(Environment.Environment):
             while not self.in_terminal_state():
                  self.method.next_time_step()
 
-    def write_q_value(self):
+    def write_q_values(self):
         """ """
         data = self.paths.load_json()
         data['learning'].update({self.name: {}})

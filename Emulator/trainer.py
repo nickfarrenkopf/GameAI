@@ -53,9 +53,9 @@ if __name__ == '__main__':
         print('Data shape: {}'.format(ds.shape))
 
     if 1: # TRAIN ITER - DATA
-        AUTO.train_data(auto_network, ds, h, w, n_train=1000, alpha=5e-3, n_plot=n//2,
-                        kmax_img=50, kmax_cost=20, plot_r=True, plot_i=True,
-                        do_subdata=True)
+        AUTO.train_data(auto_network, ds, h, w, n_train=1000, alpha=1e-3,
+                        n_plot=n//2, plot_r=True, plot_i=True, do_subdata=True,
+                        kmax_img=50, kmax_cost=20)
 
     if 0: # TRAIN FULL - DATA
         AUTO.train_data_full(auto_network, fs, h, w, h_f, w_f, n_train=200,
