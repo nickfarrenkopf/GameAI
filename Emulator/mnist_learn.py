@@ -35,11 +35,11 @@ if __name__ == '__main__':
     paths.set_base(name)
 
     # auto network
-    auto_hidden = [128, 64, 32, 16]
+    auto_hidden = [64, 32, 16]
     
     # load mnist data
     mnist_path = os.path.join(paths.base_path, 'data', 't10k-images-idx3-ubyte')
-    ds = DT.pad_me_4d(np.reshape(load_data(n=100), (-1, 28, 28, 1)), 4, 4)
+    ds = DT.pad_me_4d(np.reshape(load_data(n=1000), (-1, 28, 28, 1)), 4, 4)
 
     # auto data
     n, h, w, le = ds.shape
@@ -58,9 +58,9 @@ if __name__ == '__main__':
         auto_network = AUTO.load(name, paths.load_json())
 
     if 1: # TRAIN - DATA
-        AUTO.train_data(auto_network, ds, h, w, n_train=200, alpha=1e-2,
+        AUTO.train_data(auto_network, ds, h, w, n_train=3000, alpha=1e-3,
                         n_plot=n//2, plot_r=True, plot_i=False, do_subdata=True,
-                        kmax_img=20, kmax_cost=10)
+                        kmax_img=100, kmax_cost=50)
     
     if 0: # LEARN
         LA.learn_by_data(paths, ds)

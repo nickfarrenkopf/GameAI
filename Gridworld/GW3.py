@@ -4,17 +4,16 @@ import Gridworld
 class Gridworld_3(Gridworld.Gridworld):
     """  """
 
-    def __init__(self, paths, run_training, run_pred):
+    def __init__(self, paths):
         """ Gridworld size 4x12 """
         self.name = 'gridworld_3'
         self.height = 4
         self.width = 12
         self.start_idx = self.width * (self.height - 1)
-        Gridworld.Gridworld.__init__(self, self.height, self.width, paths, run_training, run_pred)
+        Gridworld.Gridworld.__init__(self, paths, self.height, self.width)
 
         self.set_initial_state = self.set_starting_initial_state
-        self.take_action = self.default_take_action
-        self.initialize()
+        self.take_action = self.take_action_default
 
 
     ### OVERRIDES ###

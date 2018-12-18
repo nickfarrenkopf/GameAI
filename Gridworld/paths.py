@@ -1,6 +1,10 @@
 import os
 import json
 
+import sys
+sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
+from Library.General import FileThings as FT
+
 
 ### PARAMS ###
 
@@ -12,15 +16,13 @@ network_path = os.path.join(base_path, 'network')
 
 ### JSON ###
 
-.def load_json():
+def load_json():
     """ """
-    with open(json_path, 'r') as file:  
-        return json.load(file)
+    return FT.load_json(json_path)
 
 def write_json(data):
     """ """
-    with open(json_path, 'w') as file:  
-        json.dump(data, file, indent=3)
+    return FT.write_json(json_path, data)
 
 def reset_json():
     """ """

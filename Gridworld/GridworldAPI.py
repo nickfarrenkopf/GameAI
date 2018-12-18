@@ -7,39 +7,28 @@ import GW3
 import GW4
 import GW5
 
-import sys
-sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
-from Library.General import Colors
-from Library.NeuralNetworks.Regression import RegressionAPI as REG
-
-
-
-"""
-TODO
- - dicth listening_to_keys var when update manual mode
-
-"""
 
 ### PYGAME ###
 
-def run(height=100, width=100, margin=20):
+def run():
     """ initiate Gridworld with reinforcement lerning """
-    initialize_pygame(width, height, margin)
+    initialize_pygame()
     done = False
     while not done:
         done = check_pygame_events()
-        gridworld.run_learning(listening_to_keys) #
-        draw_screen(width, height, margin)
+        if not manual_mode:
+            gridworld.iterate()
+        draw_screen()
         end_pygame_loop()
     exit_pygame()
 
-def initialize_pygame(width, height, margin):
+def initialize_pygame():
     """ run pygame.init(), build screen, start clock """
     global screen, clock
     pygame.init()
-    pygame.display.set_caption('Gridworld')
-    h = height * gridworld.height + margin * (gridworld.height + 1)
-    w = width * gridworld.width + margin * (gridworld.width + 1)
+    pygame.display.set_caption(gridworld.name)
+    h = HEIGHT * gridworld.height + MARGIN * (gridworld.height + 1)
+    w = WIDTH * gridworld.width + MARGIN * (gridworld.width + 1)
     screen = pygame.display.set_mode((w, h))
     clock = pygame.time.Clock()
 
@@ -48,21 +37,19 @@ def check_pygame_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return True
-        if listening_to_keys:
-            check_manual_events(event)
-        else:
-            check_automated_events(event)
+        check_general(event)
+        _ = [check_manual(event) if manual_mode else check_automated(event)]
     return False
 
-def draw_screen(width, height, margin):
+def draw_screen():
     """ draw gridworld on screen """
-    screen.fill(Colors.BLACK)
+    screen.fill((0,0,0))
     for i in range(gridworld.height):
         for j in range(gridworld.width):
             color = gridworld.color_grid[i * gridworld.width + j]
-            x = (margin + width) * j + margin
-            y = (margin + height) * i + margin
-            pygame.draw.rect(screen, color, [x, y, width, width])
+            x = (MARGIN + WIDTH) * j + MARGIN
+            y = (MARGIN + HEIGHT) * i + MARGIN
+            pygame.draw.rect(screen, color, [x, y, WIDTH, WIDTH])
 
 def end_pygame_loop():
     """ tick counter and draw screen """
@@ -73,24 +60,46 @@ def exit_pygame():
     """ close display """
     pygame.display.quit()
     pygame.quit()
-    gridworld.write_q_values()
+    if save_tabular:
+        gridworld.end_learning()
 
 
-### ACTIONS ###
+### EVENTS ###
+
+def check_general(event):
+    """ swicth between manual and automated, switch gridworld """
+    global grdiworld, manual_mode
+    if event.type == pygame.KEYDOWN:
+        # switch between manual and automation modes
+        if event.key == pygame.K_a:
+            manual_mode = False
+        if event.key == pygame.K_m:
+            manual_mode = True
+        # change gridworld with number keys
+        if event.key == pygame.K_1:
+            set_gridworld(1)
+        if event.key == pygame.K_2:
+            set_gridworld(2)
+        if event.key == pygame.K_3:
+            set_gridworld(3)
+        if event.key == pygame.K_4:
+            set_gridworld(4)
+        if event.key == pygame.K_5:
+            set_gridworld(5)
     
-def check_manual_events(event, sarsa):
-    """ move with arrow keys ? fix how I do this """
+def check_manual(event):
+    """ move agent in gridworld using action """
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT: # left arrow -> move left
-            gridworld.take_action((0,-1))
+            gridworld.iterate((0,-1))
         if event.key == pygame.K_RIGHT: # right arrow -> move right
-            gridworld.take_action((0,1))
+            gridworld.iterate((0,1))
         if event.key == pygame.K_UP: # up arrow -> move up
-            gridworld.take_action((-1,0))
+            gridworld.iterate((-1,0))
         if event.key == pygame.K_DOWN: # down arrow -> move down
-            gridworld.take_action((1,0))
+            gridworld.iterate((1,0))
 
-def check_automated_events(event):
+def check_automated(event):
     """ speed up or slow down actions """
     global game_speed
     if event.type == pygame.KEYDOWN:
@@ -100,49 +109,85 @@ def check_automated_events(event):
             game_speed -= 1 if game_speed > 2 else  0
 
 
-### HELPER ###
+### GRIDWORLD ###
 
 def set_gridworld(num):
     """ define gridworld by version number """
     global gridworld
+    # if gridworld already exists
+    redisplay = False
+    if gridworld:
+        redisplay = True
+        exit_pygame()
+    # reset gridworld
+    gridworld = get_gridworld(num)
+    gridworld.set_training_params(run_train, run_pred, train_start, with_decay)
+    gridworld.initialize()
+    if load_initial:
+        gridworld.load_value_data()
+    # reinitialize pygame on gridworld previously existing
+    if redisplay:
+        initialize_pygame()
+
+def get_gridworld(num):
+    """ """
     if num == 1:
-        gridworld = GW1.Gridworld_1(paths, run_train, run_pred)
+        gw = GW1.Gridworld_1(paths)
     elif num == 2:
-        gridworld = GW2.Gridworld_2(paths, run_train, run_pred)
+        gw = GW2.Gridworld_2(paths)
     elif num == 3:
-        gridworld = GW3.Gridworld_3(paths, run_train, run_pred)
-        gridworld.method.train_start = 50
+        gw = GW3.Gridworld_3(paths)
     elif num == 4:
-        gridworld = GW4.Gridworld_4(paths, run_train, run_pred)
+        gw = GW4.Gridworld_4(paths) 
     elif num == 5:
-        gridworld = GW5.Gridworld_5(paths, run_train, run_pred)
-
-
+        gw = GW5.Gridworld_5(paths)
+    return gw
 
 
 ### PARAMS ###
 
 # pygame
-gridworld = ''
-screen = ''
-clock = ''
-game_speed = 30
-listening_to_keys = False
+gridworld = None
+screen = None
+clock = None
+game_speed = 10
 
+# gridworld
+save_tabular = 0
+load_initial = 0
+manual_mode = 0
+run_train = 0
+save_network = 0
+run_pred = 0
+with_decay = 1
+train_start = 0
 
-run_train = True
-run_pred = False
+# screen
+HEIGHT = 100
+WIDTH = 100
+MARGIN = 20
+
 
 ### PROGRAM ###
 
-# stat GridworldAPI
-set_gridworld(3)
+# initialize gridworld
+set_gridworld(1)
+if manual_mode:
+    gridworld.iterate()
 
 # run previous episodes
-print('Running episodes...')
-gridworld.run_episodes(n_episodes=50)
+if 0:
+    n_episodes = 100
+    print('Running {} episodes...'.format(n_episodes))
+    gridworld.iterate_episodes(n_episodes=n_episodes)
 
-print('Running program')
-run()
+# run gridworld
+if 1:
+    print('Running program...')
+    run()
+
+# save trained network
+if run_train and save_network:
+    gridworld.method.sarsa_network.save_network()
 
 

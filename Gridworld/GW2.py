@@ -4,15 +4,14 @@ import Gridworld
 class Gridworld_2(Gridworld.Gridworld):
     """ Win if top row, 2nd from right or 2nd from left """
 
-    def __init__(self, paths, run_training, run_pred):
+    def __init__(self, paths):
         """ Gridworld size 5x5 """
         self.name = 'gridworld_2'
-        Gridworld.Gridworld.__init__(self, 5, 5, paths, run_training, run_pred)
+        Gridworld.Gridworld.__init__(self, paths, 5, 5)
 
         self.set_initial_state = self.set_default_initial_state
         self.set_color_grid = self.draw_default_color_grid
-        self.take_action = self.default_take_action
-        self.initialize()
+        self.take_action = self.take_action_default
     
 
     ### OVERRIDES ###

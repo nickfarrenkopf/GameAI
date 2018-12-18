@@ -4,7 +4,7 @@ import Gridworld
 class Gridworld_4(Gridworld.Gridworld):
     """ wind pushing to the left, with goal inside columns of wind """
 
-    def __init__(self, paths, run_training, run_pred):
+    def __init__(self, paths):
         """ Gridworld size 7x10 """
         self.name = 'gridworld_4'
         self.height = 7
@@ -12,10 +12,9 @@ class Gridworld_4(Gridworld.Gridworld):
         self.start_idx = self.width * 3
         self.wind_1 = [3, 4, 5, 8]
         self.wind_2 = [6, 7]
-        Gridworld.Gridworld.__init__(self, self.height, self.width, paths, run_training, run_pred)
+        Gridworld.Gridworld.__init__(self, self.height, self.width, paths)
 
         self.set_initial_state = self.set_starting_initial_state
-        self.initialize()
 
 
     ### OVERRIDES ###
