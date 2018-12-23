@@ -1,77 +1,119 @@
 {
    "network": {
-      "reg": {
-         "mnist_test_auto": {
-            "trained": 0,
-            "create_time": 1.3803081512451172,
-            "alpha": 0,
-            "n_output": 1,
+      "class": {
+         "mnist": {
+            "n_classes": 10,
+            "full_name": "CLASS_mnist_256_2_10",
+            "epsilon": 1e-08,
             "layers": [
+               64,
                64
             ],
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\mnist_test\\network\\REG_mnist_test_auto_13_1_1",
+            "trained": 0,
+            "create_time": 0.4812173843383789,
             "input_shape": [
                null,
-               13
+               256
             ],
-            "full_name": "REG_mnist_test_auto_13_1_1",
-            "input_size": 13,
-            "epsilon": 1e-08
+            "alpha": 0,
+            "input_size": 256,
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\mnist\\network\\CLASS_mnist_256_2_10"
          }
       },
       "auto": {
-         "mnist": {
-            "trained": 0,
-            "alpha": 0,
-            "middle_shape": [
-               4,
-               4,
-               4,
+         "mnist_test": {
+            "with_binary": true,
+            "full_name": "AUTO_mnist_test_32_32_4_64",
+            "epsilon": 1e-08,
+            "layers": [
+               16,
+               16,
+               16,
                16
             ],
+            "trained": 0,
+            "alpha": 0,
+            "batch_size": 4,
+            "reuse_weights": true,
+            "feedforward": [],
+            "middle_shape": [
+               4,
+               2,
+               2,
+               16
+            ],
+            "flat_shape": [
+               4,
+               64
+            ],
+            "input_shape": [
+               4,
+               32,
+               32,
+               1
+            ],
+            "flat_size": 64,
+            "create_time": 2.2854204177856445,
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\mnist_test\\network\\AUTO_mnist_test_32_32_4_64"
+         },
+         "mnist": {
+            "with_binary": false,
+            "full_name": "AUTO_mnist_32_32_3_256",
+            "epsilon": 1e-08,
             "layers": [
                64,
                32,
                16
             ],
-            "input_shape": [
-               4,
-               32,
-               32,
-               1
-            ],
-            "epsilon": 1e-08,
-            "create_time": 2.2854020595550537,
-            "with_binary": false,
-            "reuse_weights": true,
+            "trained": 0,
+            "alpha": 0,
             "batch_size": 4,
-            "full_name": "AUTO_mnist_32_32_3_256",
+            "reuse_weights": true,
             "feedforward": [],
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\mnist\\network\\AUTO_mnist_32_32_3_256",
+            "middle_shape": [
+               4,
+               4,
+               4,
+               16
+            ],
             "flat_shape": [
                4,
                256
             ],
-            "flat_size": 256
-         },
-         "mnist_test": {
-            "trained": 0,
-            "flat_shape": [
+            "input_shape": [
                4,
-               64
+               32,
+               32,
+               1
             ],
+            "flat_size": 256,
+            "create_time": 2.2562508583068848,
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\mnist\\network\\AUTO_mnist_32_32_3_256"
+         },
+         "mnist_test_auto": {
+            "with_binary": true,
+            "full_name": "AUTO_mnist_test_auto_32_32_4_72",
+            "epsilon": 1e-06,
+            "layers": [
+               16,
+               12,
+               14,
+               18
+            ],
+            "trained": 0,
             "alpha": 0,
+            "batch_size": 4,
+            "reuse_weights": true,
+            "feedforward": [],
             "middle_shape": [
                4,
                2,
                2,
-               16
+               18
             ],
-            "layers": [
-               16,
-               16,
-               16,
-               16
+            "flat_shape": [
+               4,
+               72
             ],
             "input_shape": [
                4,
@@ -79,29 +121,14 @@
                32,
                1
             ],
-            "create_time": 2.2854204177856445,
-            "with_binary": true,
-            "reuse_weights": true,
-            "batch_size": 4,
-            "full_name": "AUTO_mnist_test_32_32_4_64",
-            "feedforward": [],
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\mnist_test\\network\\AUTO_mnist_test_32_32_4_64",
-            "epsilon": 1e-08,
-            "flat_size": 64
+            "flat_size": 72,
+            "create_time": 2.1895015239715576,
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\mnist_test\\network\\AUTO_mnist_test_auto_32_32_4_72"
          },
          "test": {
-            "trained": 0,
-            "flat_shape": [
-               4,
-               256
-            ],
-            "alpha": 0,
-            "middle_shape": [
-               4,
-               2,
-               2,
-               64
-            ],
+            "with_binary": true,
+            "full_name": "AUTO_test_512_512_8_256",
+            "epsilon": 1e-08,
             "layers": [
                32,
                32,
@@ -111,6 +138,21 @@
                32,
                32,
                64
+            ],
+            "trained": 0,
+            "alpha": 0,
+            "batch_size": 4,
+            "reuse_weights": false,
+            "feedforward": [],
+            "middle_shape": [
+               4,
+               2,
+               2,
+               64
+            ],
+            "flat_shape": [
+               4,
+               256
             ],
             "input_shape": [
                4,
@@ -118,53 +160,30 @@
                512,
                3
             ],
-            "create_time": 6.154801607131958,
-            "with_binary": true,
-            "reuse_weights": false,
-            "batch_size": 4,
-            "full_name": "AUTO_test_512_512_8_256",
-            "feedforward": [],
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\test\\network\\AUTO_test_512_512_8_256",
-            "epsilon": 1e-08,
-            "flat_size": 256
-         },
-         "mnist_test_auto": {
-            "trained": 0,
-            "flat_shape": [
-               4,
-               72
-            ],
-            "alpha": 0,
-            "middle_shape": [
-               4,
-               2,
-               2,
-               18
-            ],
-            "layers": [
-               16,
-               12,
-               14,
-               18
-            ],
-            "input_shape": [
-               4,
-               32,
-               32,
-               1
-            ],
-            "create_time": 2.1895015239715576,
-            "with_binary": true,
-            "reuse_weights": true,
-            "batch_size": 4,
-            "full_name": "AUTO_mnist_test_auto_32_32_4_72",
-            "feedforward": [],
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\mnist_test\\network\\AUTO_mnist_test_auto_32_32_4_72",
-            "epsilon": 1e-06,
-            "flat_size": 72
+            "flat_size": 256,
+            "create_time": 6.298539161682129,
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\test\\network\\AUTO_test_512_512_8_256"
          }
       },
-      "class": {}
+      "reg": {
+         "mnist_test_auto": {
+            "full_name": "REG_mnist_test_auto_13_1_1",
+            "epsilon": 1e-08,
+            "layers": [
+               64
+            ],
+            "trained": 0,
+            "n_output": 1,
+            "create_time": 1.3803081512451172,
+            "input_shape": [
+               null,
+               13
+            ],
+            "alpha": 0,
+            "input_size": 13,
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\mnist_test\\network\\REG_mnist_test_auto_13_1_1"
+         }
+      }
    },
    "learning": {}
 }

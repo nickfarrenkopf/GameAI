@@ -8,8 +8,8 @@ import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import DataThings as DT
 from Library.General import FileThings as FT
-from Library.NeuralNetworks import TrainUtils as TU
-from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
+from Library.NeuralNetworks import NetworkThings as NETS
+from Library.NeuralNetworks.Autoencoder import AutoencoderAPI as AUTO
 #from Library.NeuralNetworks.Classifier import ClassifierAPI as CLASS
 
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     auto_hidden = [32, 32, 32, 32, 32, 32, 32, 64]
 
     # auto data
-    n = 16
+    n = 64
     h = 512
     w = 512
     le = 3
@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     """ AUTO """
 
-    if 0: # CREATE
+    if 1: # CREATE
         AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
                  with_binary=True, reuse_weights=False, print_me=True,
                  hidden_feedforward=[])
@@ -48,26 +48,29 @@ if __name__ == '__main__':
         auto_network = AUTO.load(name, paths.load_json())
 
     if 1: # LOAD - DATA
+        fs = paths.get_game_images()
         ds = FT.load_images_4d(fs[:n], h_f, w_f, le)
         print('Data shape: {}'.format(ds.shape))
 
-    if 0: # TRAIN ITER - DATA
-        AUTO.train_data_iter(auto_network, ds, h, w, n_train=100, alpha=1e-3,
-                             n_plot=n//2, plot_r=True, plot_i=True,
-                             do_subdata=True, kmax_img=20, kmax_cost=10)
+    if 1: # TRAIN ITER - DATA
+        AUTO.train_data(auto_network, ds, h, w, n_train=1000, alpha=1e-3,
+                        n_plot=n//2, plot_r=True, plot_i=True, do_subdata=True,
+                        kmax_img=50, kmax_cost=20)
 
     if 0: # TRAIN FULL - DATA
-        AUTO.train_data_full(auto_network, ds, h, w, alpha=1e-3, n_plot=n//2,
-                             do_subdata=True, kmax_cost=20)
+        AUTO.train_data_full(auto_network, fs, h, w, h_f, w_f, n_train=200,
+                             alpha=1e-3,
+                             n_plot=n//2, do_subdata=True, kmax_cost=20)
 
     if 0: # TRAIN ITER - PATHS
-        AUTO.train_path_iter(auto_network, fs, h, w, h_f, w_f, n_train=100,
-                             alpha=1e-3, n_plot=n//2, plot_r=True, plot_i=True,
-                             kmax_cost=10, kmax_img=20, do_subdata=True)
+        AUTO.train_paths(auto_network, fs, h, w, h_f, w_f, n_train=500,
+                         alpha=1e-3, n_plot=n//2, kmax_cost=10, kmax_img=50,
+                         plot_r=True, plot_i=True, do_subdata=True)
 
-    if 1: # TRAIN FULL - PATHS
-        AUTO.train_path_full(auto_network, fs, h, w, h_f, w_f, alpha=1e-3, 
-                             n_plot=n//2, do_subdata=True, kmax_cost=20)
+    if 0: # TRAIN FULL - PATHS
+        AUTO.train_paths_full(auto_network, fs, h, w, h_f, w_f,
+                              alpha=1e-3, n_plot=n//2, kmax_cost=20,
+                              do_subdata=True)
 
     if 0: # LEARN
         ds = np.reshape(DT.load_datas(paths.get_game_images()[:16]), (-1, h2, w2, 3))

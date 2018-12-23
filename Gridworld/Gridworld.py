@@ -6,10 +6,10 @@ import numpy as np
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
-from Library.Learning import EnvironmentController as Environment
+from Library.Learning import Environment
 from Library.Learning.Methods import SarsaTabular as ST
 from Library.Learning.Methods import SarsaNetwork as SN
-from Library.NeuralNetworks.Regression import RegressionAPI as REG
+from Library.NeuralNetworks.Regression import _RegressionAPI as REG
 
 
 ### GRIDWORLD ###
@@ -174,12 +174,14 @@ class Gridworld(Environment.Environment):
 
     ### LEARNING ###
 
-    def set_training_params(self, run_train, run_pred, train_start, with_decay):
+    def set_training_params(self, run_train, run_pred, train_start, with_decay,
+                            with_random):
         """ """
         self.run_train = run_train
         self.run_pred = run_pred
         self.train_start = train_start
         self.with_decay = with_decay
+        self.with_random = with_random
 
     def set_method(self):
         """ """
@@ -218,11 +220,9 @@ class Gridworld(Environment.Environment):
 
     def iterate_episodes(self, n_episodes=10):
         """ """
-        for i in range(n_episodes):
-            self.method.first_time_step()
-            while not self.in_terminal_state():
-                 self.method.next_time_step()
-            if i % 10 == 0:
-                print(' - iter {}'.format(i))
+        print('Running episodes...')
+        for i in range(n_episodes // 4):
+            self.method.run_episodes(n_episodes // 4)
+            print(' - episode count: {}'.format(i))
 
         

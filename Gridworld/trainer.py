@@ -7,7 +7,7 @@ import GW5
 
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
-from Library.NeuralNetworks.Regression import OptimizerRegression as REG
+#from Library.NeuralNetworks.Regression import OptimizerRegression as REG
 
 
 ### GRIDWORLD ###
@@ -26,33 +26,40 @@ def get_gridworld(num):
         gw = GW5.Gridworld_5(paths)
     return gw
 
-def learn_gridworld_params(num):
+def set_gridworld(num, load_initial=True):
     """ """
+    global gridworld
     gridworld = get_gridworld(num)
     gridworld.set_training_params(run_train, run_pred, train_start, with_decay)
     gridworld.initialize()
-    gridworld.load_value_data()
+    if load_initial:
+        gridworld.load_value_data()
+
+def learn_gridworld_params(num):
+    """ """
+    set_gridworld(1)
 
 
 
 ### PARAMS ###
 
 # gridworld
-run_train = 1
+run_train = 0
 run_pred = 0
 train_start = 0
 with_decay = 1
 
 
 
+set_gridworld(1)
 
 
 
+### PROGRAM ###
 
-#done = False
-#while not done:
-#    gridworld.iterate()
-#    done = True
+done = False
+while not gridworld.in_terminal_state():
+    gridworld.iterate()
 
 
 

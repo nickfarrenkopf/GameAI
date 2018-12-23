@@ -121,7 +121,8 @@ def set_gridworld(num):
         exit_pygame()
     # reset gridworld
     gridworld = get_gridworld(num)
-    gridworld.set_training_params(run_train, run_pred, train_start, with_decay)
+    gridworld.set_training_params(run_train, run_pred, train_start, with_decay,
+                                  with_random)
     gridworld.initialize()
     if load_initial:
         gridworld.load_value_data()
@@ -152,42 +153,65 @@ screen = None
 clock = None
 game_speed = 10
 
-# gridworld
-save_tabular = 0
-load_initial = 0
-manual_mode = 0
-run_train = 0
-save_network = 0
-run_pred = 0
-with_decay = 1
-train_start = 0
-
 # screen
 HEIGHT = 100
 WIDTH = 100
 MARGIN = 20
 
+# sarsa tabular
+with_random = 1
+with_decay = 1
+load_initial = 1
+save_tabular = 0
+
+# sarsa network
+train_start = 0
+run_train = 1
+run_pred = 1
+save_network = 0
+
+# gridworld
+manual_mode = 0
+
 
 ### PROGRAM ###
 
-# initialize gridworld
-set_gridworld(1)
-if manual_mode:
-    gridworld.iterate()
+"""
 
-# run previous episodes
-if 0:
-    n_episodes = 100
-    print('Running {} episodes...'.format(n_episodes))
-    gridworld.iterate_episodes(n_episodes=n_episodes)
+TEST CASES
 
-# run gridworld
-if 1:
-    print('Running program...')
-    run()
+(Method) SarsaTabular
+ - fresh start
+ - with Q data
+ 
+(Method) SarsaNetwork
+ - saved network data with Q data
+ - saved network data without Q data
+ - training converges (opt)
 
-# save trained network
-if run_train and save_network:
-    gridworld.method.sarsa_network.save_network()
+"""
+
+if __name__ == '__main__':
+    
+
+    # initialize gridworld
+    set_gridworld(1)
+    if manual_mode:
+        gridworld.iterate()
+
+    # run previous episodes
+    if 0:
+        n_episodes = 100
+        print('Running {} episodes...'.format(n_episodes))
+        gridworld.iterate_episodes(n_episodes=n_episodes)
+
+    # run gridworld
+    if 1:
+        print('Running program...')
+        run()
+
+    # save trained network
+    if run_train and save_network:
+        gridworld.method.sarsa_network.save_network()
 
 

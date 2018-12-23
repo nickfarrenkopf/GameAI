@@ -1,6 +1,6 @@
 *.pyc
-checkpoint
 __init__.py
+checkpoint
+Gridworld/network/
 Emulator/emulator/
 Emulator/data/
-Gridworld/network/

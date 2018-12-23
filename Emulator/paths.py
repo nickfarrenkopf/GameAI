@@ -3,6 +3,10 @@ import json
 from os.path import join
 
 
+import sys
+sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
+from Library.General import FileThings as FT
+
 ### PARAMS ###
 
 # top level
@@ -34,18 +38,11 @@ def get_game_images():
 
 def load_json():
     """ """
-    global json_path
-    if not os.path.exists(json_path):
-        print('JSON DNE {}'.format(json_path))
-        return {}
-    with open(json_path, 'r') as file:  
-        return json.load(file)
+    return FT.load_json(json_path)
 
 def write_json(data):
     """ """
-    global json_path
-    with open(json_path, 'w') as file:  
-        json.dump(data, file, indent=3)
+    return FT.write_json(json_path, data)
 
 def reset_json():
     """ """
