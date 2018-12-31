@@ -7,6 +7,7 @@ import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
 from Library.Learning import Environment
+from Library.Learning import Action
 from Library.Learning.Methods import SarsaTabular as ST
 from Library.Learning.Methods import SarsaNetwork as SN
 from Library.NeuralNetworks.Regression import _RegressionAPI as REG
@@ -94,8 +95,8 @@ class Gridworld(Environment.Environment):
 
     def get_default_actions(self):
         """ defines actions player can take """
-        a1 = Environment.Action('y movement', [-1, 0, 1])
-        a2 = Environment.Action('x movement', [-1, 0, 1])
+        a1 = Action.Action('y movement', [-1, 0, 1])
+        a2 = Action.Action('x movement', [-1, 0, 1])
         return [a1, a2]
 
     def get_action_profile(self):

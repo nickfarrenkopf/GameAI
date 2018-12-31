@@ -151,7 +151,7 @@ def get_gridworld(num):
 gridworld = None
 screen = None
 clock = None
-game_speed = 10
+game_speed = 3
 
 # screen
 HEIGHT = 100
@@ -161,13 +161,13 @@ MARGIN = 20
 # sarsa tabular
 with_random = 1
 with_decay = 1
-load_initial = 1
+load_initial = 0
 save_tabular = 0
 
 # sarsa network
 train_start = 0
-run_train = 1
-run_pred = 1
+run_train = 0
+run_pred = 0
 save_network = 0
 
 # gridworld
