@@ -4,13 +4,14 @@ import random
 import itertools
 import numpy as np
 
+import GridworldUtils as GU
 from learning import GridworldAgent as GA
 
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
 from Library.Learning import Environment
-from Library.Learning import AgentUtils as AU
+from Library.Learning import AgentUtils
 
 
 ### GRIDWORLD ###
@@ -34,85 +35,78 @@ class Gridworld(Environment.Environment):
         self.default_agents()
 
     """
-    TODO - child class
+    TODO
      - name
-     - def set_terminal_states(self):
-     - def set_initial_state(self):
-     - def set_next_state(self):
-     - def set_color_grid(self):
-     
-     - def get_reward(self):
+     - set_terminal_states
+     - set_agent_states
+     - set_next_state
+     - set_color_grid
+     - get_reward ?
     """
+
+
+
+
 
 
     ### ENVIRONMENT ###
 
     def reset(self):
         """ """
-        self.reset_state()
-        self.reset_agents()
-
-    
-    ### STATE ###
-
-    def reset_state(self):
-        """ """
         for i in range(self.state_size):
             self.state[i] = 0
         self.set_terminal_states()
-        self.set_initial_state()
+        self.set_agent_states() # reset
         self.set_color_grid()
-    
-    def in_terminal_state(self):
-        """ checks if agent is in terminal state """
-        return self.main_agent.in_terminal_state() # AG
 
-    def random_empty_state(self):
-        """ return index of random, empty, non/terminal state """
-        idxs = [i for i, s in enumerate(self.state) if s == 0]
-        return random.choice(idxs)
+    def in_terminal_state(self): # AG
+        """ checks if agent is in terminal state """
+        return self.main_agent.in_terminal_state()
+
+
 
 
     ### AGENT ###
 
-
-
-
-
-    def reset_agents(self):
-        """ """
-        for agent in self.agents.as_list():
-            agent.method.first_time_step()
-
-    def move_agent_to(self, agent, idx):
-        """ """
-        self.state[agent.location] = 0
-        self.state[idx] = agent.KEY
-        agent.location = idx
-
-    def move_agent(self, agent, action):
-        """ moves piece desired direction """
-        grid = np.array(self.state_to_grid(agent.location)) + np.array(action)
-        if self.is_valid_grid(*grid):
-            self.move_agent_to(agent, self.grid_to_state(grid))
-        
-    
-    ### DEFAULTS ###
-
     def default_agents(self): # AG ?
         """ """
-        self.agents = AU.AgentGroup([GA.GridworldAgent(self, 1)])
+        self.agents = AgentUtils.AgentGroup([GA.GridworldAgent(self, 1)])
         self.main_agent = self.agents.first()
 
     def default_initial_state(self):
-        """ only agents in gridworld """
+        """ random agent starting place """
         for agent in self.agents.as_list():
-            self.move_agent_to(agent, self.random_empty_state())
+            self.move_agent_to(agent, GU.random_empty_state(self.state))
+            agent.reset()
 
     def default_starting_state(self):
-        """ only agents in gridworld """
+        """ set agent starting place """
         for agent in self.agents.as_list():
             self.move_agent_to(agent, agent.start_idx)
+            agent.reset()
+
+
+    
+
+    def move_agent_to(self, agent, idx):
+        """ """
+        self.state[agent.state_idx] = 0
+        self.state[idx] = agent.KEY
+        agent.state_idx = idx
+
+    def move_agent(self, agent, action):
+        """ moves piece desired direction """
+        p1 = np.array(GU.state_to_grid(agent.location, self.width))
+        p2 = p1 + np.array(action)
+        if GU.is_valid_grid(p2[0], p2[1], self.height, self.width):
+            self.move_agent_to(agent, GU.grid_to_state(p2))
+        
+
+
+
+
+
+    ### DRAW SCREEN ###
 
     def default_color_grid(self):
         """ default states  """
@@ -120,8 +114,25 @@ class Gridworld(Environment.Environment):
         self.draw_terminal_states()
         self.draw_agents()
 
+    def draw_blank_grid(self):
+        """ reset color grid to all white """
+        self.color_grid = [Colors.WHITE for _ in self.state]
+
+    def draw_terminal_states(self, color=Colors.ORANGE):
+        """ color terminal states """
+        for idx in self.terminal_states:
+            self.color_grid[idx] = color
+
+    def draw_agents(self):
+        """ color agent depending on current state """
+        for agent in self.agents.as_list(): # AG
+            self.color_grid[agent.state_idx] = agent.get_color()
 
 
+
+
+
+        
 
     ### OFFLINE ###
 
@@ -164,46 +175,5 @@ class Gridworld(Environment.Environment):
 
 
 
-
-
-
-    
-    ### GRID ###
-
-    def state_to_grid(self, state_index):
-        """ convert state index to grid coordinate """
-        return [state_index // self.width, state_index % self.width]
-
-    def grid_to_state(self, grid_coord):
-        """ convert grid coordinate into state index """
-        return grid_coord[0] * self.width + grid_coord[1]
-
-    def location_of(self, key, grid=False):
-        """ returns the first board position of piece """
-        idx = list(self.state).index(key)
-        return self.state_to_grid(idx) if grid else idx 
-    
-    def is_valid_grid(self, x, y):
-        """ check if grid coordinate is valid """
-        row_check = x >= 0 and x < self.height
-        col_check = y >= 0 and y < self.width
-        return row_check and col_check
-
-
-    ### DRAW SCREEN ###
-
-    def draw_blank_grid(self):
-        """ reset color grid to all white """
-        self.color_grid = [Colors.WHITE for _ in self.state]
-
-    def draw_terminal_states(self, color=Colors.ORANGE):
-        """ color terminal states """
-        for idx in self.terminal_states:
-            self.color_grid[idx] = color
-
-    def draw_agents(self):
-        """ color agent depending on current state """
-        for agent in self.agents.as_list(): # AG
-            self.color_grid[agent.location] = agent.get_color()
 
 

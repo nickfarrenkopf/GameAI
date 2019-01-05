@@ -1,14 +1,16 @@
-
-
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
 from Library.Learning import AgentUtils
-
 from Library.Learning.Methods import Tabular as TL
 
-key_dict = dict({'left': (0,-1), 'right': (0,1), 'up': (-1,0), 'down': (1,0)})
-keyDictRev = {v: k for k, v in key_dict.items()}
+
+
+
+
+
+
+
 
 
 class GridworldAgent(AgentUtils.Agent):
@@ -21,7 +23,7 @@ class GridworldAgent(AgentUtils.Agent):
         AgentUtils.Agent.__init__(self, environment, key)
 
         # state
-        self.location = None
+        self.state_idx = None
 
         # constants
         self.START_IDX = start_idx

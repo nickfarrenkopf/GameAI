@@ -85,7 +85,7 @@ def check_gridworld_events(event):
     # take actions in gridworld
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT:
-            gridworld.run_step('left')  # ?
+            gridworld.run_step('left')
         if event.key == pygame.K_RIGHT:
             gridworld.run_step('right')
         if event.key == pygame.K_UP:
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     # run previous episodes
     if N_PRE_EPISODES > 0:
         print('Running {} episodes...'.format(N_PRE_EPISODES))
-        gridworld.run_offline_episodes(n_episodes=N_PRE_EPISODES) # ?
+        gridworld.run_offline_episodes(n_episodes=N_PRE_EPISODES)
 
     # run gridworld
     if 1:
