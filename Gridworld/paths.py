@@ -1,5 +1,6 @@
 import os
 import json
+from os.path import join
 
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
@@ -10,8 +11,11 @@ from Library.General import FileThings as FT
 
 # top level
 base_path = os.path.dirname(os.path.realpath(__file__))
-json_path = os.path.join(base_path, '_json_data.txt')
-network_path = os.path.join(base_path, 'network')
+data_path = join(base_path, 'data')
+
+# data
+network_path = join(data_path, 'network')
+json_path = join(data_path, '_json_data.txt')
 
 
 ### JSON ###
@@ -26,13 +30,7 @@ def write_json(data):
 
 def reset_json():
     """ """
-    data = {'network': 
-                {'auto': {},
-                 'class': {},
-                 'reg': {}
-                 },
-            'learning': {}
-            }
+    data = FT.base_json()
     write_json(data)
 
 

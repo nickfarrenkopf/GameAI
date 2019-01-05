@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-import Gridworld
+from learning import GridworldEnvironment as Gridworld
 
 
 class Gridworld_5(Gridworld.Gridworld):

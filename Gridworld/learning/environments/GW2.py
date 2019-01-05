@@ -1,4 +1,4 @@
-import Gridworld
+from learning import GridworldEnvironment as Gridworld
 
 
 class Gridworld_2(Gridworld.Gridworld):
@@ -9,9 +9,9 @@ class Gridworld_2(Gridworld.Gridworld):
         self.name = 'gridworld_2'
         Gridworld.Gridworld.__init__(self, paths, 5, 5)
 
-        self.set_initial_state = self.set_default_initial_state
-        self.set_color_grid = self.draw_default_color_grid
-        self.take_action = self.take_action_default
+        self.set_initial_state = self.default_initial_state
+        self.set_color_grid = self.default_color_grid
+        self.take_action = self.default_take_action
     
 
     ### OVERRIDES ###

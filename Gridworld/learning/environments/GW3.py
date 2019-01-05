@@ -1,4 +1,4 @@
-import Gridworld
+from learning import GridworldEnvironment as Gridworld
 
 
 class Gridworld_3(Gridworld.Gridworld):
