@@ -6,13 +6,12 @@ class Gridworld_4(Gridworld.Gridworld):
 
     def __init__(self, paths):
         """ Gridworld size 7x10 """
-        self.name = 'gridworld_4'
         self.height = 7
         self.width = 10
         self.start_idx = self.width * 3
         self.wind_1 = [3, 4, 5, 8]
         self.wind_2 = [6, 7]
-        Gridworld.Gridworld.__init__(self, self.height, self.width, paths)
+        Gridworld.Gridworld.__init__(self, paths, 'gridworld_4', self.height, self.width)
 
         self.set_initial_state = self.set_starting_initial_state
 

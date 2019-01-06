@@ -5,31 +5,22 @@ from Library.Learning import AgentUtils
 from Library.Learning.Methods import Tabular as TL
 
 
-
-
-
-
-
-
-
-
 class GridworldAgent(AgentUtils.Agent):
     """ """
 
     def __init__(self, environment, key, start_idx=0, learning=True,
-                 color=Colors.RED, color_win=Colors.GREEN,
-                 color_lose=Colors.RED):
+                 color=Colors.RED, c_win=Colors.GREEN, c_lose=Colors.RED):
         """ """
         AgentUtils.Agent.__init__(self, environment, key)
 
-        # state
+        # environment
         self.state_idx = None
 
         # constants
         self.START_IDX = start_idx
         self.COLOR = color
-        self.COLOR_WIN = color_win
-        self.COLOR_LOSE = color_lose
+        self.C_WIN = c_win
+        self.C_LOSE = c_lose
     
         # learning
         self.learning = learning
@@ -39,17 +30,20 @@ class GridworldAgent(AgentUtils.Agent):
 
     ### GRIDWORLD ###
 
+    def learn(self, action):
+        """ """
+        if self.learning:
+            self.method.next_time_step(action, self.get_reward())
+        
+
     def get_state(self):
         """ """
         return tuple(self.environment.state)
 
     def get_color(self):
         """ """
-        if self.in_terminal_state() and :
-            if self.env.get_reward() > 0: # ?
-                return self.COLOR_WIN
-            else:
-                return self.COLOR_LOSE
+        if self.in_terminal_state():
+            return self.C_WIN if self.env.get_reward() > 0 else self.C_LOSE
         else:
             return self.COLOR
 
@@ -58,7 +52,7 @@ class GridworldAgent(AgentUtils.Agent):
 
     def in_terminal_state(self):
         """ """
-        return self.location in self.env.terminal_states
+        return self.state_idx in self.env.terminal_states
 
 
     def take_Q_action():
@@ -75,6 +69,10 @@ class GridworldAgent(AgentUtils.Agent):
     def find_by_dict_key(self, string_action):
         """ """
         return key_dict[string_action]
+
+
+
+
 
 
     ### LEARNING ###

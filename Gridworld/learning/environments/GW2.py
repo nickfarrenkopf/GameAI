@@ -6,8 +6,7 @@ class Gridworld_2(Gridworld.Gridworld):
 
     def __init__(self, paths):
         """ Gridworld size 5x5 """
-        self.name = 'gridworld_2'
-        Gridworld.Gridworld.__init__(self, paths, 5, 5)
+        Gridworld.Gridworld.__init__(self, paths, 'gridworld_2', 5, 5)
 
         self.set_initial_state = self.default_initial_state
         self.set_color_grid = self.default_color_grid

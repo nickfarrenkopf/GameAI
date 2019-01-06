@@ -85,13 +85,13 @@ def check_gridworld_events(event):
     # take actions in gridworld
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT:
-            gridworld.run_step('left')
+            gridworld.run_online_step('left')
         if event.key == pygame.K_RIGHT:
-            gridworld.run_step('right')
+            gridworld.run_online_step('right')
         if event.key == pygame.K_UP:
-            gridworld.run_step('up')
+            gridworld.run_online_step('up')
         if event.key == pygame.K_DOWN:
-            gridworld.run_step('down')
+            gridworld.run_online_step('down')
 
 
 ### GRIDWORLD ###
@@ -115,6 +115,7 @@ clock = None
 manual_mode = 0
 INITIAL_GRIDWORLD = 1
 N_PRE_EPISODES = 0
+N_SKIP_EPISODES = 0
 
 # screen
 GAME_SPEED = 10

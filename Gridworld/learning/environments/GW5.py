@@ -9,10 +9,9 @@ class Gridworld_5(Gridworld.Gridworld):
 
     def __init__(self, paths):
         """ Gridworld size 5x5 """
-        self.name = 'gridworld5'
         self.height = 5
         self.width = 5
-        Gridworld.Gridworld.__init__(self, self.height, self.width, paths)
+        Gridworld.Gridworld.__init__(self, paths, 'gridworld5', self.height, self.width)
 
 
     ### OVERRIDES ###

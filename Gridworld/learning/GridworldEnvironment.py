@@ -10,19 +10,18 @@ from learning import GridworldAgent as GA
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
-from Library.Learning import Environment
+from Library.Learning import EnvironmentUtils
 from Library.Learning import AgentUtils
 
 
 ### GRIDWORLD ###
 
-class Gridworld(Environment.Environment):
+class Gridworld(EnvironmentUtils.Environment):
     """ Base Gridworld object """
 
-    def __init__(self, paths, height, width):
+    def __init__(self, paths, name, height, width):
         """ """
-        self.paths = paths
-        Environment.Environment.__init__(self)
+        EnvironmentUtils.Environment.__init__(self, paths, name)
         
         # state params
         self.height = height
@@ -56,7 +55,7 @@ class Gridworld(Environment.Environment):
         for i in range(self.state_size):
             self.state[i] = 0
         self.set_terminal_states()
-        self.set_agent_states() # reset
+        self.set_agents() # reset
         self.set_color_grid()
 
     def in_terminal_state(self): # AG
@@ -103,37 +102,6 @@ class Gridworld(Environment.Environment):
         
 
 
-
-
-
-    ### DRAW SCREEN ###
-
-    def default_color_grid(self):
-        """ default states  """
-        self.draw_blank_grid()
-        self.draw_terminal_states()
-        self.draw_agents()
-
-    def draw_blank_grid(self):
-        """ reset color grid to all white """
-        self.color_grid = [Colors.WHITE for _ in self.state]
-
-    def draw_terminal_states(self, color=Colors.ORANGE):
-        """ color terminal states """
-        for idx in self.terminal_states:
-            self.color_grid[idx] = color
-
-    def draw_agents(self):
-        """ color agent depending on current state """
-        for agent in self.agents.as_list(): # AG
-            self.color_grid[agent.state_idx] = agent.get_color()
-
-
-
-
-
-        
-
     ### OFFLINE ###
 
     def run_offline_episodes(self, n_episodes):
@@ -145,35 +113,55 @@ class Gridworld(Environment.Environment):
         """ """
         self.reset()
         while not self.in_terminal_state():
-            A = self.main_agent.choose_action()
-            self.move_agent(self.main_agent, A)
-            self.main_agent.method.next_time_step(A, self.get_reward()) # when
+            self.run_offlline_step()
 
-
-
+    def run_offlline_step(self):
+        """ """
+        A = self.main_agent.choose_action()
+        self.move_agent(self.main_agent, A)
+        self.main_agent.learn()
 
 
     ### ONLINE ###
 
-    def iterate(self):
+    def run_online_step(self, action_name):
         """ """
-        action = self.main_agent.choose_action()
-        self.run_step(action)
-
-    def run_step(self, action):
-        """ """
-        if type(action) is str:
-            action = self.main_agent.find_by_dict_key(action)
         # in terminal state
         if self.in_terminal_state():
             self.reset()
         # non terminal state
-        else:   
-            self.move_agent(self.main_agent, action)
-            self.main_agent.method.next_time_step(action, self.get_reward())
-            self.set_color_grid()
+        else:
+            A = self.main_agent.actions.find_by_name(action_name)
+            self.move_agent(self.main_agent, A)
+            self.main_agent.learn(A)
+            self.draw_color_grid()
 
 
+    ### DRAW SCREEN ###
 
+    def draw_color_grid(self):
+        """ default states  """
+        self.draw_blank_grid()
+        self.draw_color_grid_extra() # GW
+        self.draw_terminal_states()
+        self.draw_agents()
+
+    def draw_blank_grid(self):
+        """ reset color grid to all white """
+        self.color_grid = [Colors.WHITE for _ in self.state]
+
+    def draw_color_grid_extra(self):
+        """ """
+        pass
+
+    def draw_terminal_states(self, color=Colors.ORANGE):
+        """ color terminal states """
+        for idx in self.terminal_states:
+            self.color_grid[idx] = color
+
+    def draw_agents(self):
+        """ color agent depending on current state """
+        for agent in self.agents.all():
+            self.color_grid[agent.state_idx] = agent.get_color() # AG
 
 
