@@ -7,13 +7,13 @@ import GridworldUtils
 
 def run():
     """ initiate Gridworld with reinforcement lerning """
-    gridworld.reset()
+    gridworld.reset_environment()
     initialize_pygame()
     done = False
     while not done:
         done = check_pygame_events()
         if not manual_mode:
-            gridworld.iterate()
+            gridworld.run_online_step()
         draw_pygame_screen()
         end_pygame_loop()
     exit_pygame()
@@ -25,7 +25,7 @@ def initialize_pygame():
     pygame.display.set_caption(gridworld.name)
     h = HEIGHT * gridworld.height + MARGIN * (gridworld.height + 1)
     w = WIDTH * gridworld.width + MARGIN * (gridworld.width + 1)
-    screen = pygame.display.set_mode((w, h))
+    screen = pygame.display.set_mode((w + 128, h))
     clock = pygame.time.Clock()
 
 def check_pygame_events():
@@ -46,6 +46,34 @@ def draw_pygame_screen():
             x = (MARGIN + WIDTH) * j + MARGIN
             y = (MARGIN + HEIGHT) * i + MARGIN
             pygame.draw.rect(screen, color, [x, y, WIDTH, WIDTH])
+    # draw side panel
+    x = (MARGIN + WIDTH) * (j+1) + MARGIN
+    y = (MARGIN + HEIGHT) * (i+1) - MARGIN
+    pygame.draw.rect(screen, (255,255,255), [x, MARGIN,
+                                             128-MARGIN, y])
+    
+    values = gridworld.main_agent.method.get_values()
+    if len(values) > 0:
+        for i, val in enumerate(values):
+            draw_text('{:.3f}'.format(val), x, i)
+    else:
+        draw_text('none', x, 0)
+    
+
+def draw_text(text, x, yi):
+    """ """
+    largeText = pygame.font.Font('freesansbold.ttf', 30)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = (x+58, MARGIN+30 * (yi + 1))
+    screen.blit(TextSurf, TextRect)
+
+
+
+def text_objects(text, font):
+    textSurface = font.render(text, True, (255,255,255))
+    return textSurface, textSurface.get_rect()
+ 
+    
 
 def end_pygame_loop():
     """ tick counter and draw screen """
@@ -119,9 +147,9 @@ N_SKIP_EPISODES = 0
 
 # screen
 GAME_SPEED = 10
-HEIGHT = 100
-WIDTH = 100
-MARGIN = 20
+HEIGHT = 80
+WIDTH = 80
+MARGIN = 16
 
 
 ### PROGRAM ###

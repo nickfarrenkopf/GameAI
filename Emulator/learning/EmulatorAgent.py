@@ -5,22 +5,13 @@ from Library.Learning import AgentUtils
 from Library.Learning.Methods import Tabular as TL
 
 
-class GridworldAgent(AgentUtils.Agent):
+class Agent(AgentUtils.Agent):
     """ """
 
-    def __init__(self, environment, key, actions, start_idx=0, learning=True,
-                 color=Colors.RED, c_win=Colors.GREEN, c_lose=Colors.RED):
+    def __init__(self, environment, key, actions, start_idx=0, learning=True):
         """ """
         AgentUtils.Agent.__init__(self, environment, key, actions)
 
-        # environment
-        self.state_idx = 0
-
-        # constants
-        self.START_IDX = start_idx
-        self.COLOR = color
-        self.C_WIN = c_win
-        self.C_LOSE = c_lose
     
         # learning
         self.learning = learning

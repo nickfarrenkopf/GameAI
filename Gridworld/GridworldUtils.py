@@ -1,3 +1,6 @@
+import random
+import numpy as np
+
 import paths
 from learning.environments import GW1
 from learning.environments import GW2
@@ -23,38 +26,32 @@ def get_gridworld(num):
     return gw
 
 
-
 ### STATE ###
 
-def random_empty_state(self, state):
+def random_empty_state(state):
     """ return index of random, empty, non/terminal state """
     return random.choice([i for i, s in enumerate(state) if s == 0])
 
-def location_of(self, key, state_index, grid=False):
+def location_of(key, state_index, grid=False):
     """ returns the first board position of piece """
     idx = list(state_index).index(key)
     return state_to_grid(idx) if grid else idx 
 
-def move_agent_to(self, agent, state_idx):
-    """ """
-    pass
-    
-
 
 ### GRID ###
 
-def state_to_grid(self, state_index, width):
+def state_to_grid(env, state_index):
     """ convert state index to grid coordinate """
-    return [state_index // width, state_index % width]
+    return np.array([state_index // env.width, state_index % env.width])
 
-def grid_to_state(self, grid_coord, width):
+def grid_to_state(env, grid_coord):
     """ convert grid coordinate into state index """
-    return grid_coord[0] * width + grid_coord[1]
+    return grid_coord[0] * env.width + grid_coord[1]
 
-def is_valid_grid(self, x, y, height, width):
+def is_valid_grid(env, pt):
     """ check if grid coordinate is valid """
-    row_check = x >= 0 and x < height
-    col_check = y >= 0 and y < width
+    row_check = pt[0] >= 0 and pt[0] < env.height
+    col_check = pt[1] >= 0 and pt[1] < env.width
     return row_check and col_check
 
 

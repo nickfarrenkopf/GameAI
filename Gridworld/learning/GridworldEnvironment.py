@@ -11,13 +11,13 @@ import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import Colors
 from Library.Learning import EnvironmentUtils
-from Library.Learning import AgentUtils
 
 
 ### GRIDWORLD ###
 
 class Gridworld(EnvironmentUtils.Environment):
     """ Base Gridworld object """
+
 
     def __init__(self, paths, name, height, width):
         """ """
@@ -30,79 +30,70 @@ class Gridworld(EnvironmentUtils.Environment):
         self.state = np.zeros(self.state_size, dtype=int)
         self.grid = np.reshape(self.state, (height, width))
 
-        # agent params
-        self.default_agents()
-
     """
     TODO
+     - child class
+     
+    NEED
      - name
-     - set_terminal_states
-     - set_agent_states
-     - set_next_state
-     - set_color_grid
-     - get_reward ?
+     - set_terminal_state
+     - set_gridworld_agents
+
+    IF EXTRA
+     - iterate_environment
+     - draw_color_grid_extra
     """
-
-
-
-
 
 
     ### ENVIRONMENT ###
 
-    def reset(self):
+    def reset_environment(self):
         """ """
         for i in range(self.state_size):
             self.state[i] = 0
-        self.set_terminal_states()
-        self.set_agents() # reset
-        self.set_color_grid()
+        self.set_terminal_states() # GW
+        self.agents.reset_all() # AG
+        for agent in self.agents.as_list():
+            self.state[agent.state_idx] = agent.KEY
 
-    def in_terminal_state(self): # AG
+    def iterate_environment(self): 
+        """ """
+        pass
+
+    def in_terminal_state(self):
         """ checks if agent is in terminal state """
         return self.main_agent.in_terminal_state()
 
-
+    def environment_move_agent(self, key, idx_old, idx_new):
+        """ """
+        self.state[idx_old] = 0
+        self.state[idx_new] = key
 
 
     ### AGENT ###
 
-    def default_agents(self): # AG ?
+    def main_agent_take_action(self, action):
         """ """
-        self.agents = AgentUtils.AgentGroup([GA.GridworldAgent(self, 1)])
-        self.main_agent = self.agents.first()
+        action = self.main_agent.interpret_action(action)
+        self.agent_action_move(self.main_agent, action)
+        self.iterate_environment()
+        self.main_agent.learn(action)
 
-    def default_initial_state(self):
-        """ random agent starting place """
-        for agent in self.agents.as_list():
-            self.move_agent_to(agent, GU.random_empty_state(self.state))
-            agent.reset()
-
-    def default_starting_state(self):
-        """ set agent starting place """
-        for agent in self.agents.as_list():
-            self.move_agent_to(agent, agent.start_idx)
-            agent.reset()
-
-
-    
-
-    def move_agent_to(self, agent, idx):
-        """ """
-        self.state[agent.state_idx] = 0
-        self.state[idx] = agent.KEY
-        agent.state_idx = idx
-
-    def move_agent(self, agent, action):
+    def agent_action_move(self, agent, action):
         """ moves piece desired direction """
-        p1 = np.array(GU.state_to_grid(agent.location, self.width))
-        p2 = p1 + np.array(action)
-        if GU.is_valid_grid(p2[0], p2[1], self.height, self.width):
-            self.move_agent_to(agent, GU.grid_to_state(p2))
-        
+        # continue if valid move action
+        pt_old = GU.state_to_grid(self, agent.state_idx)
+        pt_new = pt_old + np.array(action)
+        if not GU.is_valid_grid(self, pt_new):
+            return
+        # execute move if empty state
+        idx = GU.grid_to_state(self, pt_new)
+        if self.state[idx] == 0:
+            self.environment_move_agent(agent.KEY, agent.state_idx, idx)
+            agent.state_idx = idx
 
 
-    ### OFFLINE ###
+    ### RUNTIME ###
 
     def run_offline_episodes(self, n_episodes):
         """ """
@@ -111,30 +102,17 @@ class Gridworld(EnvironmentUtils.Environment):
 
     def run_offline_episode(self):
         """ """
-        self.reset()
+        self.reset_environment()
         while not self.in_terminal_state():
-            self.run_offlline_step()
+            self.main_agent_take_action()
 
-    def run_offlline_step(self):
+    def run_online_step(self, action=None):
         """ """
-        A = self.main_agent.choose_action()
-        self.move_agent(self.main_agent, A)
-        self.main_agent.learn()
-
-
-    ### ONLINE ###
-
-    def run_online_step(self, action_name):
-        """ """
-        # in terminal state
         if self.in_terminal_state():
-            self.reset()
-        # non terminal state
+            self.reset_environment()
         else:
-            A = self.main_agent.actions.find_by_name(action_name)
-            self.move_agent(self.main_agent, A)
-            self.main_agent.learn(A)
-            self.draw_color_grid()
+            self.main_agent_take_action(action)
+        self.draw_color_grid()
 
 
     ### DRAW SCREEN ###
@@ -142,17 +120,17 @@ class Gridworld(EnvironmentUtils.Environment):
     def draw_color_grid(self):
         """ default states  """
         self.draw_blank_grid()
-        self.draw_color_grid_extra() # GW
+        self.draw_color_grid_extra()
         self.draw_terminal_states()
         self.draw_agents()
-
-    def draw_blank_grid(self):
-        """ reset color grid to all white """
-        self.color_grid = [Colors.WHITE for _ in self.state]
 
     def draw_color_grid_extra(self):
         """ """
         pass
+
+    def draw_blank_grid(self):
+        """ reset color grid to all white """
+        self.color_grid = [Colors.WHITE for _ in self.state]
 
     def draw_terminal_states(self, color=Colors.ORANGE):
         """ color terminal states """
@@ -161,7 +139,7 @@ class Gridworld(EnvironmentUtils.Environment):
 
     def draw_agents(self):
         """ color agent depending on current state """
-        for agent in self.agents.all():
+        for agent in self.agents.all:
             self.color_grid[agent.state_idx] = agent.get_color() # AG
 
 
