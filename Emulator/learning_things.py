@@ -25,3 +25,19 @@ key = Keyboard.get_key()
 #for i in range(10):
 #    print(Keyboard.get_pressed())
 #    time.sleep(0.1)
+
+
+
+# data point for images
+class DataPoint(object):
+    """ """
+
+    def __init__(self):
+        """ """
+        self.name = ''
+        self.episode = ''
+        self.idx = ''
+        self.keys = ''
+
+
+

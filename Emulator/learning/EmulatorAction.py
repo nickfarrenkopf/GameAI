@@ -4,6 +4,14 @@ from Library.General import Keyboard
 from Library.Learning import ActionUtils as AU
 
 
+"""
+MAPPING
+up, down, left, right
+a, b, l, r -> z, x, a, s
+sta, sel -> q, w
+"""
+
+
 ### EMULATOR ###
 
 class EmulatorAction(AU.Action):
@@ -36,5 +44,6 @@ actionDictRev = {v: k for k, v in actionDict.items()}
 # default movement
 actionset_1 = load(['left', 'right', 'up', 'down'])
 actionset_2 = load(['left', 'right', 'up', 'down', 'z', 'x'])
+actionset_3 = load(['left', 'right', 'up', 'down', 'z', 'x', 'a', 's'])
 
 

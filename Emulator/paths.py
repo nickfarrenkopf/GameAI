@@ -46,13 +46,7 @@ def write_json(data):
 
 def reset_json():
     """ """
-    data = {'network': 
-                {'auto': {},
-                 'class': {},
-                 'reg': {}
-                 },
-            'learning': {}
-            }
+    data = FT.base_json()
     write_json(data)
 
 
