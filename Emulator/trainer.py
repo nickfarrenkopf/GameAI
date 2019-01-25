@@ -1,6 +1,6 @@
 import os
+import time
 import numpy as np
-from random import shuffle
 
 import paths
 
@@ -12,10 +12,6 @@ from Library.NeuralNetworks import TrainUtils as TU
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
 
-from tensorflow.python.client import device_lib
-def get_available_gpus():
-    local_device_protos = device_lib.list_local_devices()
-    return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
 ### PROGRAM ###
 
@@ -27,10 +23,7 @@ if __name__ == '__main__':
     # base folder
     name = 'test'
     paths.set_base(name)
-    fs = paths.get_game_images()
-
-    # auto network
-    auto_hidden = [32, 32, 32, 32, 32, 32, 32, 64]
+    files = FT.get_filepaths(paths.image_path)
 
     # auto data
     n = 16
@@ -41,9 +34,11 @@ if __name__ == '__main__':
     w_f = 544
 
 
+
     """ AUTO """
 
     if 0: # CREATE
+        auto_hidden = [32, 32, 32, 32, 32, 32, 32, 64]
         AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
                  with_binary=False, reuse_weights=False, print_me=True,
                  hidden_feedforward=[])
@@ -52,38 +47,45 @@ if __name__ == '__main__':
         auto_network = AUTO.load(name, paths.load_json())
 
     if 1: # LOAD - DATA
-        ds = FT.load_images_4d(fs[:n], h_f, w_f, le)
+        ds = FT.load_images_4d(files[:n], h_f, w_f, le)
         print('Data shape: {}'.format(ds.shape))
 
     if 0: # TRAIN ITER - DATA
+        print('Training on data with iters')
         AUTO.train_data_iter(auto_network, ds, h, w, n_train=100, alpha=1e-3,
                              n_plot=n//2, plot_r=True, plot_i=True,
                              do_subdata=True, kmax_img=20, kmax_cost=10)
-
-    import time
-    start = time.time()
+    
     if 0: # TRAIN FULL - DATA
+        print('Training on data until finished')
+        start = time.time()
         AUTO.train_data_full(auto_network, ds, h, w, alpha=1e-3, n_plot=n//2,
                              do_subdata=True, kmax_cost=20)
-    print('Time {}'.format(time.time() - start))
+        print('Time {}'.format(time.time() - start))
+    
 
     if 0: # TRAIN ITER - PATHS
-        AUTO.train_path_iter(auto_network, fs, h, w, h_f, w_f, n_train=100,
+        print('Training on data with iters')
+        AUTO.train_path_iter(auto_network, files, h, w, h_f, w_f, n_train=100,
                              alpha=1e-3, n_plot=n//2, plot_r=True, plot_i=True,
                              kmax_cost=10, kmax_img=20, do_subdata=True)
 
     if 0: # TRAIN FULL - PATHS
-        AUTO.train_path_full(auto_network, fs, h, w, h_f, w_f, alpha=1e-3, 
+        print('Training on data with iters')
+        AUTO.train_path_full(auto_network, files, h, w, h_f, w_f, alpha=1e-3, 
                              n_plot=n//2, do_subdata=True, kmax_cost=20)
 
     if 0: # LEARN
-        ds = np.reshape(DT.load_datas(paths.get_game_images()[:16]), (-1, h2, w2, 3))
-        print('Data shape: {}'.format(ds.shape))
-        AUTO.learn_auto_data(auto_network, ds, h, w, kmax_cost=5, slope_min=1e-3,
+        print('Learning...?')
+        #ds = np.reshape(DT.load_datas(paths.get_game_images()[:16]), (-1, h2, w2, 3))
+        #print('Data shape: {}'.format(ds.shape))
+        #AUTO.learn_auto_data(auto_network, ds, h, w, kmax_cost=5, slope_min=1e-3,
                              slope_count_max=10)
 
     if 0: # TEST
-        for i in range(5):
+        n_test = 5
+        print('Testing auto network for {} random images'.format(n_test))
+        for i in range(n_test):
             fp = DT.get_subset(fs, n, True)
             dss = DT.subdata(FT.load_images_4d(fp, h_f, w_f, le), h, w)
             AUTO.check_auto(auto_network, dss, h, w, n // 2, True, True, i, 1)

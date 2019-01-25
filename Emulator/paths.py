@@ -12,9 +12,9 @@ from Library.General import FileThings as FT
 # top level
 base_path = os.path.dirname(os.path.realpath(__file__))
 json_path = join(base_path, '_json_data.txt')
-image_path = ''
-network_path = ''
-small_ds = join(base_path, 'old', 'small_ds')
+
+image_path = '' #?
+network_path = '' #?
 
 
 ### SET PATHS ###
@@ -24,14 +24,6 @@ def set_base(game):
     global image_path, network_path
     image_path = join(base_path, 'data', game, 'image')
     network_path = join(base_path, 'data', game, 'network')
-    
-
-### GET PATHS ###
-
-def get_game_images():
-    """ """
-    files = [join(image_path, f) for f in os.listdir(image_path)]
-    return files
 
 
 ### JSON ###

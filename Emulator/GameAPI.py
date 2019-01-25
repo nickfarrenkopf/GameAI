@@ -1,19 +1,67 @@
 import os
+import time
 import numpy as np
-from random import shuffle
+from threading import Thread
 
 import paths
+from learning import EmulatorEnvironment as EE
 
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import DataThings as DT
 from Library.General import FileThings as FT
 from Library.General import Screen
+from Library.Computer import Keyboard
 from Library.NeuralNetworks.Autoencoder import AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Classifier import ClassifierAPI as CLASS
 
 
 ### PROGRAM ###
+
+
+
+# data point for images
+class DataPoint(object):
+    """ """
+
+    def __init__(self):
+        """ """
+        self.name = ''
+        self.episode = ''
+        self.idx = ''
+        self.keys = ''
+
+
+
+def prepend_zeros():
+    """ """
+    pass
+
+
+def rgd():
+    """ """
+    files = 0
+    filenames = files
+    
+    episodes = sorted(list(set([f.split('_')[0] for f in filenames])))
+    episode = episodes[-1] + 1 if len(episodes) > 0 else 0
+    print(episodes)
+    print(episode)
+    
+    idx = 0
+    keys = []
+
+    done = False
+    while not done:
+        print('Checking things')
+
+        # image names params
+        idx += 1
+        keys = []
+        filename = '{}_{}_{}_{}'.format(name, episode, idx, keys)
+        filepath = os.path.join(paths.image_path, filename)
+
+        # save image
 
 
 
@@ -51,67 +99,51 @@ def record_game_data(path):
 if __name__ == '__main__':
 
 
-    """ APP """
+    """ GAME """
 
-    game = 'kirby'
-    paths.set_base(game)
-    json_data = paths.load_json()
+    # base folder
+    name = 'test'
+    paths.set_base(name)
+    files = FT.get_filepaths(paths.image_path)
+
+    # auto data
+    n = 16
+    h = 512
+    w = 512
+    le = 3
+    h_f = 544
+    w_f = 544
+    
+
+    """ LOAD NETWORKS """
+
+    if 1:
+        auto_network = AUTO.load(name, paths.load_json())
+
+    if 0:
+        class_network = CLASS.load(name, json_data)
 
 
-    """ AUTO """
- 
-    if 1: # PARAMS
-        auto_path = paths.network_path
-        h = w = 512
-        h2 = w2 = 544
-
-    if 1: # LOAD
-        auto_network = AUTO.load_auto(game, json_data)
-
-    if 1: # CREATE
-        json_data = paths.load_json()
-        hidden = [32, 32, 32, 32, 32, 32, 32, 64]
-        json_data = AUTO.new_auto(paths, game, h, w, hidden, length=3)
-        auto_network = AUTO.load_auto(game, json_data)    
-
-    if 0: # TRAIN
-        ds = FT.load_images_4d(paths.get_game_images()[:32], h2, w2, 3)
-        print(ds.shape)
-        AUTO.train_auto_data(auto_network, ds, h, w, n_train=300,
-                             kmax_img=15, kmax_cost=5)
-
-    if 0: # LEARN
-        ds = FT.load_images_4d(paths.get_game_images(), h2, w2, 3)
-        print('Data shape: {}'.format(ds.shape))
-        AUTO.learn_auto_data(paths, ds, h, w, kmax_cost=2, slope_min=1e-3,
-                             slope_count_max=10)
+    """ OTHER """
 
 
 
+    #t = Thread(target=Keyboard.start_constant_listener, args=())
+    #t.start()
 
-    """ CLASS - AUTO """
 
-    if 0: # PARAMS
-        class_path = paths.network_path
-        size = 64
-        n_classes = 8
 
-    if 0: # LOAD
-        class_network = CLASS.class_auto(name, json_data)
+    #env = EE.Emulator(paths, 'test')
+    #env.save_state_image()
 
-    if 0: # CREATE
-        name = 'test'
-        hidden = [64, 64, 64]
-        json_data = CLASS.new_class(paths, name, size, hidden, n_classes)
+    
 
-    if 0: # TRAIN
-        class_network = CLASS.load_class(name, json_data)
-        ds, ls = DT.load_data_labels(paths.get_audio_image_files(),
-                                     randomize=False)
-        ds = np.reshape(ds, (-1, h2, w2, 1))
-        print('Data: {}'.format(ds.shape))
-        print('Labels: {}'.format(ls.shape))
-        CLASS.train_class_data(class_network, auto_network, ds, ls, h, w)
+
+    #key = Keyboard.get_key()
+
+    #for i in range(10):
+    #    print(Keyboard.get_pressed())
+    #    time.sleep(0.1)
 
 
 
