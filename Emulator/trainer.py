@@ -12,6 +12,10 @@ from Library.NeuralNetworks import TrainUtils as TU
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
 
+from tensorflow.python.client import device_lib
+def get_available_gpus():
+    local_device_protos = device_lib.list_local_devices()
+    return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
 ### PROGRAM ###
 
@@ -39,7 +43,7 @@ if __name__ == '__main__':
 
     """ AUTO """
 
-    if 1: # CREATE
+    if 0: # CREATE
         AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
                  with_binary=False, reuse_weights=False, print_me=True,
                  hidden_feedforward=[])
@@ -58,7 +62,7 @@ if __name__ == '__main__':
 
     import time
     start = time.time()
-    if 1: # TRAIN FULL - DATA
+    if 0: # TRAIN FULL - DATA
         AUTO.train_data_full(auto_network, ds, h, w, alpha=1e-3, n_plot=n//2,
                              do_subdata=True, kmax_cost=20)
     print('Time {}'.format(time.time() - start))
@@ -78,7 +82,7 @@ if __name__ == '__main__':
         AUTO.learn_auto_data(auto_network, ds, h, w, kmax_cost=5, slope_min=1e-3,
                              slope_count_max=10)
 
-    if 1: # TEST
+    if 0: # TEST
         for i in range(5):
             fp = DT.get_subset(fs, n, True)
             dss = DT.subdata(FT.load_images_4d(fp, h_f, w_f, le), h, w)
@@ -96,12 +100,12 @@ if __name__ == '__main__':
     if 0: # LOAD
         class_network = CLASS.class_auto(name, json_data)
 
-    if 0: # CREATE
+    if 1: # CREATE
         name = 'test'
         hidden = [64, 64, 64]
         json_data = CLASS.new(paths, name, size, hidden, n_classes)
 
-    if 0: # TRAIN
+    if 1: # TRAIN
         filepaths = paths.get_game_images()
         #ds, ls = DT.load_data_labels(paths.get_game_images(), h_d, w_d, 3,
         #                             randomize=False)
@@ -110,7 +114,7 @@ if __name__ == '__main__':
         labels = DT.to_one_hot(label_names)
         #print('Data: {}'.format(ds.shape))
         print('Labels: {}'.format(labels.shape))
-        class_network = CLASS.load_class(name, json_data)
+        class_network = CLASS.load(name, json_data)
         CLASS.train_by_paths(class_network, auto_network, filepaths, labels,
                              h, w, h_d, w_d, n_plot=16, n_train=1000)
 
