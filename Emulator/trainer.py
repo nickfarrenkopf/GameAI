@@ -50,7 +50,7 @@ if __name__ == '__main__':
         ds = FT.load_images_4d(files[:n], h_f, w_f, le)
         print('Data shape: {}'.format(ds.shape))
 
-    if 1: # TRAIN ITER - DATA
+    if 0: # TRAIN ITER - DATA
         print('Training on data with iters')
         AUTO.train_data_iter(auto_network, ds, h, w, n_train=100, alpha=1e-4,
                              n_plot=4, plot_r=True, plot_i=True,

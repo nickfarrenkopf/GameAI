@@ -1,6 +1,7 @@
 import os
 import time
 import numpy as np
+import matplotlib.pyplot as plt
 from threading import Thread
 
 import paths
@@ -10,10 +11,10 @@ import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import DataThings as DT
 from Library.General import FileThings as FT
-from Library.General import Screen
+from Library.Computer import Screen
 from Library.Computer import Keyboard
-from Library.NeuralNetworks.Autoencoder import AutoencoderAPI as AUTO
-from Library.NeuralNetworks.Classifier import ClassifierAPI as CLASS
+from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
+from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
 
 
 ### PROGRAM ###
@@ -64,7 +65,6 @@ def rgd():
         # save image
 
 
-
 def record_game_data(path):
     """ """
     # starting file counter
@@ -96,6 +96,15 @@ def record_game_data(path):
             count += 1
         done = key == 'p'
 
+
+
+def get_data_thing():
+    """ """
+    return np.random.random((4, 512, 512, 3))
+
+
+### PROGRAM ###
+
 if __name__ == '__main__':
 
 
@@ -107,12 +116,13 @@ if __name__ == '__main__':
     files = FT.get_filepaths(paths.image_path)
 
     # auto data
-    n = 16
+    n = 128
     h = 512
     w = 512
     le = 3
     h_f = 544
     w_f = 544
+
     
 
     """ LOAD NETWORKS """
@@ -122,6 +132,7 @@ if __name__ == '__main__':
 
     if 0:
         class_network = CLASS.load(name, json_data)
+
 
 
     """ OTHER """
@@ -144,6 +155,16 @@ if __name__ == '__main__':
     #for i in range(10):
     #    print(Keyboard.get_pressed())
     #    time.sleep(0.1)
+
+
+
+    AUTO.watch_auto(auto_network, get_data_thing)
+    
+
+
+
+
+
 
 
 
