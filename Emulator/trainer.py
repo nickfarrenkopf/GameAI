@@ -26,7 +26,7 @@ if __name__ == '__main__':
     files = FT.get_filepaths(paths.image_path)
 
     # auto data
-    n = 16
+    n = 100000
     h = 512
     w = 512
     le = 3
@@ -37,10 +37,10 @@ if __name__ == '__main__':
 
     """ AUTO """
 
-    if 0: # CREATE
+    if 1: # CREATE
         auto_hidden = [32, 32, 32, 32, 32, 32, 32, 64]
         AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
-                 with_binary=False, reuse_weights=False, print_me=True,
+                 with_binary=False, reuse_weights=True, print_me=True,
                  hidden_feedforward=[])
 
     if 1: # LOAD - NETWORK
@@ -50,11 +50,17 @@ if __name__ == '__main__':
         ds = FT.load_images_4d(files[:n], h_f, w_f, le)
         print('Data shape: {}'.format(ds.shape))
 
-    if 0: # TRAIN ITER - DATA
+    if 1: # TRAIN ITER - DATA
         print('Training on data with iters')
-        AUTO.train_data_iter(auto_network, ds, h, w, n_train=100, alpha=1e-3,
-                             n_plot=n//2, plot_r=True, plot_i=True,
-                             do_subdata=True, kmax_img=20, kmax_cost=10)
+        AUTO.train_data_iter(auto_network, ds, h, w, n_train=100, alpha=1e-4,
+                             n_plot=4, plot_r=True, plot_i=True,
+                             do_subdata=True, kmax_img=5, kmax_cost=1)
+
+    if 0: # TRAIN NEEEEEW
+        print('Training NEEEW')
+        AUTO.train_new(auto_network, ds, h, w, n_train=30000, alpha=1e-3,
+                             n_plot=4, plot_r=True, plot_i=True,
+                             do_subdata=True, kmax_img=100, kmax_cost=20)
     
     if 0: # TRAIN FULL - DATA
         print('Training on data until finished')
@@ -80,7 +86,7 @@ if __name__ == '__main__':
         #ds = np.reshape(DT.load_datas(paths.get_game_images()[:16]), (-1, h2, w2, 3))
         #print('Data shape: {}'.format(ds.shape))
         #AUTO.learn_auto_data(auto_network, ds, h, w, kmax_cost=5, slope_min=1e-3,
-                             slope_count_max=10)
+        #                     slope_count_max=10)
 
     if 0: # TEST
         n_test = 5
@@ -102,12 +108,12 @@ if __name__ == '__main__':
     if 0: # LOAD
         class_network = CLASS.class_auto(name, json_data)
 
-    if 1: # CREATE
+    if 0: # CREATE
         name = 'test'
         hidden = [64, 64, 64]
         json_data = CLASS.new(paths, name, size, hidden, n_classes)
 
-    if 1: # TRAIN
+    if 0: # TRAIN
         filepaths = paths.get_game_images()
         #ds, ls = DT.load_data_labels(paths.get_game_images(), h_d, w_d, 3,
         #                             randomize=False)

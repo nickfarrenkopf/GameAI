@@ -112,7 +112,7 @@
             ],
             "flat_size": 256,
             "with_binary": false,
-            "reuse_weights": false,
+            "reuse_weights": true,
             "layers": [
                32,
                32,
@@ -126,7 +126,7 @@
             "feedforward": [],
             "epsilon": 1e-08,
             "alpha": 0,
-            "create_time": 2.321791887283325,
+            "create_time": 2.8793036937713623,
             "trained": 0
          },
          "mnist_test": {
