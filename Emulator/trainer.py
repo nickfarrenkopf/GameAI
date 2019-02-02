@@ -26,7 +26,7 @@ if __name__ == '__main__':
     files = FT.get_filepaths(paths.image_path)
 
     # auto data
-    n = 10000
+    n = 64
     h = 512
     w = 512
     le = 3
