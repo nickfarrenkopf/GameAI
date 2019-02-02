@@ -34,11 +34,15 @@ class Emulator(EnvironmentUtils.Environment):
 
     ### STATE ###
 
+    def get_window(self):
+        """ """
+        return self.window.get_window()
+
     def get_state(self):
         """ """
         data = np.reshape(self.window.get_window(), (1,512,512,3))
         auto_data = self.auto_network.get_flat(data)
-        print('State shape {}'.format(auto_data.shape))
+        #print('State shape {}'.format(auto_data.shape))
         return auto_data
 
     def save_state_image(self):

@@ -41,28 +41,29 @@ def prepend_zeros():
 
 def rgd():
     """ """
-    files = 0
-    filenames = files
+
+    #Keyboard.start_constant_listener()
+    t = Thread(target=Keyboard.start_constant_listener, args=())
+    t.start()
     
-    episodes = sorted(list(set([f.split('_')[0] for f in filenames])))
-    episode = episodes[-1] + 1 if len(episodes) > 0 else 0
-    print(episodes)
-    print(episode)
+    filenames = [os.path.basename(f) for f in files]
+    episodes = sorted(list(set([f.split('_')[0] for f in files])))
+    episode = int(episodes[-1]) + 1 if len(episodes) > 0 else 0
+    print('Episode count: {}'.format(episode))
     
     idx = 0
-    keys = []
-
     done = False
     while not done:
-        print('Checking things')
-
-        # image names params
-        idx += 1
-        keys = []
+        keys = Keyboard.get_pressed()
+        print('{}'.format(keys))
         filename = '{}_{}_{}_{}'.format(name, episode, idx, keys)
         filepath = os.path.join(paths.image_path, filename)
-
+        ds = env.get_window()
+        #FT.save_image_to_file(env.get_state(), filepath)
         # save image
+        idx += 1
+        time.sleep(0.2)
+        done = idx > 20
 
 
 def record_game_data(path):
@@ -111,7 +112,7 @@ if __name__ == '__main__':
     """ GAME """
 
     # base folder
-    name = 'test'
+    name = 'test2'
     paths.set_base(name)
     files = FT.get_filepaths(paths.image_path)
 
@@ -127,7 +128,7 @@ if __name__ == '__main__':
 
     """ LOAD NETWORKS """
 
-    if 1:
+    if 0:
         auto_network = AUTO.load(name, paths.load_json())
 
     if 0:
@@ -144,7 +145,7 @@ if __name__ == '__main__':
 
 
 
-    #env = EE.Emulator(paths, 'test')
+    env = EE.Emulator(paths, 'test')
     #env.save_state_image()
 
     
@@ -158,14 +159,14 @@ if __name__ == '__main__':
 
 
 
-    AUTO.watch_auto(auto_network, get_data_thing)
+    #AUTO.watch_auto(auto_network, get_data_thing)
     
 
 
 
 
 
-
+    rgd()
 
 
 

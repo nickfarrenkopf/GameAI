@@ -26,7 +26,7 @@ if __name__ == '__main__':
     files = FT.get_filepaths(paths.image_path)
 
     # auto data
-    n = 100000
+    n = 10000
     h = 512
     w = 512
     le = 3
@@ -39,8 +39,10 @@ if __name__ == '__main__':
 
     if 1: # CREATE
         auto_hidden = [32, 32, 32, 32, 32, 32, 32, 64]
+        #auto_hidden = [16, 16, 16, 16, 16, 16, 16, 64]
+        #auto_hidden = [64, 64, 64, 64]
         AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
-                 with_binary=False, reuse_weights=True, print_me=True,
+                 with_binary=False, reuse_weights=False, print_me=True,
                  hidden_feedforward=[])
 
     if 1: # LOAD - NETWORK
@@ -50,11 +52,12 @@ if __name__ == '__main__':
         ds = FT.load_images_4d(files[:n], h_f, w_f, le)
         print('Data shape: {}'.format(ds.shape))
 
-    if 0: # TRAIN ITER - DATA
+    if 1: # TRAIN ITER - DATA
         print('Training on data with iters')
-        AUTO.train_data_iter(auto_network, ds, h, w, n_train=100, alpha=1e-4,
+        #ds = DT.subdata(ds, h, w)
+        AUTO.train_data_iter(auto_network, ds, h, w, n_train=100, alpha=1e-3,
                              n_plot=4, plot_r=True, plot_i=True,
-                             do_subdata=True, kmax_img=5, kmax_cost=1)
+                             do_subdata=True, kmax_img=5, kmax_cost=2)
 
     if 0: # TRAIN NEEEEEW
         print('Training NEEEW')

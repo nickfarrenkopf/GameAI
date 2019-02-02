@@ -106,31 +106,28 @@
             ]
          },
          "test": {
-            "reuse_weights": true,
-            "create_time": 7.519341468811035,
-            "middle_shape": [
-               4,
-               2,
-               2,
-               64
-            ],
-            "flat_size": 256,
-            "flat_shape": [
-               4,
-               256
-            ],
-            "feedforward": [],
-            "trained": 0,
-            "alpha": 0,
             "full_name": "AUTO_test_512_512_8_256",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\test\\network\\AUTO_test_512_512_8_256",
+            "batch_size": 4,
             "input_shape": [
                4,
                512,
                512,
                3
             ],
-            "epsilon": 1e-08,
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\test\\network\\AUTO_test_512_512_8_256",
+            "middle_shape": [
+               4,
+               2,
+               2,
+               64
+            ],
+            "flat_shape": [
+               4,
+               256
+            ],
+            "flat_size": 256,
+            "with_binary": false,
+            "reuse_weights": false,
             "layers": [
                32,
                32,
@@ -141,8 +138,11 @@
                32,
                64
             ],
-            "batch_size": 4,
-            "with_binary": false
+            "feedforward": [],
+            "epsilon": 1e-08,
+            "alpha": 0,
+            "create_time": 2.761613368988037,
+            "trained": 0
          }
       },
       "reg": {
