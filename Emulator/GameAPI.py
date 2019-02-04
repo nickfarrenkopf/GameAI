@@ -17,11 +17,9 @@ from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
 
 
-### PROGRAM ###
 
 
 
-# data point for images
 class DataPoint(object):
     """ """
 
@@ -33,75 +31,50 @@ class DataPoint(object):
         self.keys = ''
 
 
+### DATA GENERATION ###
+
+def record_game_data(file_max=100, sleep_time=0.9):
+    """ """
+    # start keyboard listener
+    t = Thread(target=Keyboard.start_constant_listener, args=())
+    t.start()
+    # get initial conditions
+    filenames = os.listdir(paths.image_path)
+    episodes = sorted(list(set([f.split('_')[1] for f in filenames])))
+    episode = int(episodes[-1]) + 1 if len(episodes) > 0 else 0
+    idx = 0
+    print('Episode count: {}'.format(episode))
+    # loop until done
+    done = False
+    while not done:
+        # get currently pressed keys
+        keys = ','.join(Keyboard.get_pressed())
+        keys = keys if len(keys) > 0 else 'NA'
+        # save to file
+        filename = '{}_{}_{}_{}.png'.format(name, episode, idx, keys)
+        filepath = os.path.join(paths.image_path, filename)
+        FT.save_image_to_file(env.get_window(), filepath, print_me=False)
+        # end of loop
+        idx += 1
+        done = idx > file_max or 'q' in keys
+        time.sleep(sleep_time)
+    print('Done recording game data')
+
+
+
 
 def prepend_zeros():
     """ """
     pass
 
 
-def rgd():
-    """ """
-
-    #Keyboard.start_constant_listener()
-    t = Thread(target=Keyboard.start_constant_listener, args=())
-    t.start()
-    
-    filenames = [os.path.basename(f) for f in files]
-    episodes = sorted(list(set([f.split('_')[0] for f in files])))
-    episode = int(episodes[-1]) + 1 if len(episodes) > 0 else 0
-    print('Episode count: {}'.format(episode))
-    
-    idx = 0
-    done = False
-    while not done:
-        keys = Keyboard.get_pressed()
-        print('{}'.format(keys))
-        filename = '{}_{}_{}_{}'.format(name, episode, idx, keys)
-        filepath = os.path.join(paths.image_path, filename)
-        ds = env.get_window()
-        #FT.save_image_to_file(env.get_state(), filepath)
-        # save image
-        idx += 1
-        time.sleep(0.2)
-        done = idx > 20
-
-
-def record_game_data(path):
-    """ """
-    # starting file counter
-    count = 0
-    if len(os.listdir(path)) > 0:
-        count = int(os.listdir(path)[-1].split('_')[1]) + 1
-    print('Start count: {}'.format(count))
-    # wait for key
-    done = False
-    while not done:
-        key = Screen.get_key()
-        print(key)
-        # if in whitelist, take screencap
-        if key in game.action_keys or key in game.label_keys:
-            text = '0' * (4 - len(str(count))) + str(count)
-            names = ['image_{}_{}_0'.format(text, values[keys.index(key)])]
-            windows = [game.get_window()]
-            if key in game.action_keys:         
-                for i in range(1, 3):
-                    text = '0' * (4 - len(str(count))) + str(count)
-                    names.append('image_{}_{}_{}'.format(text,
-                                                         values[keys.index(key)],
-                                                         i))
-                    windows.append(game.get_window())
-                    time.sleep(0.1)
-            for name, window in zip(names, windows):
-                path = os.path.join(game.state_path, name + '.png')
-                Screen.save_image(window, path)
-            count += 1
-        done = key == 'p'
-
-
-
 def get_data_thing():
     """ """
-    return np.random.random((4, 512, 512, 3))
+    #return np.random.random((4, 512, 512, 3))
+    wind = np.reshape(env.get_window(), (-1, h, w, le))
+    #print(wind.shape)
+    #mid = np.reshape(auto_network.get_flat(wind), auto_network.plot_shape)
+    return wind
 
 
 ### PROGRAM ###
@@ -112,7 +85,7 @@ if __name__ == '__main__':
     """ GAME """
 
     # base folder
-    name = 'test2'
+    name = 'test'
     paths.set_base(name)
     files = FT.get_filepaths(paths.image_path)
 
@@ -123,17 +96,15 @@ if __name__ == '__main__':
     le = 3
     h_f = 544
     w_f = 544
-
     
 
     """ LOAD NETWORKS """
 
-    if 0:
+    if 1:
         auto_network = AUTO.load(name, paths.load_json())
 
     if 0:
         class_network = CLASS.load(name, json_data)
-
 
 
     """ OTHER """
@@ -159,14 +130,11 @@ if __name__ == '__main__':
 
 
 
-    #AUTO.watch_auto(auto_network, get_data_thing)
+    AUTO.watch_auto(auto_network, get_data_thing)
     
 
 
-
-
-
-    rgd()
+    #record_game_data()
 
 
 
