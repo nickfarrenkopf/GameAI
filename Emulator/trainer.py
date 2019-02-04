@@ -8,7 +8,6 @@ import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import DataThings as DT
 from Library.General import FileThings as FT
-from Library.NeuralNetworks import TrainUtils as TU
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
 
@@ -25,7 +24,7 @@ if __name__ == '__main__':
     paths.set_base(name)
     files = FT.get_filepaths(paths.image_path)
 
-    # auto data
+    # data params
     n = 12800
     h = 512
     w = 512
@@ -33,13 +32,24 @@ if __name__ == '__main__':
     h_f = 544
     w_f = 544
 
+    # class data
+    class_path = paths.network_path
+    size = 256
+    n_classes = 8
+
+
+
+    """ DATA """
+
+    if 0: # LOAD - DATA
+        ds = FT.load_images(files[:n])
+        print('Data shape: {}'.format(ds.shape))
+
 
 
     """ AUTO """
 
-    if 1: # CREATE
-        #auto_hidden = [32, 32, 32, 32, 32, 32, 32, 64]
-        #auto_hidden = [16, 16, 16, 16, 16, 16, 16, 64]
+    if 0: # CREATE
         auto_hidden = [64, 32, 16, 8, 4, 4]
         AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
                  with_binary=False, reuse_weights=True, print_me=True,
@@ -47,10 +57,8 @@ if __name__ == '__main__':
 
     if 1: # LOAD - NETWORK
         auto_network = AUTO.load(name, paths.load_json())
+        auto_network.print_info()
 
-    if 1: # LOAD - DATA
-        ds = FT.load_images_4d(files[:n], h_f, w_f, le)
-        print('Data shape: {}'.format(ds.shape))
 
     if 0: # TRAIN ITER - DATA
         print('Training on data with iters')
@@ -59,7 +67,7 @@ if __name__ == '__main__':
                              n_plot=4, plot_r=True, plot_i=True,
                              do_subdata=True, kmax_img=10, kmax_cost=2)
 
-    if 1: # TRAIN NEEEEEW
+    if 0: # TRAIN NEEEEEW
         print('Training NEEEW')
         AUTO.train_new(auto_network, ds, h, w, n_train=100, alpha=1e-4,
                              n_plot=4, plot_r=True, plot_i=True,
@@ -86,10 +94,6 @@ if __name__ == '__main__':
 
     if 0: # LEARN
         print('Learning...?')
-        #ds = np.reshape(DT.load_datas(paths.get_game_images()[:16]), (-1, h2, w2, 3))
-        #print('Data shape: {}'.format(ds.shape))
-        #AUTO.learn_auto_data(auto_network, ds, h, w, kmax_cost=5, slope_min=1e-3,
-        #                     slope_count_max=10)
 
     if 0: # TEST
         n_test = 5
@@ -101,20 +105,16 @@ if __name__ == '__main__':
 
 
 
-    """ CLASS """
+    """ CLASS """ 
 
-    if 1: # PARAMS
-        class_path = paths.network_path
-        size = 256
-        n_classes = 8
-
-    if 0: # LOAD
-        class_network = CLASS.class_auto(name, json_data)
-
-    if 0: # CREATE
+    if 1: # CREATE
         name = 'test'
         hidden = [64, 64, 64]
         json_data = CLASS.new(paths, name, size, hidden, n_classes)
+
+    if 1: # LOAD
+        class_network = CLASS.load(name, paths.load_json())
+        class_network.print_info()
 
     if 0: # TRAIN
         filepaths = paths.get_game_images()

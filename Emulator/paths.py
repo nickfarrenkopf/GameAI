@@ -2,10 +2,10 @@ import os
 import json
 from os.path import join
 
-
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import FileThings as FT
+
 
 ### PARAMS ###
 
@@ -13,8 +13,8 @@ from Library.General import FileThings as FT
 base_path = os.path.dirname(os.path.realpath(__file__))
 json_path = join(base_path, '_json_data.txt')
 
-image_path = '' #?
-network_path = '' #?
+image_path = ''
+network_path = ''
 
 
 ### SET PATHS ###

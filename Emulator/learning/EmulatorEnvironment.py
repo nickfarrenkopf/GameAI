@@ -34,8 +34,10 @@ class Emulator(EnvironmentUtils.Environment):
 
     ### STATE ###
 
-    def get_window(self):
+    def get_window(self, network=True):
         """ """
+        if network:
+            return np.reshape(self.window.get_window(), (-1, 512, 512, 3))
         return self.window.get_window()
 
     def get_state(self):
