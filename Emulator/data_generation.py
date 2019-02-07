@@ -12,6 +12,7 @@ from Library.General import DataThings as DT
 from Library.General import FileThings as FT
 from Library.Computer import Keyboard
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
+from Library.NeuralNetworks.Autoencoder import TestAutoencoder as TA
 from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
 
 
@@ -32,7 +33,7 @@ class DataPoint(object):
 def record_game_data(file_max=100, sleep_time=0.9):
     """ """
     # start keyboard listener
-    t = Thread(target=Keyboard.start_constant_listener, args=())
+    t = Thread(target=Keyboard.get_key_multiple, args=())
     t.start()
     # get initial conditions
     filenames = os.listdir(paths.image_path)
@@ -108,10 +109,12 @@ if __name__ == '__main__':
     #env.save_state_image()
 
     
+    #ds = env.get_window()
+    #ds = np.array(list(ds) * 4)
+    #print(ds.shape)
+    #mid = auto_network.get_middle(ds)
 
-
-
-    #AUTO.watch_auto(auto_network, get_data_thing)
+    TA.plot_middle_runtime(auto_network, env.get_window)
     
 
 

@@ -4,7 +4,7 @@ import paths
 
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
-from Library.Computer import Window
+from Library.Computer import Screen
 from Library.General import FileThings as FT
 from Library.Learning import EnvironmentUtils
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
@@ -23,7 +23,7 @@ class Emulator(EnvironmentUtils.Environment):
         # window
         self.p1 = (70, 1341)
         self.p2 = (579, 1850)
-        self.window = Window.Window(self.p1, self.p2)
+        self.window = Screen.Window(self.p1, self.p2)
 
         # image
         self.test_filepath = 'state.png'
