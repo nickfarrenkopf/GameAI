@@ -12,7 +12,6 @@ from Library.General import DataThings as DT
 from Library.General import FileThings as FT
 from Library.Computer import Keyboard
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
-from Library.NeuralNetworks.Autoencoder import TestAutoencoder as TA
 from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
 
 
@@ -44,24 +43,37 @@ def record_game_data(file_max=100, sleep_time=0.9):
     done = False
     while not done:
         # get currently pressed keys
-        keys = ','.join(Keyboard.get_pressed())
+        keys = ','.join(Keyboard.get_currently_pressed())
         keys = keys if len(keys) > 0 else 'NA'
         # save to file
         filename = '{}_{}_{}_{}.png'.format(name, episode, idx, keys)
         filepath = os.path.join(paths.image_path, filename)
-        FT.save_image_to_file(env.get_window(), filepath, print_me=False)
+        FT.save_image_to_file(env.get_window()[0], filepath, print_me=False)
         # end of loop
         idx += 1
         done = idx > file_max or 'q' in keys
         time.sleep(sleep_time)
     print('Done recording game data')
 
-
-
-
-def prepend_zeros():
+def prepend_zeros_idx():
     """ """
-    pass
+    count = 0
+    filenames = os.listdir(paths.image_path)
+    episodes = [int(f.split('_')[1]) for f in filenames]
+    for i in range(len(set(episodes))):
+        files = [filenames[j] for j, e in enumerate(episodes) if e == i]
+        max_len = len(str(len(files)))
+        print('Episode: {}   n_files: {}'.format(i, len(files)))
+        for file in files:
+            params = file.split('_')
+            middle = '0' * (max_len - len(params[2])) + params[2]
+            str_name = '_'.join(params[:2] + [middle] + params[3:])
+            if str_name != file:
+                os.rename(os.path.join(paths.image_path, file),
+                          os.path.join(paths.image_path, str_name))
+                count += 1
+    print('Files renamed {}'.format(count))
+        
 
 
 
@@ -79,7 +91,7 @@ if __name__ == '__main__':
     """ GAME """
 
     # base folder
-    name = 'test'
+    name = 'pacman'
     paths.set_base(name)
     files = FT.get_filepaths(paths.image_path)
 
@@ -97,28 +109,23 @@ if __name__ == '__main__':
     if 1:
         auto_network = AUTO.load(name, paths.load_json())
 
-    if 0:
-        class_network = CLASS.load(name, json_data)
+    if 1:
+        class_network = CLASS.load(name, paths.load_json())
+
+    if 1:
+        env = EE.Emulator(paths, name)
 
 
     """ OTHER """
 
+    #fs, ls = paths.get_filepaths_for_labels(set(('1','2','0')))
+    #lss = DT.to_one_hot(ls)
+
+    #AUTO.TEST.plot_middle_runtime(auto_network, env.get_window)
+
+    CLASS.TEST.print_class_runtime(class_network, auto_network, env.get_window)
+    
+    #record_game_data(file_max=3000, sleep_time=0.1)
 
 
-    env = EE.Emulator(paths, 'test')
     #env.save_state_image()
-
-    
-    #ds = env.get_window()
-    #ds = np.array(list(ds) * 4)
-    #print(ds.shape)
-    #mid = auto_network.get_middle(ds)
-
-    TA.plot_middle_runtime(auto_network, env.get_window)
-    
-
-
-    #record_game_data()
-
-
-

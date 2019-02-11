@@ -20,7 +20,7 @@ if __name__ == '__main__':
     """ GAME """
 
     # base folder
-    name = 'test'
+    name = 'pacman'
     paths.set_base(name)
     files = FT.get_filepaths(paths.image_path)
 
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     # class data
     class_path = paths.network_path
     size = 256
-    n_classes = 8
+    n_classes = 4
 
 
 
@@ -43,6 +43,7 @@ if __name__ == '__main__':
 
     if 0: # LOAD - DATA
         ds = FT.load_images(files[:n])
+        #ds = DT.subdata(ds, h, w)
         print('Data shape: {}'.format(ds.shape))
 
 
@@ -50,10 +51,9 @@ if __name__ == '__main__':
     """ AUTO """
 
     if 0: # CREATE
-        auto_hidden = [64, 32, 16, 8, 4, 4]
+        auto_hidden = [32, 32, 16, 16, 8, 4]
         AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
-                 with_binary=False, reuse_weights=True, print_me=True,
-                 hidden_feedforward=[])
+                 with_binary=False, reuse_weights=True, print_me=True)
 
     if 1: # LOAD - NETWORK
         auto_network = AUTO.load(name, paths.load_json())
@@ -62,16 +62,9 @@ if __name__ == '__main__':
 
     if 0: # TRAIN ITER - DATA
         print('Training on data with iters')
-        #ds = DT.subdata(ds, h, w)
-        AUTO.train_data_iter(auto_network, ds, h, w, n_train=100, alpha=1e-4,
+        AUTO.train_data_iter(auto_network, ds, h, w, n_train=50, a=1e-4,
                              n_plot=4, plot_r=True, plot_i=True,
-                             do_subdata=True, kmax_img=10, kmax_cost=2)
-
-    if 0: # TRAIN NEEEEEW
-        print('Training NEEEW')
-        AUTO.train_new(auto_network, ds, h, w, n_train=100, alpha=1e-4,
-                             n_plot=4, plot_r=True, plot_i=True,
-                             do_subdata=True, kmax_img=5, kmax_cost=1)
+                             do_subdata=True, kmax_img=4, kmax_cost=1)
     
     if 0: # TRAIN FULL - DATA
         print('Training on data until finished')
@@ -89,7 +82,7 @@ if __name__ == '__main__':
 
     if 0: # TRAIN FULL - PATHS
         print('Training on data with iters')
-        AUTO.train_path_full(auto_network, files, h, w, h_f, w_f, alpha=1e-3, 
+        AUTO.train_path_full(auto_network, files, h, w, h_f, w_f, alpha=1e-4, 
                              n_plot=n//2, do_subdata=True, kmax_cost=20)
 
     if 0: # LEARN
@@ -108,26 +101,25 @@ if __name__ == '__main__':
     """ CLASS """ 
 
     if 1: # CREATE
-        name = 'test'
-        hidden = [64, 64, 64]
-        json_data = CLASS.new(paths, name, size, hidden, n_classes)
+        name = 'pacman'
+        hidden = [32, 32]
+        CLASS.new(paths, name, size, hidden, n_classes)
+
+    if 1: # LOAD DATA
+        labels = set(('NA','0','1','2'))
+        fs, ls = paths.get_filepaths_for_labels(labels, True)
+        #ls = DT.to_one_hot(ls)
+        print('N files: {}   N classes: {}'.format(len(ls), len(labels)))
 
     if 1: # LOAD
         class_network = CLASS.load(name, paths.load_json())
         class_network.print_info()
 
-    if 0: # TRAIN
-        filepaths = paths.get_game_images()
-        #ds, ls = DT.load_data_labels(paths.get_game_images(), h_d, w_d, 3,
-        #                             randomize=False)
-        label_names = [os.path.basename(f).split('.')[0] for f in filepaths]
-        label_names = [ln.split('_')[2] for ln in label_names]
-        labels = DT.to_one_hot(label_names)
-        #print('Data: {}'.format(ds.shape))
-        print('Labels: {}'.format(labels.shape))
-        class_network = CLASS.load(name, json_data)
-        CLASS.train_by_paths(class_network, auto_network, filepaths, labels,
-                             h, w, h_d, w_d, n_plot=16, n_train=1000)
+    if 1: # TRAIN
+        ls = DT.to_one_hot(ls)
+        CLASS.train_path_iter(class_network, auto_network, fs, ls, h, w, a=1e-3,
+                              batch=16, do_subdata=True, n_train=100,
+                              kmax_cost=5)
 
 
 
