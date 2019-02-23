@@ -1,5 +1,6 @@
 import os
 import json
+import random
 from os.path import join
 from random import shuffle
 from itertools import chain
@@ -27,9 +28,10 @@ def set_base(game):
     image_path = join(base_path, 'data', game, 'image')
     network_path = join(base_path, 'data', game, 'network')
 
-def get_filepaths_for_labels(wanted_labels, shuffle_me=True):
+def get_filepaths_for_labels(wanted_labels, shuffle_me=True, with_other=True):
     """ """
     filepaths, labels = [], []
+    other_files, other_labels = [], []
     filenames = os.listdir(image_path)
     label_set = set(chain.from_iterable([get_labels(f) for f in filenames]))
     for f in filenames:
@@ -37,6 +39,13 @@ def get_filepaths_for_labels(wanted_labels, shuffle_me=True):
         if len(list(label_set & set(ls))) > 0 and ls[0] in wanted_labels:
             filepaths.append(os.path.join(image_path, f))
             labels.append(ls[0])
+        else:
+            other_files.append(os.path.join(image_path, f))
+            other_labels.append('_NA')
+    if with_other:
+        idxs = random.sample(range(len(other_files)), len(filepaths))
+        filepaths += [other_files[i] for i in idxs]
+        labels += [other_labels[i] for i in idxs]
     if shuffle_me:
         idxs = list(range(len(filepaths)))
         shuffle(idxs)

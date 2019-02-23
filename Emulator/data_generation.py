@@ -13,7 +13,7 @@ from Library.General import FileThings as FT
 from Library.Computer import Keyboard
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
-
+from Library.NeuralNetworks.Embedding import _EmbeddingAPI as EMBED
 
 
 class DataPoint(object):
@@ -113,6 +113,9 @@ if __name__ == '__main__':
         class_network = CLASS.load(name, paths.load_json())
 
     if 1:
+        embed_network = EMBED.load(name, paths.load_json())
+
+    if 1:
         env = EE.Emulator(paths, name)
 
 
@@ -122,8 +125,14 @@ if __name__ == '__main__':
     #lss = DT.to_one_hot(ls)
 
     #AUTO.TEST.plot_middle_runtime(auto_network, env.get_window)
+    
+    if 1:
+        CLASS.TEST.print_class_runtime(class_network, auto_network,
+                                       embed_network, env.get_window)
 
-    CLASS.TEST.print_class_runtime(class_network, auto_network, env.get_window)
+    if 0:
+        EMBED.TEST.plot_middle_runtime(auto_network, embed_network,
+                                       env.get_window)
     
     #record_game_data(file_max=3000, sleep_time=0.1)
 
