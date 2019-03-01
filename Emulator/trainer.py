@@ -26,7 +26,7 @@ if __name__ == '__main__':
     files = FT.get_filepaths(paths.image_path)
 
     # data params
-    n = 12800
+    n = 128
     h = 512
     w = 512
     le = 3
@@ -35,19 +35,19 @@ if __name__ == '__main__':
 
     # class data
     class_path = paths.network_path
-    size = 128
+    size = 128000
     n_classes = 4
 
 
 
     """ DATA """
 
-    if 0: # AUTO DATA
+    if 1: # AUTO DATA
         ds = FT.load_images(files[:n])
-        #ds = DT.subdata(ds, h, w)
+        ds = DT.subdata(ds, h, w)
         print('Data shape: {}'.format(ds.shape))
 
-    if 1: # CLASS DATA
+    if 0: # CLASS DATA
         labels = set(('0','1','2'))
         #labels = set(('left','right','up','down'))
         fs, ls = paths.get_filepaths_for_labels(labels, True, True)
@@ -58,21 +58,23 @@ if __name__ == '__main__':
 
     """ AUTO """
 
-    if 0: # CREATE
+    if 1: # CREATE
+        #auto_hidden = [32, 32, 32, 16, 8, 4]
         auto_hidden = [32, 32, 16, 16, 8, 4]
+        #auto_hidden = [128, 64, 32]
         AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
-                 with_binary=False, reuse_weights=True, print_me=True)
+                 with_binary=False, reuse_weights=True, print_me=True, ps=2)
 
     if 1: # LOAD - NETWORK
         auto_network = AUTO.load(name, paths.load_json())
         #auto_network.print_info()
 
 
-    if 0: # TRAIN ITER - DATA
+    if 1: # TRAIN ITER - DATA
         print('Training on data with iters')
-        AUTO.train_data_iter(auto_network, ds, h, w, n_train=50, a=1e-4,
+        AUTO.train_data_iter(auto_network, ds, h, w, n_train=100, a=1e-3,
                              n_plot=4, plot_r=True, plot_i=True,
-                             do_subdata=True, kmax_img=4, kmax_cost=1)
+                             do_subdata=False, kmax_img=5, kmax_cost=2)
     
     if 0: # TRAIN FULL - DATA
         print('Training on data until finished')
@@ -101,7 +103,7 @@ if __name__ == '__main__':
         embed_hidden = [128]
         EMBED.new(paths, name, size, embed_hidden)
 
-    if 1: # LOAD EMBED
+    if 0: # LOAD EMBED
         embed_network = EMBED.load(name, paths.load_json())
         embed_network.print_info()
 
@@ -113,15 +115,15 @@ if __name__ == '__main__':
 
     """ CLASS """ 
 
-    if 1: # CREATE
+    if 0: # CREATE
         class_hidden = [64, 64]
         CLASS.new(paths, name, size, class_hidden, n_classes)
 
-    if 1: # LOAD CLASS
+    if 0: # LOAD CLASS
         class_network = CLASS.load(name, paths.load_json())
         class_network.print_info()
 
-    if 1: # TRAIN
+    if 0: # TRAIN
         ls = DT.to_one_hot(ls)
         CLASS.train_path_iter(class_network, auto_network, embed_network,
                               fs, ls, h, w, a=1e-3,
