@@ -63,7 +63,7 @@ if __name__ == '__main__':
         auto_hidden = [32, 32, 16, 16, 8, 4]
         #auto_hidden = [128, 64, 32]
         AUTO.new(paths, name, h, w, auto_hidden, length=le, patch=3, e=1e-8,
-                 with_binary=False, reuse_weights=True, print_me=True, ps=2)
+                 reuse_weights=True, print_me=True, ps=2)
 
     if 1: # LOAD - NETWORK
         auto_network = AUTO.load(name, paths.load_json())
