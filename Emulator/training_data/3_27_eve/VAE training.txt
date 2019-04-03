@@ -1,0 +1,43 @@
+Train time: 2+ hours
+
+hidden_encode = [4, 8, 16, 32, 32, 32, 32, 32, 64, 64]
+        pools_encode = [2, 2, 2, 2, 2, 1, 2, 1, 2, 1, 2]
+        pools_decode = [1,1,1,1,1,1,1,1]
+        hidden_dense = [128, 128]
+        n_latent = 64
+
+Creating autoencoder network...
+ - C:\Users\Nick\Desktop\Ava\Programs\GameAI\Emulator\data\pacman\network\AUTO_pacman_512_512_3_10_2_64
+ - input shape: (?, 512, 512, 3)
+ - encode: (?, 256, 256, 4)
+ - encode: (?, 128, 128, 8)
+ - encode: (?, 64, 64, 16)
+ - encode: (?, 32, 32, 32)
+ - encode: (?, 16, 16, 32)
+ - encode: (?, 16, 16, 32)
+ - encode: (?, 8, 8, 32)
+ - encode: (?, 8, 8, 32)
+ - encode: (?, 4, 4, 64)
+ - encode: (?, 4, 4, 64)
+ - flat: (?, 1024)
+ - latent: (?, 64)
+ - dense: (?, 128)
+ - dense: (?, 128)
+ - dense: (?, 1024)
+ - reshaped: (?, 4, 4, 64)
+ - decode: (?, 4, 4, 64)
+ - decode: (?, 4, 4, 64)
+ - decode: (?, 4, 4, 32)
+ - decode: (?, 4, 4, 32)
+ - decode: (?, 4, 4, 32)
+ - decode: (?, 4, 4, 32)
+ - decode: (?, 4, 4, 32)
+ - decode: (?, 4, 4, 16)
+ - dense: (?, 786432)
+ - output: (?, 786432)
+Created AUTO_pacman_512_512_3_10_2_64 network in 13.459031581878662
+
+Training on data with iters
+Iter 0  Loss 181963.06250  IO 181963.06250  KL 0.00005
+Iter 500  Loss 10160.59668  IO 10127.28809  KL 24.09438
+Iter 1000  Loss nan  IO 11123.88477  KL nan

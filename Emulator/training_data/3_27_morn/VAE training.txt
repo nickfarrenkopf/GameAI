@@ -1,0 +1,115 @@
+Train time: 12+ hours
+
+hidden_encode = [4, 8, 16, 32, 64, 64, 64, 64]
+        pools_encode = [2, 2, 2, 2, 2, 2, 2, 2]
+        pools_decode = [1,1,1,1,1,1,1,1]
+        hidden_dense = [256, 256]
+        n_latent = 64
+        AUTO.new(paths, name, h, w, length=le, patch=5, print_me=True,
+                 hidden_encode=hidden_encode, pools_encode=pools_encode,
+                 hidden_latent=hidden_dense, n_latent=n_latent,
+                 pools_decode=pools_decode)
+
+
+
+Creating autoencoder network...
+ - C:\Users\Nick\Desktop\Ava\Programs\GameAI\Emulator\data\pacman\network\AUTO_pacman_512_512_3_8_2_64
+ - input shape: (?, 512, 512, 3)
+ - encode: (?, 256, 256, 4)
+ - encode: (?, 128, 128, 8)
+ - encode: (?, 64, 64, 16)
+ - encode: (?, 32, 32, 32)
+ - encode: (?, 16, 16, 64)
+ - encode: (?, 8, 8, 64)
+ - encode: (?, 4, 4, 64)
+ - encode: (?, 2, 2, 64)
+ - flat: (?, 256)
+ - latent: (?, 64)
+ - dense: (?, 256)
+ - dense: (?, 256)
+ - dense: (?, 4)
+ - reshaped: (?, 2, 2, 1)
+ - decode: (?, 2, 2, 64)
+ - decode: (?, 2, 2, 64)
+ - decode: (?, 2, 2, 64)
+ - decode: (?, 2, 2, 64)
+ - decode: (?, 2, 2, 32)
+ - decode: (?, 2, 2, 16)
+ - decode: (?, 2, 2, 8)
+ - decode: (?, 2, 2, 4)
+ - dense: (?, 786432)
+ - output: (?, 786432)
+Created AUTO_pacman_512_512_3_8_2_64 network in 4.115002870559692
+
+Training on data with iters
+Iter 0  Loss 181637.34375  IO 181637.34375  KL 0.00005
+Iter 500  Loss 11110.54395  IO 11104.24609  KL 6.82188
+Iter 1000  Loss 10209.78906  IO 10203.96680  KL 4.43607
+Iter 1500  Loss 10734.46484  IO 10752.13770  KL 4.52599
+Iter 2000  Loss 10609.82617  IO 10611.73730  KL 8.71358
+Iter 2500  Loss 9185.68555  IO 8937.43848  KL 18.53846
+Iter 3000  Loss 7659.77344  IO 7603.68408  KL 48.66912
+Iter 3500  Loss 7076.08545  IO 7036.39258  KL 42.77704
+Iter 4000  Loss 7023.92090  IO 6990.65137  KL 28.79416
+Iter 4500  Loss 6927.09033  IO 6882.70020  KL 35.56473
+Iter 5000  Loss 7108.57910  IO 7090.23340  KL 30.26161
+Iter 5500  Loss 7683.49658  IO 7636.12891  KL 45.30384
+Iter 6000  Loss 7212.75977  IO 7179.82227  KL 37.24551
+Iter 6500  Loss 6698.44287  IO 6657.62744  KL 46.89780
+Iter 7000  Loss 6514.61084  IO 6472.39355  KL 40.86768
+Iter 7500  Loss 9390.15723  IO 9362.42480  KL 49.10569
+Iter 8000  Loss 6573.73535  IO 6546.86328  KL 28.82085
+Iter 8500  Loss 6749.78906  IO 6725.67090  KL 33.44255
+Iter 9000  Loss 6989.47266  IO 6948.53467  KL 37.03505
+Iter 9500  Loss 7417.24219  IO 7351.92871  KL 52.13250
+Iter 10000  Loss 5886.90381  IO 5858.27197  KL 35.95763
+Iter 10500  Loss 6227.04248  IO 6202.83594  KL 36.54766
+Iter 11000  Loss 6022.35010  IO 5989.42969  KL 35.70561
+Iter 11500  Loss 5862.84180  IO 5834.14502  KL 34.09232
+Iter 12000  Loss 6196.94824  IO 6159.23242  KL 32.42603
+Iter 12500  Loss nan  IO 10303.91406  KL nan
+Iter 13000  Loss nan  IO 10105.23047  KL nan
+Iter 13500  Loss nan  IO 10352.25781  KL nan
+Iter 14000  Loss nan  IO 11245.65820  KL nan
+
+Warning (from warnings module):
+  File "C:\Users\Nick\AppData\Local\Programs\Python\Python36\lib\site-packages\matplotlib\image.py", line 395
+    dv = (np.float64(self.norm.vmax) -
+UserWarning: Warning: converting a masked element to nan.
+
+Warning (from warnings module):
+  File "C:\Users\Nick\AppData\Local\Programs\Python\Python36\lib\site-packages\matplotlib\image.py", line 396
+    np.float64(self.norm.vmin))
+UserWarning: Warning: converting a masked element to nan.
+
+Warning (from warnings module):
+  File "C:\Users\Nick\AppData\Local\Programs\Python\Python36\lib\site-packages\matplotlib\image.py", line 403
+    a_min = np.float64(newmin)
+UserWarning: Warning: converting a masked element to nan.
+
+Warning (from warnings module):
+  File "C:\Users\Nick\AppData\Local\Programs\Python\Python36\lib\site-packages\matplotlib\image.py", line 408
+    a_max = np.float64(newmax)
+UserWarning: Warning: converting a masked element to nan.
+
+Warning (from warnings module):
+  File "C:\Users\Nick\AppData\Local\Programs\Python\Python36\lib\site-packages\matplotlib\colors.py", line 918
+    dtype = np.min_scalar_type(value)
+UserWarning: Warning: converting a masked element to nan.
+
+Warning (from warnings module):
+  File "C:\Users\Nick\AppData\Local\Programs\Python\Python36\lib\site-packages\numpy\ma\core.py", line 713
+    data = np.array(a, copy=False, subok=subok)
+UserWarning: Warning: converting a masked element to nan.
+Iter 14500  Loss nan  IO 10524.41699  KL nan
+Iter 15000  Loss nan  IO 9658.74707  KL nan
+Iter 15500  Loss nan  IO 9166.42188  KL nan
+Iter 16000  Loss nan  IO 9823.48535  KL nan
+Iter 16500  Loss nan  IO 10296.15527  KL nan
+Iter 17000  Loss nan  IO 10686.00000  KL nan
+Iter 17500  Loss nan  IO 9294.84082  KL nan
+Iter 18000  Loss nan  IO 10537.81055  KL nan
+Iter 18500  Loss nan  IO 10098.91602  KL nan
+Iter 19000  Loss nan  IO 11133.18164  KL nan
+Iter 19500  Loss nan  IO 11320.10645  KL nan
+Iter 20000  Loss nan  IO 9936.17383  KL nan

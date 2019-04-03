@@ -1,0 +1,73 @@
+        hidden_encode = [4, 8, 16, 32, 64, 128]
+        pools_encode = [2, 2, 2, 2, 2, 2]
+        pools_decode = [1,1,1,1,1,1]
+        hidden_dense = [64, 64, 64]
+        n_latent = 64
+
+Creating autoencoder network...
+ - C:\Users\Nick\Desktop\Ava\Programs\GameAI\Emulator\data\pacman\network\AUTO_pacman_512_512_3_6_3_64
+ - input shape: (?, 512, 512, 3)
+ - encode: (?, 256, 256, 4)
+ - encode: (?, 128, 128, 8)
+ - encode: (?, 64, 64, 16)
+ - encode: (?, 32, 32, 32)
+ - encode: (?, 16, 16, 64)
+ - encode: (?, 8, 8, 128)
+ - flat: (?, 8192)
+ - latent: (?, 64)
+ - dense: (?, 64)
+ - dense: (?, 64)
+ - dense: (?, 64)
+ - dense: (?, 64)
+ - reshaped: (?, 8, 8, 1)
+ - decode: (?, 8, 8, 128)
+ - decode: (?, 8, 8, 64)
+ - decode: (?, 8, 8, 32)
+ - decode: (?, 8, 8, 16)
+ - decode: (?, 8, 8, 8)
+ - decode: (?, 8, 8, 4)
+ - dense: (?, 786432)
+ - output: (?, 786432)
+Created AUTO_pacman_512_512_3_6_3_64 network in 13.284491300582886
+
+Training on data with iters
+Iter 0  Loss 181609.12500  IO 181609.10938  KL 0.02039
+Iter 200  Loss 10394.78711  IO 10354.72363  KL 32.50866
+Iter 400  Loss 7904.97852  IO 7835.00098  KL 73.96466
+Iter 600  Loss 7890.91895  IO 7794.92188  KL 99.45908
+Iter 800  Loss 6850.95312  IO 6790.56689  KL 69.21454
+Iter 1000  Loss 6727.73926  IO 6680.21631  KL 59.69905
+Iter 1200  Loss 6134.80566  IO 6060.91406  KL 57.01220
+Iter 1400  Loss 6244.61084  IO 6184.58691  KL 57.39204
+Iter 1600  Loss 6574.44092  IO 6506.42969  KL 58.24128
+Iter 1800  Loss 6057.28564  IO 6006.25879  KL 62.98443
+Iter 2000  Loss 5889.39844  IO 5796.16064  KL 60.06193
+Iter 2200  Loss 6147.02148  IO 6089.54297  KL 61.31525
+Iter 2400  Loss 6029.83398  IO 5977.90039  KL 61.55608
+Iter 2600  Loss 7650.45654  IO 7532.40771  KL 68.53029
+Iter 2800  Loss 5862.35791  IO 5788.43652  KL 68.20551
+Iter 3000  Loss 6039.98340  IO 5902.09717  KL 70.51408
+Iter 3200  Loss 6380.41602  IO 6308.18945  KL 75.75314
+Iter 3400  Loss 5315.85010  IO 5234.50781  KL 73.84339
+Iter 3600  Loss 5312.22461  IO 5251.52979  KL 70.27814
+Iter 3800  Loss 5166.77002  IO 5093.19238  KL 71.91411
+Iter 4000  Loss 5633.58740  IO 5558.82275  KL 69.63733
+Iter 4200  Loss 5026.37744  IO 4942.45605  KL 71.95152
+Iter 4400  Loss 5243.17383  IO 5168.69434  KL 73.44078
+Iter 4600  Loss 5682.61670  IO 5610.92480  KL 66.49729
+Iter 4800  Loss 4897.10010  IO 4825.14062  KL 72.25877
+Iter 5000  Loss 5182.82080  IO 5109.92871  KL 71.64328
+Iter 5200  Loss 5153.80322  IO 5074.78516  KL 77.17538
+Iter 5400  Loss 5377.09814  IO 5301.37598  KL 69.99930
+Iter 5600  Loss 4916.12793  IO 4847.66309  KL 70.88225
+Iter 5800  Loss 4998.34180  IO 4958.52979  KL 74.01912
+Iter 6000  Loss 5440.86377  IO 5381.32031  KL 68.79499
+Iter 6200  Loss 4921.94043  IO 4833.43262  KL 72.69571
+Iter 6400  Loss 5455.42383  IO 5400.80176  KL 75.22166
+Iter 6600  Loss 5102.78662  IO 5011.37891  KL 87.37973
+Iter 6800  Loss 4964.19922  IO 4900.54883  KL 70.05840
+Iter 7000  Loss 4976.00684  IO 4893.27930  KL 77.40876
+Iter 7200  Loss 5046.97949  IO 4980.47900  KL 79.01944
+Iter 7400  Loss 5082.72656  IO 5008.24219  KL 84.26975
+Iter 7600  Loss 4746.79883  IO 4662.46094  KL 79.17441
+Iter 7800  Loss 5113.42969  IO 5004.23975  KL 73.48131

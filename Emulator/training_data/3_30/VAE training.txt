@@ -1,0 +1,105 @@
+Train time: 12+ hours
+
+        hidde_encode = [2, 3, 4, 5, 6, 7]
+        pools_encode = [2, 2, 2, 2, 2, 2]
+        hidde_decode = [6, 5, 4, 3, 2, 1]
+        pools_decode = [1, 1, 1, 1, 1, 1]
+        hidden_dense = [256, 256]
+        n_latent = 64
+        hidden_encode = [2 ** i for i in hidde_encode]
+        hidden_decode = [2 ** i for i in hidde_decode]
+        AUTO.new(paths, name, h, w, length=le, patch=5, print_me=True,
+                 hidden_encode=hidden_encode, pools_encode=pools_encode,
+                 hidden_latent=hidden_dense, n_latent=n_latent,
+                 pools_decode=pools_decode, hidden_decode=hidden_decode)
+
+Creating autoencoder network...
+ - C:\Users\Nick\Desktop\Ava\Programs\GameAI\Emulator\data\pacman\network\AUTO_pacman_512_512_3_6_2_64
+ - input shape: (?, 512, 512, 3)
+ - encode: (?, 256, 256, 4)
+ - encode: (?, 128, 128, 8)
+ - encode: (?, 64, 64, 16)
+ - encode: (?, 32, 32, 32)
+ - encode: (?, 16, 16, 64)
+ - encode: (?, 8, 8, 128)
+ - flat: (?, 8192)
+ - latent: (?, 64)
+ - dense: (?, 256)
+ - dense: (?, 256)
+ - dense: (?, 64)
+ - reshaped: (?, 8, 8, 1)
+ - decode: (?, 8, 8, 64)
+ - decode: (?, 8, 8, 32)
+ - decode: (?, 8, 8, 16)
+ - decode: (?, 8, 8, 8)
+ - decode: (?, 8, 8, 4)
+ - decode: (?, 8, 8, 2)
+ - dense: (?, 786432)
+ - output: (?, 786432)
+Created AUTO_pacman_512_512_3_6_2_64 network in 8.215039730072021
+
+Training on data with iters
+Iter 0  Loss 182068.78125  IO 182068.78125  KL 0.00578
+Iter 500  Loss 10091.14453  IO 10075.39258  KL 16.63083
+Iter 1000  Loss 7061.54297  IO 7038.67578  KL 39.39985
+Iter 1500  Loss 6354.52002  IO 6312.68604  KL 45.48320
+Iter 2000  Loss 5132.93896  IO 5076.22754  KL 50.67876
+Iter 2500  Loss 5124.65723  IO 5077.82861  KL 45.89684
+Iter 3000  Loss 4543.27051  IO 4497.52783  KL 44.24168
+Iter 3500  Loss 4734.30664  IO 4697.22949  KL 45.09148
+Iter 4000  Loss 4505.31689  IO 4448.09814  KL 43.77935
+Iter 4500  Loss 4357.44873  IO 4315.81396  KL 44.33556
+Iter 5000  Loss 4313.34766  IO 4256.77686  KL 46.05935
+Iter 5500  Loss 4339.94043  IO 4295.10107  KL 43.67178
+Iter 6000  Loss 4254.59766  IO 4221.25830  KL 46.56758
+Iter 6500  Loss 4307.37891  IO 4255.41016  KL 46.52782
+Iter 7000  Loss 3986.60303  IO 3923.79639  KL 49.53845
+Iter 7500  Loss 3791.68384  IO 3755.08057  KL 50.92323
+Iter 8000  Loss 3997.43896  IO 3941.18994  KL 48.53651
+Iter 8500  Loss 3790.05273  IO 3735.55347  KL 46.79387
+Iter 9000  Loss 3530.95703  IO 3486.05273  KL 51.30814
+Iter 9500  Loss 3602.21289  IO 3558.68262  KL 50.93000
+Iter 10000  Loss 3927.03760  IO 3885.14600  KL 47.64603
+Iter 10500  Loss 3473.42627  IO 3426.54370  KL 51.90954
+Iter 11000  Loss 3708.25342  IO 3654.35254  KL 53.77751
+Iter 11500  Loss 3210.69336  IO 3163.65283  KL 52.92229
+Iter 12000  Loss 3318.15527  IO 3264.11768  KL 57.45672
+Iter 12500  Loss 3395.26343  IO 3333.57568  KL 56.74197
+Iter 13000  Loss 2959.93359  IO 2897.55811  KL 57.56285
+Iter 13500  Loss 3153.09644  IO 3107.36084  KL 54.72679
+Iter 14000  Loss 3156.72070  IO 3084.27759  KL 56.12618
+Iter 14500  Loss 3074.77222  IO 3033.16699  KL 58.54713
+Iter 15000  Loss 3038.03711  IO 2982.40503  KL 57.14994
+Iter 15500  Loss 3044.44800  IO 2989.73340  KL 56.52660
+Iter 16000  Loss 2736.86304  IO 2687.22656  KL 56.97527
+Iter 16500  Loss 3118.15869  IO 3057.26758  KL 60.87018
+Iter 17000  Loss 2752.82446  IO 2683.10596  KL 61.75571
+Iter 17500  Loss 2704.63135  IO 2651.88086  KL 62.18172
+Iter 18000  Loss 2782.39868  IO 2741.03296  KL 53.55956
+Iter 18500  Loss 2626.55371  IO 2574.67969  KL 55.27636
+Iter 19000  Loss 2709.01538  IO 2631.05005  KL 63.76064
+Iter 19500  Loss 2513.23193  IO 2445.06982  KL 60.63873
+Iter 20000  Loss 2513.65405  IO 2455.34082  KL 54.34547
+
+Warning (from warnings module):
+  File "C:\Users\Nick\AppData\Local\Programs\Python\Python36\lib\site-packages\matplotlib\pyplot.py", line 514
+    max_open_warning, RuntimeWarning)
+RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+Iter 20500  Loss 2752.63257  IO 2684.52271  KL 56.18579
+Iter 21000  Loss 2617.03906  IO 2567.48486  KL 52.41027
+Iter 21500  Loss 2504.63965  IO 2446.02344  KL 58.20676
+Iter 22000  Loss 2338.80029  IO 2294.89917  KL 49.48402
+Iter 22500  Loss 2592.85791  IO 2539.90381  KL 51.06662
+Iter 23000  Loss 2647.16479  IO 2571.43896  KL 55.19606
+Iter 23500  Loss 2663.54199  IO 2610.72388  KL 62.53332
+Iter 24000  Loss 2738.38672  IO 2671.49976  KL 63.42621
+Iter 24500  Loss 2538.70288  IO 2513.56226  KL 49.01933
+Iter 25000  Loss 2796.40771  IO 2743.43750  KL 50.41479
+Iter 25500  Loss 2642.16943  IO 2591.76196  KL 49.87693
+Iter 26000  Loss 5069.28955  IO 4897.12549  KL 79.25869
+Iter 26500  Loss 2968.05908  IO 2919.90918  KL 52.67311
+Iter 27000  Loss 2755.06738  IO 2702.74951  KL 51.65685
+Iter 27500  Loss 2774.52588  IO 2708.14648  KL 60.09669
+Iter 28000  Loss 3226.05908  IO 3162.89502  KL 51.84594
+Iter 28500  Loss 2598.69238  IO 2544.24365  KL 50.04234
+Iter 29000  Loss 3150.79712  IO 3113.56348  KL 46.74144

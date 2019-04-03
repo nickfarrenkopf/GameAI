@@ -1,82 +1,56 @@
 {
-   "learning": {},
    "network": {
       "auto": {
          "pacman": {
-            "filename": "AUTO_pacman_512_512_6_256",
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\AUTO_pacman_512_512_6_256",
-            "batch_size": 4,
+            "filename": "AUTO_pacman_512_512_3_6_2_64",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\AUTO_pacman_512_512_3_6_2_64",
+            "create_time": 11.10333514213562,
             "input_shape": [
-               4,
+               null,
                512,
                512,
                3
             ],
-            "middle_shape": [
+            "hidden_encoder": [
                4,
-               256
-            ],
-            "flat_shape": [
-               4,
-               256
-            ],
-            "flat_size": 256,
-            "layers": [
-               32,
-               32,
-               16,
-               16,
                8,
-               4
-            ],
-            "with_binary": false,
-            "reuse_weights": true,
-            "feedforward": [],
-            "epsilon": 1e-08,
-            "alpha": 0,
-            "create_time": 2.429032325744629,
-            "trained": 0
-         }
-      },
-      "reg": {},
-      "class": {
-         "pacman": {
-            "full_name": "CLASS_pacman_128_2_4",
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\CLASS_pacman_128_2_4",
-            "input_size": 128,
-            "input_shape": [
-               null,
+               16,
+               32,
+               64,
                128
             ],
-            "layers": [
-               64,
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               2,
+               2,
+               2
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               8,
+               8,
+               1
+            ],
+            "hidden_latent": [
+               512,
+               512,
                64
             ],
-            "n_classes": 4,
-            "epsilon": 1e-08,
-            "alpha": 0,
-            "create_time": 0.2079486846923828,
-            "trained": 0
+            "latent_shape": [
+               null,
+               64
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
          }
       },
-      "embed": {
-         "pacman": {
-            "full_name": "EMBED_pacman_256_128_1",
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\EMBED_pacman_256_128_1",
-            "input_size": 256,
-            "input_shape": [
-               null,
-               256
-            ],
-            "encode_size": 128,
-            "layers": [
-               128
-            ],
-            "epsilon": 1e-08,
-            "alpha": 0,
-            "create_time": 0.1515944004058838,
-            "trained": 0
-         }
-      }
-   }
+      "class": {},
+      "reg": {},
+      "embed": {}
+   },
+   "learning": {}
 }
