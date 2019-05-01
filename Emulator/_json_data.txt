@@ -2,46 +2,48 @@
    "network": {
       "auto": {
          "pacman": {
-            "filename": "AUTO_pacman_512_512_3_6_2_64",
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\AUTO_pacman_512_512_3_6_2_64",
-            "create_time": 11.10333514213562,
+            "filename": "AUTO_pacman_160_160_3_7_2_32",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\AUTO_pacman_160_160_3_7_2_32",
+            "create_time": 4.6914520263671875,
             "input_shape": [
                null,
-               512,
-               512,
+               160,
+               160,
                3
             ],
             "hidden_encoder": [
-               4,
                8,
                16,
+               16,
+               32,
                32,
                64,
-               128
+               64
             ],
             "pools_encoder": [
                2,
                2,
                2,
+               1,
                2,
-               2,
-               2
+               1,
+               1
             ],
             "activation_encoder": "leaky_relu",
             "encoded_shape": [
                -1,
-               8,
-               8,
+               10,
+               10,
                1
             ],
             "hidden_latent": [
-               512,
-               512,
-               64
+               256,
+               256,
+               100
             ],
             "latent_shape": [
                null,
-               64
+               32
             ],
             "activation_post_latent": "relu",
             "activation_decoder": "relu",

@@ -1,0 +1,479 @@
+{
+   "network": {
+      "auto": {
+         "mana": {
+            "filename": "AUTO_mana_16_32_3_6_3_2",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_mana_16_32_3_6_3_2",
+            "create_time": 3.247314929962158,
+            "input_shape": [
+               null,
+               16,
+               32,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               1,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               2,
+               4,
+               1
+            ],
+            "hidden_latent": [
+               256,
+               256,
+               256,
+               8
+            ],
+            "latent_shape": [
+               null,
+               2
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         },
+         "hero": {
+            "filename": "AUTO_hero_64_64_3_6_2_8",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_hero_64_64_3_6_2_8",
+            "create_time": 2.321824073791504,
+            "input_shape": [
+               null,
+               64,
+               64,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               2,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               4,
+               4,
+               1
+            ],
+            "hidden_latent": [
+               512,
+               512,
+               16
+            ],
+            "latent_shape": [
+               null,
+               8
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         },
+         "heroPower": {
+            "filename": "AUTO_heroPower_64_64_3_6_3_4",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_heroPower_64_64_3_6_3_4",
+            "create_time": 1.6924738883972168,
+            "input_shape": [
+               null,
+               64,
+               64,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               1,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               8,
+               8,
+               1
+            ],
+            "hidden_latent": [
+               256,
+               256,
+               256,
+               64
+            ],
+            "latent_shape": [
+               null,
+               4
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         },
+         "weapon": {
+            "filename": "AUTO_weapon_64_64_3_6_3_4",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_weapon_64_64_3_6_3_4",
+            "create_time": 1.6266489028930664,
+            "input_shape": [
+               null,
+               64,
+               64,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               1,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               8,
+               8,
+               1
+            ],
+            "hidden_latent": [
+               256,
+               256,
+               256,
+               64
+            ],
+            "latent_shape": [
+               null,
+               4
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         },
+         "board": {
+            "filename": "AUTO_board_64_256_3_6_3_32",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_board_64_256_3_6_3_32",
+            "create_time": 1.6455984115600586,
+            "input_shape": [
+               null,
+               64,
+               256,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               2,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               4,
+               16,
+               1
+            ],
+            "hidden_latent": [
+               256,
+               256,
+               256,
+               64
+            ],
+            "latent_shape": [
+               null,
+               32
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         },
+         "handS": {
+            "filename": "AUTO_handS_64_256_3_6_3_32",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_handS_64_256_3_6_3_32",
+            "create_time": 1.8580303192138672,
+            "input_shape": [
+               null,
+               64,
+               256,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               2,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               4,
+               16,
+               1
+            ],
+            "hidden_latent": [
+               256,
+               256,
+               256,
+               64
+            ],
+            "latent_shape": [
+               null,
+               32
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         },
+         "handO": {
+            "filename": "AUTO_handO_32_128_3_6_3_16",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_handO_32_128_3_6_3_16",
+            "create_time": 1.061161994934082,
+            "input_shape": [
+               null,
+               32,
+               128,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               2,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               2,
+               8,
+               1
+            ],
+            "hidden_latent": [
+               256,
+               256,
+               256,
+               16
+            ],
+            "latent_shape": [
+               null,
+               16
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         },
+         "deckS": {
+            "filename": "AUTO_deckS_256_64_3_6_3_32",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_deckS_256_64_3_6_3_32",
+            "create_time": 1.6785106658935547,
+            "input_shape": [
+               null,
+               256,
+               64,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               2,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               16,
+               4,
+               1
+            ],
+            "hidden_latent": [
+               256,
+               256,
+               256,
+               64
+            ],
+            "latent_shape": [
+               null,
+               32
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         },
+         "deckO": {
+            "filename": "AUTO_deckO_256_64_3_6_3_32",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_deckO_256_64_3_6_3_32",
+            "create_time": 1.6715290546417236,
+            "input_shape": [
+               null,
+               256,
+               64,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               2,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               16,
+               4,
+               1
+            ],
+            "hidden_latent": [
+               256,
+               256,
+               256,
+               64
+            ],
+            "latent_shape": [
+               null,
+               32
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         },
+         "userNameO": {
+            "filename": "AUTO_userNameO_16_64_3_6_3_4",
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\HearthstoneAI\\data\\networks\\AUTO_userNameO_16_64_3_6_3_4",
+            "create_time": 1.119006872177124,
+            "input_shape": [
+               null,
+               16,
+               64,
+               3
+            ],
+            "hidden_encoder": [
+               8,
+               16,
+               32,
+               32,
+               64,
+               64
+            ],
+            "pools_encoder": [
+               2,
+               2,
+               2,
+               1,
+               1,
+               1
+            ],
+            "activation_encoder": "leaky_relu",
+            "encoded_shape": [
+               -1,
+               2,
+               8,
+               1
+            ],
+            "hidden_latent": [
+               256,
+               256,
+               256,
+               16
+            ],
+            "latent_shape": [
+               null,
+               4
+            ],
+            "activation_post_latent": "relu",
+            "activation_decoder": "relu",
+            "activation_output": "sigmoid"
+         }
+      },
+      "class": {},
+      "reg": {},
+      "embed": {}
+   },
+   "learning": {}
+}

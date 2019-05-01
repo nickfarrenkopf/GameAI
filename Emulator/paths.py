@@ -59,6 +59,7 @@ def get_labels(file):
 
 
 
+
 ### JSON ###
 
 def load_json():
@@ -73,5 +74,4 @@ def reset_json():
     """ """
     data = FT.base_json()
     write_json(data)
-
 

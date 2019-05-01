@@ -11,6 +11,8 @@ sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import DataThings as DT
 from Library.General import FileThings as FT
 from Library.Computer import Keyboard
+from Library.Computer import Screen
+from Library.Computer import Mouse
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
 from Library.NeuralNetworks.Embedding import _EmbeddingAPI as EMBED
@@ -74,7 +76,26 @@ def prepend_zeros_idx():
                 count += 1
     print('Files renamed {}'.format(count))
         
+def record_thing(iters, sleep_time=3):
+    """ """
+    last_data = []
+    print('Saving data')
+    for i in range(200):
+        last_data = record_mana(last_data, iters, i)
+        time.sleep(sleep_time)
+        if i % 5 == 0:
+            print(i)
 
+def record_mana(last_data, iters, i):
+    """ """
+    ds = np.array([Screen.get_data()])
+    # self mana
+    dat1 = DT.subdata_xy(ds, 32, 64, 1000, 1262)
+    FT.save_image_to_file(dat1[0], 'manaS_{}_{}.png'.format(iters, i))
+    # opponent mana
+    dat2 = DT.subdata_xy(ds, 32, 64, 67, 1229)
+    FT.save_image_to_file(dat2[0], 'manaO_{}_{}.png'.format(iters, i))
+    return [dat1, dat2]
 
 
 
@@ -105,17 +126,22 @@ if __name__ == '__main__':
     
 
     """ LOAD NETWORKS """
+    record_thing(0)
 
-    if 1:
+
+        
+    
+
+    if 0:
         auto_network = AUTO.load(name, paths.load_json())
 
-    if 1:
+    if 0:
         class_network = CLASS.load(name, paths.load_json())
 
-    if 1:
+    if 0:
         embed_network = EMBED.load(name, paths.load_json())
 
-    if 1:
+    if 0:
         env = EE.Emulator(paths, name)
 
 
@@ -126,7 +152,7 @@ if __name__ == '__main__':
 
     #AUTO.TEST.plot_middle_runtime(auto_network, env.get_window)
     
-    if 1:
+    if 0:
         CLASS.TEST.print_class_runtime(class_network, auto_network,
                                        embed_network, env.get_window)
 
