@@ -130,8 +130,9 @@ def record_data():
 def load_watchers(i=0,j=100, nets=False):
     """ """
     watchers = []
-    for row in FT.read_file_csv(paths.params_path)[i:j]:
-        watchers.append(ScreenWatcher(*row))
+    params = paths.load_params()
+    for k in params:
+        watchers.append(ScreenWatcher(params[k]))
         if nets:
             watchers[-1].load_network(watchers)
     return watchers

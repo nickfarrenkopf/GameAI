@@ -36,6 +36,12 @@ images_hero = join(images_path, 'hero')
 
 ### JSON ###
 
+def load_params():
+    """ """
+    return FT.load_json(params_path_json)
+
+
+
 def load_json():
     """ """
     return FT.load_json(json_path)
