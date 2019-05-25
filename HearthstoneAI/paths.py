@@ -9,38 +9,31 @@ from Library.General import FileThings as FT
 # top level
 base_path = os.path.dirname(os.path.realpath(__file__))
 json_path = join(base_path, '_json_data.txt')
-params_path = join(base_path, '_hearthstone_params.txt')
 data_path = join(base_path, 'data')
 
 # data types
-network_path = join(data_path, 'networks')
 images_path = join(data_path, 'images')
-
-# text data
-
-
-# images
-images_mana = join(images_path, 'mana')
-images_hero = join(images_path, 'hero')
-#cards_path = join(data_path, 'cards')
+labels_path = join(data_path, 'labels')
+network_path = join(data_path, 'networks')
 
 
 
-# text
-#card_info = join(data_path, 'card_info.txt')
-#command_info = join(data_path, 'command_info.txt')
-#node_info = join(data_path, 'node_info.txt')
+### HELPER ###
 
+def get_image_path(name):
+    """ """
+    return join(images_path, name)
 
+def get_label_path(name):
+    """ """
+    return join(labels_path, '{}_labels.txt'.format(name))
+
+def get_labels(name):
+    """ """
+    return FT.read_file_csv(get_label_path(name))
 
 
 ### JSON ###
-
-def load_params():
-    """ """
-    return FT.load_json(params_path_json)
-
-
 
 def load_json():
     """ """
@@ -54,3 +47,5 @@ def reset_json():
     """ """
     data = FT.base_json()
     write_json(data)
+
+

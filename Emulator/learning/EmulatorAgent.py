@@ -1,86 +1,71 @@
+import time
+import random
+
+from learning import EmulatorAction as EA
+from learning import ActorCritic as ACM
+
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
-from Library.General import Colors
-from Library.Learning import AgentUtils
 from Library.Learning.Methods import Tabular as TL
 
 
-class Agent(AgentUtils.Agent):
+class EmulatorAgent(object):
     """ """
 
-    def __init__(self, environment, key, actions, start_idx=0, learning=True):
+    def __init__(self, env, key, actions):
         """ """
-        AgentUtils.Agent.__init__(self, environment, key, actions)
+        self.env = env
+        self.key = key
+        self.name = self.env.name + '_agent0'
 
-    
-        # learning
-        self.learning = learning
-        self.set_method()
+        # game specific
+        self.A_size = 2
+
+        #self.method = A3C.A3CMethod(self)
+
+        # actions
+        self.actions = EA.sets['emulator_2']
+        self.A_size = 1 # on or off
+        self.SA_size = self.env.S_size + self.A_size
 
 
+    ### API ###
 
-    ### GRIDWORLD ###
-
-    def learn(self, action):
+    def play(self, n_play=30):
         """ """
-        if self.learning:
-            print(self.get_reward())
-            self.method.next_time_step(action, self.get_reward())
-        
+        for i in range(n_play):
+            self.play_round()
+            time.sleep(1)
 
-    def get_state(self):
+    def play_round(self):
         """ """
-        return tuple(self.environment.state)
+        # game state
+        S = self.env.get_state()
+        # actions
+        A = self.decide_action(S)
+        EA.take_actions(A)
+        print('Taking actions {}'.format(A))
+        # AC3 - process reward
+        R = self.read_reward(S)
+        self.method.learn_from_reward(S, R)
 
-    def get_color(self):
-        """ """
-        if self.in_terminal_state():
-            return self.C_WIN if self.get_reward() > 0 else self.C_LOSE
-        else:
-            return self.COLOR
-
-
-    def interpret_action(self, action=None):
-        """ """
-        if type(action) is str:
-            action = self.actions.find_by_name(action)
-        # choose action if none given
-        if not action:
-            action = self.choose_action()
-        return action
-    
 
     ### ACTION ###
 
-    def in_terminal_state(self):
+    def decide_action(self, state, is_learned=True):
         """ """
-        return self.state_idx in self.env.terminal_states
+        if is_learned:
+            return self.method.choose_action(state)
+        else:
+            return [random.choice(self.actions)]
 
 
-    ### LEARNING ###
+    ### REWARD ###
 
-    def set_method(self):
+    def read_reward(self, state):
         """ """
-        print('Using SARSA tabular')
-        self.method = TL.Tabular(self)
-
-    def load_value_data(self):
-        """ """
-        data = self.paths.load_json()['learning']
-        if self.name in data:
-            self.agent.method.load_q_data_json(data[self.name])
-
-    def save_value_data(self):
-        """ """
-        data = self.paths.load_json()
-        data['learning'].update({self.name: {}})
-        for k in self.method.Q.keys():
-            SA = ','.join([str(i) for i in list(k)])
-            data['learning'][self.name][SA] = self.method.Q[k].value
-        self.paths.write_json(data)
-
-
-
-
+        #print('NEED TO DO - Get Reward')
+        # classification of current game state
+        pass
 
 

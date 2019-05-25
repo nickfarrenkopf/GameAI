@@ -1,49 +1,72 @@
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
-from Library.General import Keyboard
-from Library.Learning import ActionUtils as AU
+from Library.Computer import Mouse
+from Library.Computer import Keyboard
 
 
 """
-MAPPING
+EMULATOR CONTROLS MAPPING
+
 up, down, left, right
-a, b, l, r -> z, x, a, s
-sta, sel -> q, w
+a, b -> z, x
+l, r -> a, s
+start, select -> q, w
+
 """
-
-
-### EMULATOR ###
-
-class EmulatorAction(AU.Action):
-    """ """
-
-    def __init__(self, name, value):
-        """ """
-        AU.Action.__init__(self, name, value)
-        self.x = value[0]
-        self.y = value[1]
-
-    def take_action(self, action_name):
-        """ """
-        Keyboard.press_key(actionDict[action_name])
 
 
 ### HELPER ###
 
-def load(names):
+def take_actions(actions):
     """ """
-    return AU.ActionList([EmulatorAction(n, actionDict[n]) for n in names])
+    for data in actions:
+        if type(data) == str:
+            take_action(data)
+        else:
+            take_action(data[0], data[1:])
+
+def take_action(name, extra=None):
+    """ """
+    # mouse actions
+    if name in Mouse.mouseDictRev:
+        take_mouse_action(name, extra)
+    # keyboard actions
+    elif name in Keyboard.keyDictRev:
+        take_keyboard_actions(name)
+    # invalid action
+    else:
+        print('No action taken for {} {}'.format(name, extra))
+
+def take_mouse_actions(name, extra):
+    """ """
+    # left click and drag
+    if 'click_drag' in name: 
+        Mouse.click_drag(*extra)
+    # left/right/middle click
+    elif 'click' in name:
+        Mouse.click(extra[0], extra[1], name)
+
+def take_keyboard_actions(name):
+    """ """
+    # multiple keys
+    if ',' in name:
+        Keyboard.press_keys(name.split(','))
+    # single key
+    else:
+        Keyboard.press_key(name)
 
 
 ### PARAMS ###
 
-# action dictionarites
-actionDict = keyDictRev
-actionDictRev = {v: k for k, v in actionDict.items()}
+# common keyboard set combos
+key_combos_0 = ['left', 'right', 'up', 'down']
+key_combos_1 = ['left,up', 'left,down', 'right,up', 'right,down']
 
-# default movement
-actionset_1 = load(['left', 'right', 'up', 'down'])
-actionset_2 = load(['left', 'right', 'up', 'down', 'z', 'x'])
-actionset_3 = load(['left', 'right', 'up', 'down', 'z', 'x', 'a', 's'])
+# default action sets
+sets = dict()
+sets['emulator_1'] = ['NA'] + key_combos_0
+sets['emulator_2'] = ['NA'] + key_combos_0 + key_combos_1
+sets['mouse_1'] = ['NA'] + ['left_click']
+sets['mouse_2'] = ['NA'] + ['left_click','left_click_drag']
 
 

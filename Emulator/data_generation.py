@@ -10,23 +10,12 @@ import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import DataThings as DT
 from Library.General import FileThings as FT
-from Library.Computer import Keyboard
 from Library.Computer import Screen
 from Library.Computer import Mouse
+from Library.Computer import Keyboard
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
 from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
 from Library.NeuralNetworks.Embedding import _EmbeddingAPI as EMBED
-
-
-class DataPoint(object):
-    """ """
-
-    def __init__(self):
-        """ """
-        self.name = ''
-        self.episode = ''
-        self.idx = ''
-        self.keys = ''
 
 
 ### DATA GENERATION ###
@@ -97,8 +86,6 @@ def record_mana(last_data, iters, i):
     FT.save_image_to_file(dat2[0], 'manaO_{}_{}.png'.format(iters, i))
     return [dat1, dat2]
 
-
-
 def get_data_thing():
     """ """
     return env.get_window(network=True)
@@ -126,22 +113,18 @@ if __name__ == '__main__':
     
 
     """ LOAD NETWORKS """
-    record_thing(0)
+    #record_thing(0)
 
-
-        
-    
-
-    if 0:
+    if 1:
         auto_network = AUTO.load(name, paths.load_json())
 
-    if 0:
+    if 1:
         class_network = CLASS.load(name, paths.load_json())
 
     if 0:
         embed_network = EMBED.load(name, paths.load_json())
 
-    if 0:
+    if 1:
         env = EE.Emulator(paths, name)
 
 
@@ -164,3 +147,5 @@ if __name__ == '__main__':
 
 
     #env.save_state_image()
+
+

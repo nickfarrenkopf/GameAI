@@ -16,6 +16,7 @@ from Library.General import FileThings as FT
 base_path = os.path.dirname(os.path.realpath(__file__))
 json_path = join(base_path, '_json_data.txt')
 
+game_path = ''
 image_path = ''
 network_path = ''
 
@@ -24,7 +25,8 @@ network_path = ''
 
 def set_base(game):
     """ """
-    global image_path, network_path
+    global image_path, network_path, game_path
+    game_path = join(base_path, 'data', game)
     image_path = join(base_path, 'data', game, 'image')
     network_path = join(base_path, 'data', game, 'network')
 
@@ -33,6 +35,7 @@ def get_filepaths_for_labels(wanted_labels, shuffle_me=True, with_other=True):
     filepaths, labels = [], []
     other_files, other_labels = [], []
     filenames = os.listdir(image_path)
+    print(len(filenames))
     label_set = set(chain.from_iterable([get_labels(f) for f in filenames]))
     for f in filenames:
         ls = get_labels(f)
@@ -43,7 +46,7 @@ def get_filepaths_for_labels(wanted_labels, shuffle_me=True, with_other=True):
             other_files.append(os.path.join(image_path, f))
             other_labels.append('_NA')
     if with_other:
-        idxs = random.sample(range(len(other_files)), len(filepaths))
+        idxs = random.sample(range(len(other_files)), len(filepaths) * 2)
         filepaths += [other_files[i] for i in idxs]
         labels += [other_labels[i] for i in idxs]
     if shuffle_me:
@@ -74,4 +77,5 @@ def reset_json():
     """ """
     data = FT.base_json()
     write_json(data)
+
 
