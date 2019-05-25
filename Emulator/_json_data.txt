@@ -1,16 +1,106 @@
 {
    "network": {
-      "auto": {
-         "pacman": {
-            "filename": "AUTO_pacman_160_160_3_6_1_64",
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\AUTO_pacman_160_160_3_6_1_64",
-            "create_time": 6.292175531387329,
+      "reg": {},
+      "critic": {
+         "pacman_agent0": {
+            "full_name": "CRITIC_pacman_agent0_64_9_3",
+            "n_output": 1,
+            "A_hidden": [
+               32
+            ],
+            "A_size": 9,
+            "A_shape": [
+               null,
+               9
+            ],
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\CRITIC_pacman_agent0_64_9_3",
+            "S_hidden": [
+               16,
+               32
+            ],
+            "S_shape": [
+               null,
+               64
+            ],
+            "P_hidden": [
+               32
+            ],
+            "create_time": 0.9796772003173828,
+            "S_size": 64
+         },
+         "pacman_agent0_target": {
+            "A_shape": [
+               null,
+               9
+            ],
+            "full_name": "CRITIC_pacman_agent0_target_64_9_3",
+            "P_hidden": [
+               32
+            ],
+            "A_hidden": [
+               32
+            ],
+            "A_size": 9,
+            "S_hidden": [
+               16,
+               32
+            ],
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\CRITIC_pacman_agent0_target_64_9_3",
+            "n_output": 1,
+            "S_shape": [
+               null,
+               64
+            ],
+            "create_time": 1.178886890411377,
+            "S_size": 64
+         }
+      },
+      "class": {},
+      "embed": {},
+      "actor": {
+         "pacman_agent0": {
+            "full_name": "ACTOR_pacman_agent0_64_2_9",
+            "input_size": 64,
+            "layers": [
+               16,
+               32
+            ],
             "input_shape": [
                null,
-               160,
-               160,
-               3
+               64
             ],
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\ACTOR_pacman_agent0_64_2_9",
+            "create_time": 0.40595054626464844,
+            "output_shape": [
+               null,
+               9
+            ],
+            "n_classes": 9
+         },
+         "pacman_agent0_target": {
+            "full_name": "ACTOR_pacman_agent0_target_64_2_9",
+            "input_size": 64,
+            "layers": [
+               16,
+               32
+            ],
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\ACTOR_pacman_agent0_target_64_2_9",
+            "input_shape": [
+               null,
+               64
+            ],
+            "create_time": 0.6698129177093506,
+            "output_shape": [
+               null,
+               9
+            ],
+            "n_classes": 9
+         }
+      },
+      "auto": {
+         "pacman": {
+            "activation_output": "sigmoid",
+            "activation_post_latent": "relu",
             "hidden_encoder": [
                8,
                8,
@@ -19,6 +109,31 @@
                4,
                4
             ],
+            "activation_encoder": "leaky_relu",
+            "latent_shape": [
+               null,
+               64
+            ],
+            "activation_decoder": "relu",
+            "input_shape": [
+               null,
+               160,
+               160,
+               3
+            ],
+            "create_time": 6.292175531387329,
+            "hidden_latent": [
+               512,
+               400
+            ],
+            "filename": "AUTO_pacman_160_160_3_6_1_64",
+            "encoded_shape": [
+               -1,
+               20,
+               20,
+               1
+            ],
+            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\AUTO_pacman_160_160_3_6_1_64",
             "pools_encoder": [
                1,
                2,
@@ -27,122 +142,7 @@
                1,
                2,
                1
-            ],
-            "activation_encoder": "leaky_relu",
-            "encoded_shape": [
-               -1,
-               20,
-               20,
-               1
-            ],
-            "hidden_latent": [
-               512,
-               400
-            ],
-            "latent_shape": [
-               null,
-               64
-            ],
-            "activation_post_latent": "relu",
-            "activation_decoder": "relu",
-            "activation_output": "sigmoid"
-         }
-      },
-      "class": {},
-      "reg": {},
-      "embed": {},
-      "actor": {
-         "pacman_agent0": {
-            "full_name": "ACTOR_pacman_agent0_64_2_9",
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\ACTOR_pacman_agent0_64_2_9",
-            "input_size": 64,
-            "input_shape": [
-               null,
-               64
-            ],
-            "layers": [
-               16,
-               32
-            ],
-            "n_classes": 9,
-            "output_shape": [
-               null,
-               9
-            ],
-            "create_time": 0.15908002853393555
-         },
-         "pacman_agent0_target": {
-            "full_name": "ACTOR_pacman_agent0_target_64_2_9",
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\ACTOR_pacman_agent0_target_64_2_9",
-            "input_size": 64,
-            "input_shape": [
-               null,
-               64
-            ],
-            "layers": [
-               16,
-               32
-            ],
-            "n_classes": 9,
-            "output_shape": [
-               null,
-               9
-            ],
-            "create_time": 0.191497802734375
-         }
-      },
-      "critic": {
-         "pacman_agent0": {
-            "full_name": "CRITIC_pacman_agent0_64_9_3",
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\CRITIC_pacman_agent0_64_9_3",
-            "S_size": 64,
-            "S_shape": [
-               null,
-               64
-            ],
-            "S_hidden": [
-               16,
-               32
-            ],
-            "A_size": 9,
-            "A_shape": [
-               null,
-               9
-            ],
-            "A_hidden": [
-               32
-            ],
-            "P_hidden": [
-               32
-            ],
-            "n_output": 1,
-            "create_time": 0.35505056381225586
-         },
-         "pacman_agent0_target": {
-            "full_name": "CRITIC_pacman_agent0_target_64_9_3",
-            "filepath": "C:\\Users\\Nick\\Desktop\\Ava\\Programs\\GameAI\\Emulator\\data\\pacman\\network\\CRITIC_pacman_agent0_target_64_9_3",
-            "S_size": 64,
-            "S_shape": [
-               null,
-               64
-            ],
-            "S_hidden": [
-               16,
-               32
-            ],
-            "A_size": 9,
-            "A_shape": [
-               null,
-               9
-            ],
-            "A_hidden": [
-               32
-            ],
-            "P_hidden": [
-               32
-            ],
-            "n_output": 1,
-            "create_time": 0.4857010841369629
+            ]
          }
       }
    },

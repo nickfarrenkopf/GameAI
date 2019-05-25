@@ -25,10 +25,9 @@ class Emulator(object):
         self.window = Screen.Window(self.p1, self.p2)
 
         # auto network
-        self.w_n = 160
-        self.h_n = 160
-        self.network_shape = (-1, self.w_n, self.h_n, 3)
         self.auto_network = AUTO.load(name, paths.load_json())
+        self.network_shape = self.auto_network.input_shape
+        self.w_n, self.h_n = self.network_shape[1:3]
 
         # state
         self.S_size = self.auto_network.latent_shape[-1]

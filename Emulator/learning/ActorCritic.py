@@ -1,6 +1,5 @@
 import random
 import numpy as np
-import tensorflow as tf
 
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
@@ -18,14 +17,11 @@ class ActorCriticMethod(object):
         """ """
         self.paths = paths
         self.agent = agent
+        self.env = agent.env
         self.name = agent.name
         self.name_t = agent.name + '_target'
 
-        # data params
-        self.S_size = self.agent.env.S_size
-        self.A_size = self.agent.A_size
-
-        self.actions = agent.actions
+        # data
         self.n_actions = len(agent.actions)
         self.memory = []
 
@@ -34,14 +30,13 @@ class ActorCriticMethod(object):
         self.epsilon = 1.0
         self.epsilon_decay = .995
         self.gamma = .95
-        self.tau = .125
         self.batch_size = 32
 
         # networks
         if load_networks:
             self.load_actor_network()
             self.load_critic_network()
-
+        
 
     ### API ###
 
@@ -96,26 +91,27 @@ class ActorCriticMethod(object):
     def train_actor(self, memories):
         """ """
         for S, _, R, _, _ in memories:
-            R = np.array([[R]])
+            # predict new action
             A_new = self.actor_network.get_preds(S)[0]
-            zeros = np.zeros((1, self.n_actions))
-            zeros[0][A_new] = 1
-            grads = self.critic_network.get_grads([S, zeros], R)[0]
-            self.actor_network.train_network(S, grads, self.alpha)
+            A_label = np.array([DT.new_label(A_new, self.n_actions)])
+            # train actor based on critic gradients
+            grads = self.critic_network.get_grads([S, A_label], np.array([R]))
+            self.actor_network.train_network(S, grads[0], self.alpha)
             
     def train_critic(self, memories):
         """ """
         for S, A, R, S_new, done in memories:
             if not done:
+                # predict new action
                 A_target = self.actor_network_target.get_preds(S_new)
-                #idx = self.actions.index(A_target[0])
-                zeros = np.zeros((1, self.n_actions))
-                zeros[0][A_target[0]] = 1
-                R_new = self.critic_network_target.get_logits([S_new, zeros])
-                R += self.gamma * R_new[0]
-            # what?
+                A_label = np.array([DT.new_label(A_target, self.n_actions)])
+                # calculate target reward
+                R_new = self.critic_network_target.get_logits([S_new, A_label])
+                R[0] += self.gamma * R_new[0]
+            # train critic based on given action and reward
+            A_label_old = np.array([DT.new_label(A, self.n_actions)])
             R = np.array([R])
-            self.critic_network.train_network([S, zeros], R, self.alpha)
+            self.critic_network.train_network([S, A_label_old], R, self.alpha)
 
 
     ### TARGET ###

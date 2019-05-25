@@ -1,7 +1,6 @@
 import time
 import random
 
-from learning import EmulatorAction as EA
 from learning import ActorCritic as ACM
 
 import sys
@@ -12,21 +11,18 @@ from Library.Learning.Methods import Tabular as TL
 class EmulatorAgent(object):
     """ """
 
-    def __init__(self, env, key, actions):
+    def __init__(self, paths, env, key):
         """ """
+        self.paths = paths
         self.env = env
         self.key = key
         self.name = self.env.name + '_agent0'
 
-        # game specific
-        self.A_size = 2
-
-        #self.method = A3C.A3CMethod(self)
-
         # actions
         self.actions = EA.sets['emulator_2']
-        self.A_size = 1 # on or off
-        self.SA_size = self.env.S_size + self.A_size
+
+        # learning
+        self.method = ACM.ActorCriticMethod(paths, self, load_networks=True)
 
 
     ### API ###

@@ -1,9 +1,7 @@
 import os
-import time
 import numpy as np
 
 import paths
-from learning import ActorCritic as MAT
 from learning import EmulatorEnvironment as EE
 from learning import EmulatorAgent as EAg
 from learning import EmulatorAction as EAc
@@ -13,11 +11,7 @@ sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.General import DataThings as DT
 from Library.General import FileThings as FT
 from Library.NeuralNetworks.Autoencoder import _AutoencoderAPI as AUTO
-from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLASS
-from Library.NeuralNetworks.Embedding import _EmbeddingAPI as EMBED
-from Library.NeuralNetworks.Actor import _ActorAPI as ACTOR
-from Library.NeuralNetworks.Critic import _CriticAPI as CRITIC
-
+from Library.NeuralNetworks.Classifier import _ClassifierAPI as CLAS
 
 
 ### PROGRAM ###
@@ -33,7 +27,7 @@ if __name__ == '__main__':
     files = FT.get_filepaths(paths.image_path)
 
     # data params
-    n = 10000
+    n = 200
     h = 160
     w = 160
     le = 3
@@ -116,59 +110,51 @@ if __name__ == '__main__':
                               alpha=1e-3, n_train=5000, kmax_cost=100)
 
 
+    """ OTHER """
 
     if 1: # test image
         env = EE.Emulator(paths, 'pacman')
-        env.save_window()
-        #dd = env.get_window(network=True)
-    if 1:
-        key = 0
-        actions = EAc.sets['emulator_2']
-        ag = EAg.EmulatorAgent(env, key, actions)
+        #env.save_window()
+        ag = EAg.EmulatorAgent(paths, env, 0, EAc.sets['emulator_2'])
 
     if 1: # MEMORY
-        method = MAT.ActorCriticMethod(paths, ag, load_networks=True)
+        method = ag.method
         #method.create_actor_network()
         #method.create_critic_network()
+        
         # load memories
-
         memories = []
         previous_labels = ''
-
         auto_data = auto_network.get_latent(ds)
 
-        # loo over files
-        for i, f in enumerate(files):
+        # loop over files
+        for i, f in enumerate(files[:n]):
             bn = os.path.basename(f)
             name, iters, idx, labels = bn.split('.')[0].split('_')
             
-            # skip - only episode 1
-            if int(iters) != 1:
-                continue
-            # skip - non in game
-            if '2' in labels:
+            # skip - only episode 1 or non in game
+            if int(iters) != 1 or '2' in labels:
                 continue
             # skip - non standard action
             if labels not in ag.actions and '1' in labels:
                 continue
             
             # initial memory values
-            S = auto_data[i:i+1]
-            A = 0
-            R = 0
-            S_new = auto_data[i+1:i+2]
+            S, S_new = auto_data[i:i+1], auto_data[i+1:i+2]
+            A, R = 0, 0
             done = f == files[-1]
 
             # action
             if labels in ag.actions:
                 A = ag.actions.index(labels)
+            A = np.array([A])
             
             # if 0 - negative reward
             if '1' in labels:
                 R = 1
             if '0' in labels:
                 R = -1
-            A = np.array([A])
+            R = np.array([R])
             
             # save memory
             memories.append((S, A, R, S_new, done))
@@ -177,7 +163,6 @@ if __name__ == '__main__':
 
         # loop through memories
         for i, (S, A, R, S_new, done) in enumerate(memories):
-
             if i % 10 == 0:
                 print('Iter {} {} {}'.format(i, A, R))
             method.remember(S, A, R, S_new, done)

@@ -4,18 +4,7 @@ from Library.Computer import Mouse
 from Library.Computer import Keyboard
 
 
-"""
-EMULATOR CONTROLS MAPPING
-
-up, down, left, right
-a, b -> z, x
-l, r -> a, s
-start, select -> q, w
-
-"""
-
-
-### HELPER ###
+### API ###
 
 def take_actions(actions):
     """ """
@@ -27,6 +16,9 @@ def take_actions(actions):
 
 def take_action(name, extra=None):
     """ """
+    # no action
+    if name == 'NA':
+        return
     # mouse actions
     if name in Mouse.mouseDictRev:
         take_mouse_action(name, extra)
@@ -36,6 +28,9 @@ def take_action(name, extra=None):
     # invalid action
     else:
         print('No action taken for {} {}'.format(name, extra))
+
+
+### HELPER ###
 
 def take_mouse_actions(name, extra):
     """ """
@@ -57,6 +52,15 @@ def take_keyboard_actions(name):
 
 
 ### PARAMS ###
+
+
+"""
+EMULATOR CONTROLS MAPPING
+   a, b -> z, x
+   l, r -> a, s
+   start, select -> q, w
+
+"""
 
 # common keyboard set combos
 key_combos_0 = ['left', 'right', 'up', 'down']
