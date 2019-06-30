@@ -51,7 +51,7 @@ if __name__ == '__main__':
     """ GAME """
 
     # base folder
-    name = 'hero'
+    name = 'mana'
     names = [name + 'S']
     filepath = paths.get_image_path(name)
 
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
     """ AUTO """
 
-    if 1: # CREATE
+    if 0: # CREATE
         e.create_network()
         e.load_network([])
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
         auto_network = e.auto_network
         auto_network.print_info()
 
-    if 1: # TRAIN ITER - DATA
+    if 0: # TRAIN ITER - DATA
         print('Training on data with iters')
         AUTO.train_data_iter(e.auto_network, ds, e.w, e.h, n_train=1000000,
                              a=1e-3, n_plot=60, plot_r=True, plot_i=False,
@@ -106,10 +106,10 @@ if __name__ == '__main__':
                              kmax_cost=1000, kmax_img=10000)
 
 
-    if 0: # TEST
+    if 1: # TEST
         print('Training on data with iters')
-        AUTO.train_data_iter(e.auto_network, ds, e.w, e.h, n_train=3,
-                             a=0, n_plot=60, plot_r=True, plot_i=True,
+        AUTO.train_data_iter(e.auto_network, ds, e.w, e.h, n_train=5,
+                             a=0, n_plot=60, plot_r=True, plot_i=False,
                              kmax_img=1, kmax_cost=9999)
 
     if 0:

@@ -27,9 +27,10 @@ class Emulator(object):
         # auto network
         self.auto_network = AUTO.load(name, paths.load_json())
         self.network_shape = self.auto_network.input_shape
+        self.network_shape[0] = -1
         self.w_n, self.h_n = self.network_shape[1:3]
 
-        # state
+        # data params
         self.S_size = self.auto_network.latent_shape[-1]
 
 

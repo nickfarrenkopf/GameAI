@@ -1,31 +1,36 @@
 import time
 import random
 
-from learning import ActorCritic as ACM
-
 import sys
 sys.path.append('C:\\Users\\Nick\\Desktop\\Ava\\Programs')
 from Library.Learning.Methods import Tabular as TL
+from Library.Learning.Methods import ActorCritic as ACM
 
 
 class EmulatorAgent(object):
     """ """
 
-    def __init__(self, paths, env, key):
+    def __init__(self, paths, env, key, actions, networks=True):
         """ """
         self.paths = paths
         self.env = env
         self.key = key
-        self.name = self.env.name + '_agent0'
-
-        # actions
-        self.actions = EA.sets['emulator_2']
+        self.actions = actions
+        self.A_size = len(actions)
 
         # learning
-        self.method = ACM.ActorCriticMethod(paths, self, load_networks=True)
+        self.name = self.env.name + '_agent{}'.format(key)
+        self.method = ACM.ActorCriticMethod(paths, self, load_networks=networks)
 
 
     ### API ###
+
+    def save_nets(self):
+        """ """
+        self.method.actor_network.save_network()
+        self.method.actor_TARGET.save_network()
+        self.method.critic_network.save_network()
+        self.method.critic_TARGET.save_network()
 
     def play(self, n_play=30):
         """ """
@@ -60,7 +65,6 @@ class EmulatorAgent(object):
 
     def read_reward(self, state):
         """ """
-        #print('NEED TO DO - Get Reward')
         # classification of current game state
         pass
 
