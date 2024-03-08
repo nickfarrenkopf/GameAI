@@ -1,4 +1,5 @@
 This project contains 3 major projects: GridWorld, EmulatorAI, & HearthstoneAI
+Note: none of the large datasets were stored on GitHub
 
 Gridworld
  - My first project exploring Reinforcement Learning
